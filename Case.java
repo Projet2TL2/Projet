@@ -1,18 +1,35 @@
 
 public class Case {
 	
-	int x; //colonne de la case ( 0 - 20 )
-	int y; // ligne de la case ( 0 - 20 )
+	int colonne; //colonne de la case ( 0 - 20 )
+	int ligne; // ligne de la case ( 0 - 20 )
 	boolean touchee;
 	
 	/*
 	 * Construit une case de colonne x et ligne y
 	 */
 	public Case(int colonne, int ligne) {
-		this.x = colonne;
-		this.y = ligne;
+		this.colonne = colonne;
+		this.ligne = ligne;
 		this.touchee = false;
 	}
+	
+	public String toString() {
+		return "[" + colonne + "][" + ligne +"]; ";
+	}
+	
+	
+	public boolean equals(Case c) {
+		if (this.getColonne() == c.getColonne() && this.getLigne() == c.getLigne()){
+			return true;
+		}
+		else {
+			return false;
+		}
+		
+	}
+	
+	//GETTERS AND SETTERS
 	
 	public boolean isTouchee() {
 		return touchee;
@@ -22,20 +39,20 @@ public class Case {
 		this.touchee = touchee;
 	}
 
-	public int getX() {
-		return x;
+	public int getColonne() {
+		return colonne;
 	}
 
-	public void setX(int x) {
-		this.x = x;
+	public void setColonne(int colonne) {
+		this.colonne = colonne;
 	}
 
-	public int getY() {
-		return y;
+	public int getLigne() {
+		return ligne;
 	}
 
-	public void setY(int y) {
-		this.y = y;
+	public void setLigne(int ligne) {
+		this.ligne = ligne;
 	}
 
 	
