@@ -9,13 +9,13 @@ public class Bateau {
 	 * Construit un Bateau avec un nom, un tableau de Case qui représente sa surface dans la grille et son centre
 	 * @param : nom represente le nom du bateau
 	 * @param : surface represente la surface de case que prends le bateau dans la grille
-	 * @param : centre represente le centre de la surface ( si le nombre de case n'est pas impair, 
+	 * @param : centre represente le centre de la surface ( si le nombre de case est pair, 
 	 * le centre est la moitie de la surface) (exemple: bateau de 4, centre est la seconde case)
 	 */
-	public Bateau(String nom, Case[] surface, Case centre) {
+	public Bateau(String nom, Case[] surface) {
 		this.nom = nom;
 		this.surface = surface;
-		this.centre = centre;
+		setCentre();	//Calcul le centre
 	}
 
 	/*
@@ -39,6 +39,33 @@ public class Bateau {
 		return false;
 	}
 	
+	public String toString() {
+		String result =  "nom: " + nom +"\nsurface: ";
+		for(int i=0 ; i<surface.length ; i++) {
+			result += surface[i].toString();
+		}
+		result +="\ncentre: " +  centre.toString();
+		return result;
+	}
+	
+	/*
+	 * Set le centre a la bonne valeure en fonction de la surface
+	 */
+	public void setCentre() {
+		if(surface.length % 2 == 0) {
+			this.centre = surface[surface.length / 2 - 1];
+		}
+		else {
+			this.centre = surface[surface.length / 2 ];
+		}
+	}
+	
+	public int getTaille() {
+		return surface.length;
+	}
+	
+	//GETTERS AND SETTERS
+	
 	public String getNom() {
 		return nom;
 	}
@@ -59,9 +86,7 @@ public class Bateau {
 		return centre;
 	}
 
-	public void setCentre(Case centre) {
-		this.centre = centre;
-	}
+	
 	
 	
 }
