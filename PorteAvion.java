@@ -6,10 +6,8 @@ public class PorteAvion extends Bateau{
 	private Case centre;
 	
 	/*
-	 * crée un bateau
-	 * @param : nom représente "le nom du bateau"
-	 * @param : surface représente la surface du bateau
-	 * @param : centre représente le centre du bateau
+	 * crÃ©e un bateau
+	 * @param : centre reprÃ©sente le centre du bateau
 	 */
 	public PorteAvion(Case centre) {
 		super(centre);
