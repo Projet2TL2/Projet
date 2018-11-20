@@ -30,6 +30,9 @@ public class Bateau {
 		return false;
 	}
 	
+	/*
+	 * @return true si le bateau est touche dans sa surface, false sinon
+	 */
 	public boolean estTouchee() {
 		for(int i=0 ; i<surface.length ; i++) {
 			if(surface[i].isTouchee()) {
@@ -39,6 +42,9 @@ public class Bateau {
 		return false;
 	}
 	
+	/*
+	 * @return un bateau sous la forme: "nom:" + "surface: " + "centre: "
+	 */
 	public String toString() {
 		String result =  "nom: " + nom +"\nsurface: ";
 		for(int i=0 ; i<surface.length ; i++) {
@@ -60,6 +66,9 @@ public class Bateau {
 		}
 	}
 	
+	/*
+	 * @return la taille du bateau
+	 */
 	public int getTaille() {
 		return surface.length;
 	}
@@ -80,6 +89,7 @@ public class Bateau {
 
 	public void setSurface(Case[] surface) {
 		this.surface = surface;
+		setCentre();
 	}
 
 	public Case getCentre() {

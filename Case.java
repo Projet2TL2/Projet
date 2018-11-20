@@ -4,6 +4,17 @@ public class Case {
 	int colonne; //colonne de la case ( 0 - 20 )
 	int ligne; // ligne de la case ( 0 - 20 )
 	boolean touchee;
+	boolean occupe;
+	
+	/*
+	 * Construit une case de colonne x et ligne y
+	 */
+	public Case(int colonne, int ligne, boolean occupe) {
+		this.colonne = colonne;
+		this.ligne = ligne;
+		this.touchee = false;
+		this.occupe = occupe;
+	}
 	
 	/*
 	 * Construit une case de colonne x et ligne y
@@ -12,6 +23,7 @@ public class Case {
 		this.colonne = colonne;
 		this.ligne = ligne;
 		this.touchee = false;
+		this.occupe = false;
 	}
 	
 	public String toString() {
@@ -31,8 +43,17 @@ public class Case {
 	
 	//GETTERS AND SETTERS
 	
+	
 	public boolean isTouchee() {
 		return touchee;
+	}
+
+	public boolean isOccupe() {
+		return occupe;
+	}
+
+	public void setOccupe(boolean occupe) {
+		this.occupe = occupe;
 	}
 
 	public void setTouchee(boolean touchee) {
