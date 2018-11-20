@@ -22,6 +22,7 @@ public class PorteAvion extends Bateau{
      */
 	private void calculSurface(Case centre) {
 		this.surface  = new Case[5];
-		surface[3] = centre;
+		setCentre();
 	}
+	
 }
