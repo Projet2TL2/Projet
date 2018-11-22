@@ -1,7 +1,7 @@
 public class AttaqueDemon extends Attaque{
 
 	/*
-	 * Crée une Attaque ultime des démons
+	 * CrÃ©e une Attaque ultime des dÃ©mons
 	 * @param : nom represente "Z de l'enfer"
 	 * @param : surface represente la surface de l'attaque (7 cases)
 	 * @param : cout represente son cout (10)
@@ -12,7 +12,7 @@ public class AttaqueDemon extends Attaque{
 	}
 
 	/*
-	 * Crée une Attaque Ultime des démons
+	 * CrÃ©e une Attaque Ultime des dÃ©mons
 	 * @param : nom represente "Z de l'enfer"
 	 * @param : cout represente son cout (10)
 	 * @param : centre le centre de l'attaque
@@ -28,8 +28,8 @@ public class AttaqueDemon extends Attaque{
 		surface[1] = new Case(centre.getColonne()-1,centre.getLigne()-1);
 		surface[2] = new Case(centre.getColonne(),centre.getLigne()-1);
 		surface[3] = new Case(centre);
-		surface[4] = new Case(centre.getLigne()+1,centre.getColonne());
-		surface[5] = new Case(centre.getLigne()+1,centre.getColonne()+1);
-		surface[6] = new Case(centre.getLigne()+1,centre.getColonne()+2);
+		surface[4] = new Case(centre.getColonne(),centre.getLigne()+1);
+		surface[5] = new Case(centre.getColonne()+1,centre.getLigne()+1);
+		surface[6] = new Case(centre.getColonne()+2,centre.getLigne()+1);
 	}
 }
