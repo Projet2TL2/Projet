@@ -2,19 +2,19 @@
 public class AttaqueHorizontale extends Attaque{
 
 	/*
-	 * CrÃ©e une Attaque horizontale
+	 * Crée une Attaque horizontale
 	 * @param : nom represente "attaque horizontale"
 	 * @param : surface represente la surface de l'attaque (3 cases)
 	 * @param : cout represente son cout (3)
 	 * @param : centre le centre de l'attaque
 	 */
 	public AttaqueHorizontale(String nom, Case[] surface, int cout, Case centre) {
-		super(nom, surface, 3,centre);
+		super(nom, surface, 5,centre);
 	}
 
 	/*
-	 * CrÃ©e une Attaque horizontale
-	 * @param : nom represente "attaque horizontale"
+	 * Crée une Attaque classique ou la surface equivaut au centre
+	 * @param : nom represente "attaque classique"
 	 * @param : cout represente son cout (3)
 	 * @param : centre le centre de l'attaque
 	 */
