@@ -1,80 +1,42 @@
 
 public class Case {
+
+	int ligne;
+	int colonne;
+	boolean estOccupee = false;
+	boolean estTouchee = false;
 	
-	int colonne; //colonne de la case ( 0 - 20 )
-	int ligne; // ligne de la case ( 0 - 20 )
-	boolean touchee;
-	boolean occupe;
-	
-	/*
-	 * Construit une case de colonne x et ligne y
-	 */
-	public Case(int colonne, int ligne, boolean occupe) {
-		this.colonne = colonne;
+	public Case(int ligne, int colonne) {
 		this.ligne = ligne;
-		this.touchee = false;
-		this.occupe = occupe;
-	}
-	
-	/*
-	 * Construit une case de colonne x et ligne y
-	 */
-	public Case(int colonne, int ligne) {
 		this.colonne = colonne;
-		this.ligne = ligne;
-		this.touchee = false;
-		this.occupe = false;
-	}
-	
-	public String toString() {
-		return "[" + colonne + "][" + ligne +"]; ";
-	}
-	
-	
-	public boolean equals(Case c) {
-		if (this.getColonne() == c.getColonne() && this.getLigne() == c.getLigne()){
-			return true;
-		}
-		else {
-			return false;
-		}
-		
-	}
-	
-	//GETTERS AND SETTERS
-	
-	
-	public boolean isTouchee() {
-		return touchee;
 	}
 
-	public boolean isOccupe() {
-		return occupe;
+	public boolean estOccupee() {
+		return estOccupee;
 	}
-
-	public void setOccupe(boolean occupe) {
-		this.occupe = occupe;
+	
+	public void setOccupee() {
+		estOccupee = true;
 	}
-
-	public void setTouchee(boolean touchee) {
-		this.touchee = touchee;
+	
+	public boolean estTouchee() {
+		return estTouchee;
+	}
+	
+	public void setTouchee() {
+		estOccupee = true;
+	}
+	
+	public int getLigne() {
+		return ligne;
 	}
 
 	public int getColonne() {
 		return colonne;
 	}
-
-	public void setColonne(int colonne) {
-		this.colonne = colonne;
-	}
-
-	public int getLigne() {
-		return ligne;
-	}
-
-	public void setLigne(int ligne) {
-		this.ligne = ligne;
-	}
-
 	
+	public String toString() {
+		return this.getLigne() + "" + this.getColonne();
+	}
+
 }

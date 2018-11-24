@@ -1,68 +1,31 @@
 
 public class Attaque {
 
-	String nom;
-	Case[] surface;
-	int cout;
-	Case centre;
+	int ligne;
+	int colonne;
 	
-	/*
-	 * Crée une Attaque 
-	 * @param : nom represente le nom de l'attaque
-	 * @param : surface represente la surface de l'attaque 
-	 * @param : cout represente son cout 
-	 * @param : centre represente le centre de l'attaque
-	 */
-	public Attaque(String nom, Case[] surface, int cout, Case centre) {
-		this.nom = nom;
-		this.surface = surface;
-		this.cout = cout;
-		this.centre = centre;
-	}
-	
-	/*
-	 * Crée une Attaque 
-	 * @param : nom represente le nom de l'attaque
-	 * @param : cout represente son cout 
-	 * @param : centre represente le centre de l'attaque
-	 */
-	public Attaque(String nom, int cout, Case centre) {
-		this.nom = nom;
-		this.cout = cout;
-		this.centre = centre;
+	public Attaque(int ligne, int colonne) { 
+		this.ligne = ligne;
+		this.colonne = colonne;
 	}
 
-	public String getNom() {
-		return nom;
+	public int getLigne() {
+		return ligne;
 	}
 
-	public void setNom(String nom) {
-		this.nom = nom;
+	public void setLigne(int ligne) {
+		this.ligne = ligne;
 	}
 
-	public Case[] getSurface() {
-		return surface;
+	public int getColonne() {
+		return colonne;
 	}
 
-	public void setSurface(Case[] surface) {
-		this.surface = surface;
-	}
-
-	public int getCout() {
-		return cout;
-	}
-
-	public void setCout(int cout) {
-		this.cout = cout;
-	}
-
-	public Case getCentre() {
-		return centre;
-	}
-
-	public void setCentre(Case centre) {
-		this.centre = centre;
+	public void setColonne(int colonne) {
+		this.colonne = colonne;
 	}
 	
-	
+	public String toString() {
+		return "[" + getLigne() + getColonne() + "]" ;
+	}
 }
