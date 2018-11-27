@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 public class JoueurVueConsole extends JoueurVue implements Observer {
 	protected Scanner sc;
+	private boolean aPlacerBateaux = false;
 	
 	public JoueurVueConsole(Joueur model, JoueurControl controller) {
 		super(model, controller);
@@ -32,12 +33,57 @@ public class JoueurVueConsole extends JoueurVue implements Observer {
 	}
 
 	private void printHelp(){
-		//affiche("Pour emprunter : E + numÃ©ro de livre.");
-		//affiche("Pour rendre : R + numÃ©ro de livre.");
+		affiche("Pour attaquer : A + numéro de la ligne a attaquée + numéro de la colonne a attaquée.");
+		affiche("Pour placer un bateau : P + numéro de la ligne a attaquée + numéro de la colonne a attaquée + taille du bateau + orientation (H - V).");
 	}
 	
 	private class ReadInput implements Runnable{
 		public void run() {
+			
+			while(aPlacerBateaux == false) {
+				try {
+					String a = sc.next();
+					if(a.length()!=1){
+						affiche("Format d'input incorrect");
+						printHelp();
+					}
+					switch(a) {
+						case "P":
+							int i = sc.nextInt();
+							if(i<0 || i> 9){
+								affiche("Numéro de ligne incorrect");
+								printHelp(); 
+							}
+							int j = sc.nextInt();
+							if(j<0 || j> 9){
+								affiche("Numéro de colonne incorrect");
+								printHelp(); 
+							}
+							int taille = sc.nextInt();
+							if(taille<0 || taille> 9){
+								affiche("Taille incorrect");
+								printHelp(); 
+							}
+							String orientation = sc.next();
+							if(orientation.length()!=1){
+								affiche("Format d'input incorrect");
+								printHelp();
+							}
+							controller.placerBateau(new Bateau(i,j,taille,orientation));
+							aPlacerBateaux = true;
+							break;
+						default : 
+							affiche("Opération incorrecte");
+							printHelp();
+					}
+				}
+				catch(InputMismatchException e){
+					affiche("Format d'input incorrect");
+					printHelp();
+				}
+			}
+			
+			
 			while(true){
 				try{
 					String c = sc.next();
@@ -48,18 +94,22 @@ public class JoueurVueConsole extends JoueurVue implements Observer {
 						
 					int i = sc.nextInt();
 					if(i<0 || i> 9){
-						affiche("NumÃ©ro du livre incorrect");
+						affiche("Numéro de ligne incorrect");
 						printHelp(); 
 					}
+					
+					int j = sc.nextInt();
+					if(j<0 || j> 9){
+						affiche("Numéro de colonne incorrect");
+						printHelp(); 
+					}
+					
 					switch(c){
-						case "R" :
-							controller.estAttaque(new Attaque(i,i));
-							break;
-						case "E" : 
-							//controller.emprunteLivre(i);
+						case "A" :
+							controller.estAttaque(new Attaque(i,j));
 							break;
 						default : 
-							affiche("OpÃ©ration incorrecte");
+							affiche("Opération incorrecte");
 							printHelp();
 					} 
 				}

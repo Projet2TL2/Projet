@@ -24,7 +24,7 @@ public class Case {
 	}
 	
 	public void setTouchee() {
-		estOccupee = true;
+		estTouchee= true;
 	}
 	
 	public int getLigne() {
