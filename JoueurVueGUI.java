@@ -7,12 +7,9 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-
-import com.sun.org.apache.bcel.internal.generic.INVOKEVIRTUAL;
 
 
 
@@ -22,6 +19,7 @@ public class JoueurVueGUI extends JoueurVue implements ActionListener{
 	private JTextField ligneAttaque = new JTextField(1);
 	private JTextField colonneAttaque = new JTextField(1);
 	private JButton attaqueButton = new JButton("Attaquer");
+	private JButton attaqueHorizontaleButton = new JButton("Attaque Horizontale");
 	private JButton placerBateauButton = new JButton("Placer Bateau");
 	private JLabel message = new JLabel(" ");
 	private JTable table;
@@ -35,8 +33,6 @@ public class JoueurVueGUI extends JoueurVue implements ActionListener{
 	
 	
 	
-	
-	
 	boolean bateauxPlacés = false;
 
 	public JoueurVueGUI(Joueur model, JoueurControl controller, int posX, int posY) {
@@ -47,9 +43,6 @@ public class JoueurVueGUI extends JoueurVue implements ActionListener{
 		joueurJFrame = new JFrame("Joueur MVC");	
 		textContent.setLayout(new BoxLayout(textContent, BoxLayout.Y_AXIS));
 		updateTable();
-		if(bateauxPlacés == false) {
-			attaqueButton.setVisible(false);
-		}
 		textContent.add(table.getTableHeader());
 		textContent.add(table);
 		textContent.add(message);
@@ -71,7 +64,16 @@ public class JoueurVueGUI extends JoueurVue implements ActionListener{
 		joueurJFrame.add(fieldZone, BorderLayout.CENTER);
 		JPanel panelbuttons = new JPanel();
 		panelbuttons.add(attaqueButton);
+		panelbuttons.add(attaqueHorizontaleButton);
 		panelbuttons.add(placerBateauButton);
+		if(controller.aPlacerBateaux() == false) {
+			attaqueButton.setVisible(false);
+			attaqueHorizontaleButton.setVisible(false);
+		}
+		else {
+			attaqueButton.setVisible(true);
+			attaqueHorizontaleButton.setVisible(true);
+		}
 		
 		joueurJFrame.add(panelbuttons, BorderLayout.SOUTH);
 		joueurJFrame.pack();
@@ -82,6 +84,7 @@ public class JoueurVueGUI extends JoueurVue implements ActionListener{
 		
 		//DÃ©finition des actions sur les Ã©lÃ©ments de la GUI
 		attaqueButton.addActionListener(this);
+		attaqueHorizontaleButton.addActionListener(this);
 		placerBateauButton.addActionListener(this);
 		joueurJFrame.pack();
 	}
@@ -96,9 +99,21 @@ public class JoueurVueGUI extends JoueurVue implements ActionListener{
 		String[] head = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
 		for(int ligne=0; ligne<data.length; ligne++){
 			for (int colonne = 0; colonne < head.length; colonne++) {
-				data[ligne][colonne] = "[ 0 ]";
-				if(controller.getPlateau()[ligne][colonne].estTouchee()) {
-					data[ligne][colonne] = "[ X ]";
+				if(model.getPlateau().getPlateau()[ligne][colonne].estOccupee()) {
+					if(model.getPlateau().getPlateau()[ligne][colonne].estTouchee()){
+						data[ligne][colonne] = "[ X ]";
+					}
+					else{
+						data[ligne][colonne] = "[ 0 ]";
+					}
+				}
+				else {
+					if(model.getPlateau().getPlateau()[ligne][colonne].estTouchee()){
+						data[ligne][colonne] = "[    ]";
+					}
+					else{
+						data[ligne][colonne] = "[ 0 ]";
+					}
 				}
 			}
 		}
@@ -109,6 +124,14 @@ public class JoueurVueGUI extends JoueurVue implements ActionListener{
 	@Override
 	public void update(Observable o, Object arg) {
 		updateTable();
+		if(controller.aPlacerBateaux() == false) {
+			attaqueButton.setVisible(false);
+			attaqueHorizontaleButton.setVisible(false);
+		}
+		else {
+			attaqueButton.setVisible(true);
+			attaqueHorizontaleButton.setVisible(true);
+		}
 		textContent.remove(1);
 		textContent.add(table, 1);	
 		joueurJFrame.pack();
@@ -120,6 +143,7 @@ public class JoueurVueGUI extends JoueurVue implements ActionListener{
 		 String [][] data = new String [5][4];
 		 
 		 if(source == placerBateauButton) {
+			 controller.setAPlacerBateaux(true);
 			 String[] head = { "Taille", "ligne", "colonne", "orientation"};
 			 tableBateaux = new JTable(data, head);
 			 textContentBateaux.add(tableBateaux.getTableHeader());
@@ -144,7 +168,7 @@ public class JoueurVueGUI extends JoueurVue implements ActionListener{
 						}
 					}
 				 	Bateau current = new Bateau(Integer.parseInt(data[ligne][0]), Integer.parseInt(data[ligne][1]), Integer.parseInt(data[ligne][2]), data[ligne][3]);
-				 	controller.placerBateau(current);
+				 	controller.joueurPlacerBateau(current);
 			 }
 			 System.out.println("test");
 			 attaqueButton.setVisible(true);
@@ -156,7 +180,19 @@ public class JoueurVueGUI extends JoueurVue implements ActionListener{
 				 return;
 			 }
 			 Attaque attaque = new Attaque(getLigneAttaque(), getColonneAttaque());
-			 this.controller.estAttaque(attaque);
+			 this.controller.ordiEstAttaque(attaque);
+			 updateTable();
+		 }
+		 
+		 if(source == attaqueHorizontaleButton) {
+			 if(getColonneAttaque() < 0 || getLigneAttaque() < 0 || getColonneAttaque() > 10 || getLigneAttaque() > 10){
+				 affiche("Erreur, ceci n'est pas une attaque valide "); 
+				 return;
+			 }
+			 Attaque attaque = new AttaqueHorizontale(getLigneAttaque(), getColonneAttaque());
+			 this.controller.ordiEstAttaque(attaque);
+			 updateTable();
+
 		 }
 		 
 		

@@ -1,6 +1,8 @@
 
 public class AttaqueHorizontale extends Attaque{
 
+	
+	
 	/*
 	 * Crée une Attaque horizontale
 	 * @param : nom represente "attaque horizontale"
@@ -8,25 +10,19 @@ public class AttaqueHorizontale extends Attaque{
 	 * @param : cout represente son cout (3)
 	 * @param : centre le centre de l'attaque
 	 */
-	public AttaqueHorizontale(String nom, Case[] surface, int cout, Case centre) {
-		super(nom, surface, 5,centre);
-	}
-
-	/*
-	 * Crée une Attaque classique ou la surface equivaut au centre
-	 * @param : nom represente "attaque classique"
-	 * @param : cout represente son cout (3)
-	 * @param : centre le centre de l'attaque
-	 */
-	public AttaqueHorizontale(String nom, int cout, Case centre) {
-		super(nom,cout,centre);
-		calculSurface(centre);
+	public AttaqueHorizontale(int ligne, int colonne) {
+		super(ligne, colonne);
 	}
 	
-	public void calculSurface(Case centre) {
+	public void calculSurface() {
 		this.surface = new Case[3];
-		surface[0] = new Case(centre.getColonne()-1,centre.getLigne());
-		surface[1] = centre;
-		surface[2] = new Case(centre.getColonne()+1,centre.getLigne());
+		surface[0] = new Case(this.ligne,this.colonne-1);
+		surface[1] = new Case(this.ligne,this.colonne);
+		surface[2] = new Case(this.ligne,this.colonne+1);
+	}
+	
+	public Case[] getSurface() {
+		calculSurface();
+		return surface;
 	}
 }
