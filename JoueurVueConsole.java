@@ -21,6 +21,12 @@ public class JoueurVueConsole extends JoueurVue implements Observer {
 		printPlateau();
 	}
 	
+	/*
+	 * Affiche en console le plateau du joueur( en premier) et le plateau de l'ordi ( en second)
+	 * Affiche [0] si cette case n'est pas attaquée
+	 * Affiche [X] si cette case est attaquée et contient un bateau
+	 * Affiche [ ] si cette case est attaquée mais ne contient pas de bateau 
+	 */
 	public void printPlateau() {
 		System.out.println("Votre plateau: ");
 		System.out.println("   0  1  2  3  4  5  6  7  8  9");
@@ -74,11 +80,21 @@ public class JoueurVueConsole extends JoueurVue implements Observer {
 		System.out.println("\n");
 	}
 
+	/*
+	 * Affiche en console les règles
+	 */
 	private void printHelp(){
 		affiche("Pour faire une attaque simple (1 case) : A + numéro de la ligne a attaquée + numéro de la colonne a attaquée.");
 		affiche("Pour faire une attaque horizontale (3 cases) : AH + numéro de la ligne du centre a attaquée + numéro de la colonne du centre a attaquée.");
 	}
 	
+	/*
+	 * Gere tous ce qui est entré comme input en console:
+	 * 		-A = attaque
+	 * 		-AH = attaque horizontale
+	 * 		-P = placer bateau
+	 * 		-fin = fin du tour (simule attaque de l'ordi sur notre plateau)
+	 */
 	private class ReadInput implements Runnable{
 		public void run() {
 			

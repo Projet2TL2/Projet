@@ -3,6 +3,10 @@ public class Plateau {
 
 	Case[][] plateau;
 	
+	/*
+	 * Construit un plateau composé d'un tableau de tableau de Case  de taille 10 sur 10
+	 * Initialise le plateau a 100 nouvelles cases non occupées et non touchées
+	 */
 	public Plateau() {
 		plateau = new Case[10][10];
 		for(int ligne=0; ligne<10; ligne++){
@@ -13,8 +17,8 @@ public class Plateau {
 	}
 	
 	/*
-	 * @return true : si l'attaque touche un bateau du joueur
-	 * @return false : si l'attaque ne touche pas de bateau du joueur
+	 * @return true : si l'attaque touche un bateau sur le plateau
+	 * @return false : si l'attaque ne touche pas de bateau 
 	 */
 	public boolean estAttaque(Attaque attaque) {
 		boolean boo = false;
@@ -27,6 +31,7 @@ public class Plateau {
 		return boo;
 	}
 	
+	//GETTERS
 	public Case[][] getPlateau() {
 		return plateau;
 	}

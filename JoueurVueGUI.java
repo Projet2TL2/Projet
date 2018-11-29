@@ -89,10 +89,19 @@ public class JoueurVueGUI extends JoueurVue implements ActionListener{
 		joueurJFrame.pack();
 	}
 	
+	/*
+	 * Affiche le msg en argument dans le Jlabel de la GUI
+	 */
 	public void affiche(String msg){
 		message.setText(msg);
 	}
 	
+	/*
+	 * Affiche dans le JTable le plateau du model
+	 * Affiche [0] si cette case n'est pas attaquée
+	 * Affiche [X] si cette case est attaquée et contient un bateau
+	 * Affiche [ ] si cette case est attaquée mais ne contient pas de bateau
+	 */
 	public void updateTable(){
 		
 		Object [][] data = new Object [10][10];
@@ -121,7 +130,10 @@ public class JoueurVueGUI extends JoueurVue implements ActionListener{
 	}
 	
 	
-	@Override
+	/*
+	 * Lors d'un changement dans le controller, actualise l'affichage
+	 * si le joueur n'a pas encore placé ses bateaux, les bouttons d'attaque ne sont pas visibles
+	 */
 	public void update(Observable o, Object arg) {
 		updateTable();
 		if(controller.aPlacerBateaux() == false) {
@@ -137,7 +149,21 @@ public class JoueurVueGUI extends JoueurVue implements ActionListener{
 		joueurJFrame.pack();
 	}
 	
-	@Override
+	/*
+	 * si l'action e est:
+	 * 		-le bouton "Placer bateaux":
+	 * 			Ouvre une autre Jframe pour placer les bateaux
+	 * 			TODO
+	 * 		-le bouton "Placer!":
+	 * 			Ferme la Jframe du placement des bateaux et a effectué le placement
+	 * 			TODO
+	 * 		-le bouton "Attaque":
+	 * 			Prends la valeur des 2 JTextField et crée une attaque appliqué sur le plateau de l'ordi du controller/joueur
+	 * 			réactualise le plateau
+	 * 		-le bouton "Attaque Horizontale":
+	 * 			Prends la valeur des 2 JTextField et crée une attaque Horizontale appliqué sur le plateau de l'ordi du controller/joueur
+	 * 			réactualise le plateau
+	 */
 	public void actionPerformed(ActionEvent e) {
 		 Object  source=e.getSource();
 		 String [][] data = new String [5][4];
@@ -198,6 +224,9 @@ public class JoueurVueGUI extends JoueurVue implements ActionListener{
 		
 	}
 	
+	/*
+	 * Return le nombre du premier JTextField
+	 */
 	public int getLigneAttaque() {
 		int result = 0;
 		try {
@@ -209,6 +238,9 @@ public class JoueurVueGUI extends JoueurVue implements ActionListener{
 		return result;
 	}
 	
+	/*
+	 * Return le nombre du second JTextField
+	 */
 	public int getColonneAttaque() {
 		int result = 0;
 		try {

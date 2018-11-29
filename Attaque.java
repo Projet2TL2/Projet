@@ -5,11 +5,24 @@ public class Attaque {
 	int colonne;
 	Case[] surface;
 	
+	/*
+	 * Construit une attaque composée d'une ligne et d'une colonne ainsi que d'une surface représentant un tableau de case 
+	 * @param : ligne la ligne de la case
+	 * @param : colonne la colonne de la case
+	 */
 	public Attaque(int ligne, int colonne) { 
 		this.ligne = ligne;
 		this.colonne = colonne;
 	}
 
+	/*
+	 * renvoi la ligne et la colonne de l'attaque entre []
+	 */
+	public String toString() {
+		return "[" + getLigne() + getColonne() + "]" ;
+	}
+	
+	//GETTERS AND SETTERS
 	public int getLigne() {
 		return ligne;
 	}
@@ -27,11 +40,8 @@ public class Attaque {
 		surface[0] = new Case(this.ligne,this.colonne);
 		return surface;
 	}
+	
 	public void setColonne(int colonne) {
 		this.colonne = colonne;
-	}
-	
-	public String toString() {
-		return "[" + getLigne() + getColonne() + "]" ;
 	}
 }

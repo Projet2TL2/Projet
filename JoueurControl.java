@@ -45,10 +45,6 @@ public class JoueurControl {
 		model.aPlacerBateaux = boo;
 	}
 	
-	public Case[][] getPlateau(){
-		return model.getPlateau().getPlateau();
-	}
-	
 	public void addView(JoueurVue vue) {
 		this.vue = vue;
 	}

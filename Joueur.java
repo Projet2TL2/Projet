@@ -9,14 +9,17 @@ public class Joueur extends Observable{
 	ArrayList<Case> caseDeBateauxOrdi = new ArrayList<Case>();
 	boolean aPlacerBateaux = false;
 	
+	/*
+	 * Crée un Joueur qui possède un plateau sur lequelle il placera ses bateaux et un plateauOrdi qui représente le plateau sur lequel il attaque
+	 */
 	public Joueur() {
 		 plateau = new Plateau();
 		 plateauOrdi = new Plateau();
 	}
 	
 	/*
-	 * @return true : si l'attaque touche un bateau du joueur
-	 * @return false : si l'attaque ne touche pas de bateau du joueur
+	 * @return true : si l'attaque touche un bateau de l'ordi
+	 * @return false : si l'attaque ne touche pas de bateau 
 	 */
 	public boolean ordiEstAttaque(Attaque attaque) {
 		setChanged();
@@ -26,7 +29,7 @@ public class Joueur extends Observable{
 	
 	/*
 	 * @return true : si l'attaque touche un bateau du joueur
-	 * @return false : si l'attaque ne touche pas de bateau du joueur
+	 * @return false : si l'attaque ne touche pas de bateau 
 	 */
 	public boolean joueurEstAttaque(Attaque attaque) {
 		setChanged();
@@ -35,7 +38,10 @@ public class Joueur extends Observable{
 	}
 	
 	
-	
+	/*
+	 * @return true : le bateau b a été placé sur le plateau du joueur
+	 * @retrun false: si le bateau n'a pas été placé car la surface était déja occupée
+	 */
 	public boolean joueurPlacerBateau(Bateau b) {
 		for (int i = 0; i < b.getLongueur(); i++) {
 			for (int j = 0; j < caseDeBateauxJoueur.size(); j++) {
@@ -51,7 +57,10 @@ public class Joueur extends Observable{
 		return true;
 	}
 
-	
+	/*
+	 * @return true : le bateau b a été placé sur le plateau de l'ordi
+	 * @retrun false: si le bateau n'a pas été placé car la surface était déja occupée
+	 */
 	public boolean ordiPlacerBateau(Bateau b) {
 		for (int i = 0; i < b.getLongueur(); i++) {
 			for (int j = 0; j < caseDeBateauxOrdi.size(); j++) {
@@ -67,12 +76,15 @@ public class Joueur extends Observable{
 		return true;
 	}
 	
-	
-	
+	/*
+	 * @return true: le joueur a déja placé ses bateaux 
+	 * @return false: le joueur n'a pas encore placé ses bateaux
+	 */
 	public boolean aPlacerBateaux() {
 		return aPlacerBateaux;
 	}
 	
+	//GETTERS 
 	public Plateau getPlateau() {
 		return plateau;
 	}
