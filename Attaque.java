@@ -4,6 +4,7 @@ public class Attaque {
 	int ligne;
 	int colonne;
 	Case[] surface;
+	int cout;
 	
 	/*
 	 * Construit une attaque composée d'une ligne et d'une colonne ainsi que d'une surface représentant un tableau de case 
@@ -13,6 +14,7 @@ public class Attaque {
 	public Attaque(int ligne, int colonne) { 
 		this.ligne = ligne;
 		this.colonne = colonne;
+		this.cout = 3;
 	}
 
 	/*
@@ -43,5 +45,9 @@ public class Attaque {
 	
 	public void setColonne(int colonne) {
 		this.colonne = colonne;
+	}
+	
+	public int getCout(){
+		return this.cout;
 	}
 }

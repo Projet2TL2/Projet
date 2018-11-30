@@ -23,6 +23,7 @@ public class JoueurVueGUI extends JoueurVue implements ActionListener{
 	private JButton placerBateauButton = new JButton("Placer Bateau");
 	private JLabel message = new JLabel(" ");
 	private JTable table;
+	private JTable tableOrdi;
 	JPanel textContent = new JPanel();
 	
 	JFrame placementBateaux = new JFrame("Placement bateaux");
@@ -45,6 +46,8 @@ public class JoueurVueGUI extends JoueurVue implements ActionListener{
 		updateTable();
 		textContent.add(table.getTableHeader());
 		textContent.add(table);
+		textContent.add(tableOrdi.getTableHeader());
+		textContent.add(tableOrdi);
 		textContent.add(message);
 		
 		placerBateauFinal.addActionListener(this);
@@ -105,6 +108,7 @@ public class JoueurVueGUI extends JoueurVue implements ActionListener{
 	public void updateTable(){
 		
 		Object [][] data = new Object [10][10];
+		Object [][] dataOrdi = new Object[10][10];
 		String[] head = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
 		for(int ligne=0; ligne<data.length; ligne++){
 			for (int colonne = 0; colonne < head.length; colonne++) {
@@ -126,7 +130,28 @@ public class JoueurVueGUI extends JoueurVue implements ActionListener{
 				}
 			}
 		}
+		for(int ligne=0; ligne<data.length; ligne++){
+			for (int colonne = 0; colonne < head.length; colonne++) {
+				if(model.getPlateauOrdi().getPlateau()[ligne][colonne].estOccupee()) {
+					if(model.getPlateauOrdi().getPlateau()[ligne][colonne].estTouchee()){
+						dataOrdi[ligne][colonne] = "[ X ]";
+					}
+					else{
+						dataOrdi[ligne][colonne] = "[ 0 ]";
+					}
+				}
+				else {
+					if(model.getPlateauOrdi().getPlateau()[ligne][colonne].estTouchee()){
+						dataOrdi[ligne][colonne] = "[    ]";
+					}
+					else{
+						dataOrdi[ligne][colonne] = "[ 0 ]";
+					}
+				}
+			}
+		}
 		table = new JTable(data, head);
+		tableOrdi = new JTable(dataOrdi,head);
 	}
 	
 	
@@ -145,7 +170,9 @@ public class JoueurVueGUI extends JoueurVue implements ActionListener{
 			attaqueHorizontaleButton.setVisible(true);
 		}
 		textContent.remove(1);
-		textContent.add(table, 1);	
+		textContent.add(table, 1);
+		textContent.remove(3);
+		textContent.add(tableOrdi, 3);	
 		joueurJFrame.pack();
 	}
 	

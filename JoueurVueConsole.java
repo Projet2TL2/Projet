@@ -18,7 +18,7 @@ public class JoueurVueConsole extends JoueurVue implements Observer {
 
 	@Override
 	public void update(Observable o, Object arg) {
-		printPlateau();
+		//printPlateau();
 	}
 	
 	/*
@@ -84,21 +84,25 @@ public class JoueurVueConsole extends JoueurVue implements Observer {
 	 * Affiche en console les règles
 	 */
 	private void printHelp(){
-		affiche("Pour faire une attaque simple (1 case) : A + numéro de la ligne a attaquée + numéro de la colonne a attaquée.");
-		affiche("Pour faire une attaque horizontale (3 cases) : AH + numéro de la ligne du centre a attaquée + numéro de la colonne du centre a attaquée.");
+		affiche("Il vous reste " + model.getArgent() + " pièces");
+		affiche("3 piéces Pour faire une attaque simple (1 case) : A + numéro de la ligne a attaquée + numéro de la colonne a attaquée.");
+		affiche("5 piéces Pour faire une attaque horizontale (3 cases) : AH + numéro de la ligne du centre a attaquée + numéro de la colonne du centre a attaquée.");
+		affiche("5 piéces Pour faire une attaque verticale (3 cases) : AV + numéro de la ligne du centre a attaquée + numéro de la colonne du centre a attaquée.");
+		affiche("0 piécesPour finir le tour et faire le tour de l'ordi : fin");
 	}
 	
 	/*
 	 * Gere tous ce qui est entré comme input en console:
 	 * 		-A = attaque
 	 * 		-AH = attaque horizontale
+	 * 		-AV = attaque verticale
 	 * 		-P = placer bateau
 	 * 		-fin = fin du tour (simule attaque de l'ordi sur notre plateau)
 	 */
 	private class ReadInput implements Runnable{
 		public void run() {
 			
-			int compteur = 1;
+			int compteur = 2;
 			while(controller.aPlacerBateaux() == false  && compteur != 0) {
 				try {
 					affiche("\nEncore " + compteur + " bateaux a placer !" );
@@ -127,12 +131,6 @@ public class JoueurVueConsole extends JoueurVue implements Observer {
 							compteur --;
 							if(compteur == 0) {
 							controller.setAPlacerBateaux(true);
-							printPlateau();
-							printHelp();
-							}
-							else {
-								affiche("\nEncore " + compteur + " bateaux a placer !" );
-								printHelp();
 							}
 							break;
 						default : 
@@ -146,48 +144,61 @@ public class JoueurVueConsole extends JoueurVue implements Observer {
 				}
 			}
 			
+			System.out.println("L'ordi a placé ses bateaux !! :");
 			controller.ordiPlacerBateau(new Bateau(aleatoire(0, 6),aleatoire(0, 6),aleatoire(2, 5),"H"));
+			controller.ordiPlacerBateau(new Bateau(aleatoire(4, 9),aleatoire(4, 6),aleatoire(2, 4),"V"));
+			printHelp();
 			
 			while(true){
 				try{
 					String c = sc.next();
 						if(c.equals("fin")) {
-							Random n = new Random();
-							if(aleatoire(0, 2) ==1) {
+							int nbrAleatoire = aleatoire(0, 3);
+							if(nbrAleatoire == 0) {
 								controller.joueurEstAttaque(new Attaque(aleatoire(0, 10),aleatoire(0, 10)));
+								printPlateau();
 							}
-							else {
-								controller.joueurEstAttaque(new AttaqueHorizontale(aleatoire(0, 10),aleatoire(1, 9)));
+							else{
+								if(nbrAleatoire == 1) {
+									controller.joueurEstAttaque(new AttaqueHorizontale(aleatoire(0, 10),aleatoire(1, 9)));
+								}
+								else{
+									controller.joueurEstAttaque(new AttaqueVerticale(aleatoire(1, 9),aleatoire(0, 10)));
+								}
 							}
 							printPlateau();
 						}
-					int i = sc.nextInt();
-					if(i<0 || i> 9){
-						affiche("Numéro de ligne incorrect");
-					}
-					
-					int j = sc.nextInt();
-					if(j<0 || j> 9){
-						affiche("Numéro de colonne incorrect");
-					}
-					
-					switch(c){
-						case "A" :
-							controller.ordiEstAttaque(new Attaque(i,j));
+						while(model.getArgent()>0){
+							int i = sc.nextInt();
+							if(i<0 || i> 9){
+								affiche("Numéro de ligne incorrect");
+							}
+							
+							int j = sc.nextInt();
+							if(j<0 || j> 9){
+								affiche("Numéro de colonne incorrect");
+							}
+							
+							switch(c){
+								case "A" :
+									controller.ordiEstAttaque(new Attaque(i,j));
+									model.setArgent(3);
+									break;
+								case "AH" :
+									controller.ordiEstAttaque(new AttaqueHorizontale(i,j));
+									model.setArgent(5);
+									break;
+								case "AV" :
+									controller.ordiEstAttaque(new AttaqueVerticale(i,j));
+									model.setArgent(5);
+									break;
+								default : 
+									affiche("Opération incorrecte");
+							} 
 							printPlateau();
-							break;
-						case "AH" :
-							controller.ordiEstAttaque(new AttaqueHorizontale(i,j));
-							printPlateau();
-							break;
-						case "Fin" :
-							//controller.joueurEstAttaque(new Attaque((int)Math.random()*10,(int)Math.random()*10));
-							printPlateau();
-						default : 
-							affiche("Opération incorrecte");
 							printHelp();
-					} 
-				}
+						}
+					}
 				catch(InputMismatchException e){
 					affiche("Format d'input incorrect");
 					printHelp();
