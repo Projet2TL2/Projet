@@ -1,4 +1,10 @@
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Observable;
@@ -26,6 +32,9 @@ public class JoueurVueGUI extends JoueurVue implements ActionListener{
 	private JTable tableOrdi;
 	JPanel textContent = new JPanel();
 	
+	private JButton grille1[];
+	private JPanel plat;
+	
 	JFrame placementBateaux = new JFrame("Placement bateaux");
 	JPanel textContentBateaux = new JPanel();
 	JButton placerBateauFinal = new JButton("Placer Bateaux !");
@@ -43,6 +52,11 @@ public class JoueurVueGUI extends JoueurVue implements ActionListener{
 		//Construction de la fenêtre
 		joueurJFrame = new JFrame("Joueur MVC");	
 		textContent.setLayout(new BoxLayout(textContent, BoxLayout.Y_AXIS));
+		
+		grille1 = new JButton[100];
+		plat = new JPanel();
+		plat.setLayout(new GridLayout(10, 10, 0, 0));
+		
 		updateTable();
 		textContent.add(table.getTableHeader());
 		textContent.add(table);
@@ -90,6 +104,13 @@ public class JoueurVueGUI extends JoueurVue implements ActionListener{
 		attaqueHorizontaleButton.addActionListener(this);
 		placerBateauButton.addActionListener(this);
 		joueurJFrame.pack();
+		
+		
+		
+		
+		setSize(1170, 500);
+		setVisible(true);
+		getContentPane().add(plat, BorderLayout.CENTER);
 	}
 	
 	/*
@@ -110,26 +131,50 @@ public class JoueurVueGUI extends JoueurVue implements ActionListener{
 		Object [][] data = new Object [10][10];
 		Object [][] dataOrdi = new Object[10][10];
 		String[] head = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
+		
+		
+		
 		for(int ligne=0; ligne<data.length; ligne++){
 			for (int colonne = 0; colonne < head.length; colonne++) {
 				if(model.getPlateau().getPlateau()[ligne][colonne].estOccupee()) {
 					if(model.getPlateau().getPlateau()[ligne][colonne].estTouchee()){
 						data[ligne][colonne] = "[ X ]";
+						grille1[ligne*10 + colonne] = new JButton("[ X ]");
+						grille1[ligne*10 + colonne].setName(""+(ligne*10 + colonne));
+						grille1[ligne*10 + colonne].setActionCommand("Grille1"+(ligne*10 + colonne));
+						grille1[ligne*10 + colonne].addActionListener(this);
+						plat.add(grille1[ligne*10 + colonne]);
 					}
 					else{
-						data[ligne][colonne] = "[ 0 ]";
+						data[ligne][colonne] = "[ Y ]";
+						grille1[ligne*10 + colonne] = new JButton("[ Y ]");
+						grille1[ligne*10 + colonne].setName(""+(ligne*10 + colonne));
+						grille1[ligne*10 + colonne].setActionCommand("Grille1"+(ligne*10 + colonne));
+						grille1[ligne*10 + colonne].addActionListener(this);
+						plat.add(grille1[ligne*10 + colonne]);
 					}
 				}
 				else {
 					if(model.getPlateau().getPlateau()[ligne][colonne].estTouchee()){
 						data[ligne][colonne] = "[    ]";
+						grille1[ligne*10 + colonne] = new JButton("[   ]");
+						grille1[ligne*10 + colonne].setName(""+(ligne*10 + colonne));
+						grille1[ligne*10 + colonne].setActionCommand("Grille1"+(ligne*10 + colonne));
+						grille1[ligne*10 + colonne].addActionListener(this);
+						plat.add(grille1[ligne*10 + colonne]);
 					}
 					else{
 						data[ligne][colonne] = "[ 0 ]";
+						grille1[ligne*10 + colonne] = new JButton("[ 0 ]");
+						grille1[ligne*10 + colonne].setName(""+(ligne*10 + colonne));
+						grille1[ligne*10 + colonne].setActionCommand("Grille1"+(ligne*10 + colonne));
+						grille1[ligne*10 + colonne].addActionListener(this);
+						plat.add(grille1[ligne*10 + colonne]);
 					}
 				}
 			}
 		}
+		
 		for(int ligne=0; ligne<data.length; ligne++){
 			for (int colonne = 0; colonne < head.length; colonne++) {
 				if(model.getPlateauOrdi().getPlateau()[ligne][colonne].estOccupee()) {
@@ -137,7 +182,7 @@ public class JoueurVueGUI extends JoueurVue implements ActionListener{
 						dataOrdi[ligne][colonne] = "[ X ]";
 					}
 					else{
-						dataOrdi[ligne][colonne] = "[ 0 ]";
+						dataOrdi[ligne][colonne] = "[ Y ]";
 					}
 				}
 				else {
@@ -152,6 +197,8 @@ public class JoueurVueGUI extends JoueurVue implements ActionListener{
 		}
 		table = new JTable(data, head);
 		tableOrdi = new JTable(dataOrdi,head);
+		
+
 	}
 	
 	

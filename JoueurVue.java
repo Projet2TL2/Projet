@@ -1,7 +1,10 @@
 import java.util.Observer;
 
+import javax.swing.JFrame;
 
-public abstract class JoueurVue implements Observer{
+
+
+public abstract class JoueurVue extends JFrame implements Observer{
 	
 	protected Joueur model;
 	protected JoueurControl controller;

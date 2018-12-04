@@ -28,6 +28,7 @@ public class JoueurVueConsole extends JoueurVue implements Observer {
 	 * Affiche [ ] si cette case est attaquée mais ne contient pas de bateau 
 	 */
 	public void printPlateau() {
+		System.out.print("[0] = Case non découverte\n[Y] = Bateau non découvert\n[X] = Bateau touché\n[ ] = Case touchée mais vide\n");
 		System.out.println("Votre plateau: ");
 		System.out.println("   0  1  2  3  4  5  6  7  8  9");
 		for(int ligne = 0; ligne<10; ligne++){
@@ -38,7 +39,7 @@ public class JoueurVueConsole extends JoueurVue implements Observer {
 						System.out.print("[X]");
 					}
 					else{
-						System.out.print("[0]");
+						System.out.print("[Y]");
 					}
 				}
 				else {
@@ -157,6 +158,7 @@ public class JoueurVueConsole extends JoueurVue implements Observer {
 							if(nbrAleatoire == 0) {
 								controller.joueurEstAttaque(new Attaque(aleatoire(0, 10),aleatoire(0, 10)));
 								printPlateau();
+								model.setArgent(10);
 							}
 							else{
 								if(nbrAleatoire == 1) {
@@ -182,15 +184,15 @@ public class JoueurVueConsole extends JoueurVue implements Observer {
 							switch(c){
 								case "A" :
 									controller.ordiEstAttaque(new Attaque(i,j));
-									model.setArgent(3);
+									model.setArgent(model.getArgent()-3);
 									break;
 								case "AH" :
 									controller.ordiEstAttaque(new AttaqueHorizontale(i,j));
-									model.setArgent(5);
+									model.setArgent(model.getArgent()-5);
 									break;
 								case "AV" :
 									controller.ordiEstAttaque(new AttaqueVerticale(i,j));
-									model.setArgent(5);
+									model.setArgent(model.getArgent()-5);
 									break;
 								default : 
 									affiche("Opération incorrecte");
