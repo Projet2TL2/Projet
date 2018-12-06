@@ -8,6 +8,7 @@ public class Joueur extends Observable{
 	ArrayList<Case> caseDeBateauxJoueur = new ArrayList<Case>();
 	ArrayList<Case> caseDeBateauxOrdi = new ArrayList<Case>();
 	boolean aPlacerBateaux = false;
+	int argent = 10;
 	
 	/*
 	 * Crée un Joueur qui possède un plateau sur lequelle il placera ses bateaux et un plateauOrdi qui représente le plateau sur lequel il attaque
@@ -91,5 +92,13 @@ public class Joueur extends Observable{
 	
 	public Plateau getPlateauOrdi() {
 		return plateauOrdi;
+	}
+	
+	public int getArgent() {
+		return argent;
+	}
+	
+	public void setArgent(int a) {
+		this.argent = a;
 	}
 }

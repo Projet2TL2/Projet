@@ -1,6 +1,7 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -9,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Observable;
 
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -32,8 +34,15 @@ public class JoueurVueGUI extends JoueurVue implements ActionListener{
 	private JTable tableOrdi;
 	JPanel textContent = new JPanel();
 	
-	private JButton grille1[];
-	private JPanel plat;
+	private JButton grilleJoueur[];
+	private JPanel plateauJoueur;
+	private JButton grilleOrdi[];
+	private JPanel plateauOrdi;
+	
+	private JPanel total;
+	private JButton mesBoutons[] = new JButton[121];
+	private JPanel grille;
+	JFrame framePlateau = new JFrame();
 	
 	JFrame placementBateaux = new JFrame("Placement bateaux");
 	JPanel textContentBateaux = new JPanel();
@@ -49,13 +58,32 @@ public class JoueurVueGUI extends JoueurVue implements ActionListener{
 		
 		super(model, controller);
 		
-		//Construction de la fenêtre
 		joueurJFrame = new JFrame("Joueur MVC");	
 		textContent.setLayout(new BoxLayout(textContent, BoxLayout.Y_AXIS));
 		
-		grille1 = new JButton[100];
-		plat = new JPanel();
-		plat.setLayout(new GridLayout(10, 10, 0, 0));
+		total = new JPanel();
+		total.setLayout(new BorderLayout());
+		grille = new JPanel();
+        grille.setLayout(new GridLayout(11,11));
+		
+       
+        
+		
+		grilleJoueur = new JButton[100];
+		grilleOrdi = new JButton[100];
+		plateauJoueur = new JPanel();
+		plateauJoueur.setLayout(new GridLayout(10, 10, 0, 0));
+		plateauOrdi = new JPanel();
+		plateauOrdi.setLayout(new GridLayout(10, 10, 0, 0));
+		
+		for(int i =0 ; i<100 ; i++) {
+			grilleJoueur[i] = new JButton(" ");
+			grilleJoueur[i].setPreferredSize(new Dimension(10, 10));
+			grilleOrdi[i] = new JButton(" ");
+			grilleOrdi[i].setPreferredSize(new Dimension(10, 10));
+			plateauJoueur.add(grilleJoueur[i]);
+			plateauOrdi.add(grilleOrdi[i]);
+		}
 		
 		updateTable();
 		textContent.add(table.getTableHeader());
@@ -69,7 +97,7 @@ public class JoueurVueGUI extends JoueurVue implements ActionListener{
 		textContentBateaux.setLayout(new BoxLayout(textContentBateaux, BoxLayout.Y_AXIS));
 		
 		joueurJFrame.add(textContent, BorderLayout.NORTH);
-		
+	
 		JPanel fieldZone = new JPanel();
 		fieldZone.setLayout(new BoxLayout(fieldZone, BoxLayout.X_AXIS));
 		JLabel fieldLabel1 = new JLabel("Ligne de votre attaque ");
@@ -92,6 +120,7 @@ public class JoueurVueGUI extends JoueurVue implements ActionListener{
 			attaqueHorizontaleButton.setVisible(true);
 		}
 		
+		
 		joueurJFrame.add(panelbuttons, BorderLayout.SOUTH);
 		joueurJFrame.pack();
 		joueurJFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -99,18 +128,23 @@ public class JoueurVueGUI extends JoueurVue implements ActionListener{
 		joueurJFrame.setLocation(300, 400);
 		joueurJFrame.setVisible(true);
 		
+		
 		//Définition des actions sur les éléments de la GUI
 		attaqueButton.addActionListener(this);
 		attaqueHorizontaleButton.addActionListener(this);
 		placerBateauButton.addActionListener(this);
-		joueurJFrame.pack();
+		//joueurJFrame.pack();
 		
 		
 		
 		
-		setSize(1170, 500);
+		setSize(800,1000);
 		setVisible(true);
-		getContentPane().add(plat, BorderLayout.CENTER);
+		getContentPane().add(plateauJoueur,BorderLayout.NORTH);
+		getContentPane().add(attaqueButton, BorderLayout.CENTER);
+		getContentPane().add(placerBateauButton, BorderLayout.CENTER);
+		getContentPane().add(plateauOrdi, BorderLayout.SOUTH);
+		//this.setResizable(false);
 	}
 	
 	/*
@@ -128,6 +162,42 @@ public class JoueurVueGUI extends JoueurVue implements ActionListener{
 	 */
 	public void updateTable(){
 		
+		 int taille = 0, lettre = 65, numero = 0;
+	        for(int i=0;i<11;i++) {
+	            for(int j=0;j<11;j++) {
+	                mesBoutons[taille] = new JButton("");
+	                
+	                if(i==0&&j==0) mesBoutons[taille].setBackground(Color.BLACK);
+	                if(i==0&&j!=0) {
+	                    mesBoutons[taille].setText(""+numero);
+	                    mesBoutons[taille].setBackground(Color.ORANGE);
+	                    mesBoutons[taille].setForeground(Color.red);
+	                    mesBoutons[taille].setBorder(BorderFactory.createEtchedBorder(Color.blue, Color.red));
+	                    numero++;
+	                }
+	                if(j==0&&i!=0) {
+	                    mesBoutons[taille].setText(""+(char)lettre);
+	                    mesBoutons[taille].setBackground(Color.ORANGE);
+	                    mesBoutons[taille].setBorder(BorderFactory.createEtchedBorder(Color.blue, Color.red));
+	                    lettre++;
+	                }
+	                if(i>0&&j>0) {
+	                    mesBoutons[taille].setText(".");
+	                }
+	                
+	                grille.add(mesBoutons[taille]); 
+	                taille++;
+	            }
+	        }
+	        
+	        total.add(grille);
+	        framePlateau.setTitle("test");
+	        framePlateau.setContentPane(total);
+	        framePlateau.pack();
+	        framePlateau.setVisible(true);
+		
+		
+		
 		Object [][] data = new Object [10][10];
 		Object [][] dataOrdi = new Object[10][10];
 		String[] head = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
@@ -139,37 +209,49 @@ public class JoueurVueGUI extends JoueurVue implements ActionListener{
 				if(model.getPlateau().getPlateau()[ligne][colonne].estOccupee()) {
 					if(model.getPlateau().getPlateau()[ligne][colonne].estTouchee()){
 						data[ligne][colonne] = "[ X ]";
-						grille1[ligne*10 + colonne] = new JButton("[ X ]");
-						grille1[ligne*10 + colonne].setName(""+(ligne*10 + colonne));
-						grille1[ligne*10 + colonne].setActionCommand("Grille1"+(ligne*10 + colonne));
-						grille1[ligne*10 + colonne].addActionListener(this);
-						plat.add(grille1[ligne*10 + colonne]);
+						plateauJoueur.remove(grilleJoueur[ligne*10 + colonne]);
+						grilleJoueur[ligne*10 + colonne] = new JButton("[ X ]");
+						grilleJoueur[ligne*10 + colonne].setPreferredSize(new Dimension(40, 40));
+						grilleJoueur[ligne*10 + colonne].setBackground(Color.RED);
+						grilleJoueur[ligne*10 + colonne].setName(""+(ligne*10 + colonne));
+						grilleJoueur[ligne*10 + colonne].setActionCommand("GrilleJoueur"+(ligne*10 + colonne));
+						grilleJoueur[ligne*10 + colonne].addActionListener(this);
+						plateauJoueur.add(grilleJoueur[ligne*10 + colonne]);
 					}
 					else{
 						data[ligne][colonne] = "[ Y ]";
-						grille1[ligne*10 + colonne] = new JButton("[ Y ]");
-						grille1[ligne*10 + colonne].setName(""+(ligne*10 + colonne));
-						grille1[ligne*10 + colonne].setActionCommand("Grille1"+(ligne*10 + colonne));
-						grille1[ligne*10 + colonne].addActionListener(this);
-						plat.add(grille1[ligne*10 + colonne]);
+						plateauJoueur.remove(grilleJoueur[ligne*10 + colonne]);
+						grilleJoueur[ligne*10 + colonne] = new JButton("[ Y ]");
+						grilleJoueur[ligne*10 + colonne].setPreferredSize(new Dimension(40, 40));
+						grilleJoueur[ligne*10 + colonne].setBackground(Color.ORANGE);
+						grilleJoueur[ligne*10 + colonne].setName(""+(ligne*10 + colonne));
+						grilleJoueur[ligne*10 + colonne].setActionCommand("GrilleJoueur"+(ligne*10 + colonne));
+						grilleJoueur[ligne*10 + colonne].addActionListener(this);
+						plateauJoueur.add(grilleJoueur[ligne*10 + colonne]);
 					}
 				}
 				else {
 					if(model.getPlateau().getPlateau()[ligne][colonne].estTouchee()){
 						data[ligne][colonne] = "[    ]";
-						grille1[ligne*10 + colonne] = new JButton("[   ]");
-						grille1[ligne*10 + colonne].setName(""+(ligne*10 + colonne));
-						grille1[ligne*10 + colonne].setActionCommand("Grille1"+(ligne*10 + colonne));
-						grille1[ligne*10 + colonne].addActionListener(this);
-						plat.add(grille1[ligne*10 + colonne]);
+						plateauJoueur.remove(grilleJoueur[ligne*10 + colonne]);
+						grilleJoueur[ligne*10 + colonne] = new JButton("[   ]");
+						grilleJoueur[ligne*10 + colonne].setPreferredSize(new Dimension(40, 40));
+						grilleJoueur[ligne*10 + colonne].setBackground(Color.GRAY);
+						grilleJoueur[ligne*10 + colonne].setName(""+(ligne*10 + colonne));
+						grilleJoueur[ligne*10 + colonne].setActionCommand("GrilleJoueur"+(ligne*10 + colonne));
+						grilleJoueur[ligne*10 + colonne].addActionListener(this);
+						plateauJoueur.add(grilleJoueur[ligne*10 + colonne]);
 					}
 					else{
 						data[ligne][colonne] = "[ 0 ]";
-						grille1[ligne*10 + colonne] = new JButton("[ 0 ]");
-						grille1[ligne*10 + colonne].setName(""+(ligne*10 + colonne));
-						grille1[ligne*10 + colonne].setActionCommand("Grille1"+(ligne*10 + colonne));
-						grille1[ligne*10 + colonne].addActionListener(this);
-						plat.add(grille1[ligne*10 + colonne]);
+						plateauJoueur.remove(grilleJoueur[ligne*10 + colonne]);
+						grilleJoueur[ligne*10 + colonne] = new JButton("[ 0 ]");
+						grilleJoueur[ligne*10 + colonne].setPreferredSize(new Dimension(40, 40));
+						grilleJoueur[ligne*10 + colonne].setBackground(Color.CYAN);
+						grilleJoueur[ligne*10 + colonne].setName(""+(ligne*10 + colonne));
+						grilleJoueur[ligne*10 + colonne].setActionCommand("GrilleJoueur"+(ligne*10 + colonne));
+						grilleJoueur[ligne*10 + colonne].addActionListener(this);
+						plateauJoueur.add(grilleJoueur[ligne*10 + colonne]);
 					}
 				}
 			}
@@ -180,17 +262,49 @@ public class JoueurVueGUI extends JoueurVue implements ActionListener{
 				if(model.getPlateauOrdi().getPlateau()[ligne][colonne].estOccupee()) {
 					if(model.getPlateauOrdi().getPlateau()[ligne][colonne].estTouchee()){
 						dataOrdi[ligne][colonne] = "[ X ]";
+						plateauOrdi.remove(grilleOrdi[ligne*10 + colonne]);
+						grilleOrdi[ligne*10 + colonne] = new JButton("[ X ]");
+						grilleOrdi[ligne*10 + colonne].setPreferredSize(new Dimension(30, 30));
+						grilleOrdi[ligne*10 + colonne].setBackground(Color.RED);
+						grilleOrdi[ligne*10 + colonne].setName(""+(ligne*10 + colonne));
+						grilleOrdi[ligne*10 + colonne].setActionCommand("grilleOrdi"+(ligne*10 + colonne));
+						grilleOrdi[ligne*10 + colonne].addActionListener(this);
+						plateauOrdi.add(grilleOrdi[ligne*10 + colonne]);
 					}
 					else{
 						dataOrdi[ligne][colonne] = "[ Y ]";
+						plateauOrdi.remove(grilleOrdi[ligne*10 + colonne]);
+						grilleOrdi[ligne*10 + colonne] = new JButton("[ Y ]");
+						grilleOrdi[ligne*10 + colonne].setPreferredSize(new Dimension(40, 40));
+						grilleOrdi[ligne*10 + colonne].setBackground(Color.ORANGE);
+						grilleOrdi[ligne*10 + colonne].setName(""+(ligne*10 + colonne));
+						grilleOrdi[ligne*10 + colonne].setActionCommand("grilleOrdi"+(ligne*10 + colonne));
+						grilleOrdi[ligne*10 + colonne].addActionListener(this);
+						plateauOrdi.add(grilleOrdi[ligne*10 + colonne]);
 					}
 				}
 				else {
 					if(model.getPlateauOrdi().getPlateau()[ligne][colonne].estTouchee()){
 						dataOrdi[ligne][colonne] = "[    ]";
+						plateauOrdi.remove(grilleOrdi[ligne*10 + colonne]);
+						grilleOrdi[ligne*10 + colonne] = new JButton("[   ]");
+						grilleOrdi[ligne*10 + colonne].setPreferredSize(new Dimension(40, 40));
+						grilleOrdi[ligne*10 + colonne].setBackground(Color.GRAY);
+						grilleOrdi[ligne*10 + colonne].setName(""+(ligne*10 + colonne));
+						grilleOrdi[ligne*10 + colonne].setActionCommand("grilleOrdi"+(ligne*10 + colonne));
+						grilleOrdi[ligne*10 + colonne].addActionListener(this);
+						plateauOrdi.add(grilleOrdi[ligne*10 + colonne]);
 					}
 					else{
 						dataOrdi[ligne][colonne] = "[ 0 ]";
+						plateauOrdi.remove(grilleOrdi[ligne*10 + colonne]);
+						grilleOrdi[ligne*10 + colonne] = new JButton("[ 0 ]");
+						grilleOrdi[ligne*10 + colonne].setPreferredSize(new Dimension(40, 40));
+						grilleOrdi[ligne*10 + colonne].setBackground(Color.CYAN);
+						grilleOrdi[ligne*10 + colonne].setName(""+(ligne*10 + colonne));
+						grilleOrdi[ligne*10 + colonne].setActionCommand("grilleOrdi"+(ligne*10 + colonne));
+						grilleOrdi[ligne*10 + colonne].addActionListener(this);
+						plateauOrdi.add(grilleOrdi[ligne*10 + colonne]);
 					}
 				}
 			}
@@ -243,19 +357,8 @@ public class JoueurVueGUI extends JoueurVue implements ActionListener{
 		 String [][] data = new String [5][4];
 		 
 		 if(source == placerBateauButton) {
-			 controller.setAPlacerBateaux(true);
-			 String[] head = { "Taille", "ligne", "colonne", "orientation"};
-			 tableBateaux = new JTable(data, head);
-			 textContentBateaux.add(tableBateaux.getTableHeader());
-			 textContentBateaux.add(tableBateaux);
-			 textContentBateaux.add(tableBateaux, 1);	
-			 placementBateaux.add(textContentBateaux, BorderLayout.NORTH);
-			 placementBateaux.add(panelbuttons, BorderLayout.SOUTH);
-			 placementBateaux.pack();
-			 placementBateaux.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			 placementBateaux.setSize(500, 200);
-			 placementBateaux.setLocation(800, 200);
-			 placementBateaux.setVisible(true);
+			
+			 
 			 
 		 }
 		 

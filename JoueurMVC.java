@@ -8,7 +8,7 @@ public class JoueurMVC {
 		JoueurControl ctrlGUI = new JoueurControl(model);
 		JoueurControl ctrlConsole = new JoueurControl(model);
 		
-		JoueurVue gui = new JoueurVueGUI(model, ctrlGUI, 200, 200);
+		JoueurVue gui = new JoueurVueGUIVersion2(model, ctrlGUI, 200, 200);
 		JoueurVue console = new JoueurVueConsole(model, ctrlConsole);
 		
 		ctrlGUI.addView(gui);
