@@ -1,80 +1,51 @@
 
 public class Case {
-	
-	int colonne; //colonne de la case ( 0 - 20 )
-	int ligne; // ligne de la case ( 0 - 20 )
-	boolean touchee;
-	boolean occupe;
-	
-	/*
-	 * Construit une case de colonne x et ligne y
-	 */
-	public Case(int colonne, int ligne, boolean occupe) {
-		this.colonne = colonne;
-		this.ligne = ligne;
-		this.touchee = false;
-		this.occupe = occupe;
-	}
+
+	int ligne;
+	int colonne;
+	boolean estOccupee = false;
+	boolean estTouchee = false;
 	
 	/*
-	 * Construit une case de colonne x et ligne y
+	 * Construit une case de ligne ligne, colonne colonne. EstOccupe et EstTouche sont initialisé a false
+	 * @param : ligne la ligne de la case
+	 * @param : colonne la colonne de la case
 	 */
-	public Case(int colonne, int ligne) {
-		this.colonne = colonne;
+	public Case(int ligne, int colonne) {
 		this.ligne = ligne;
-		this.touchee = false;
-		this.occupe = false;
+		this.colonne = colonne;
 	}
-	
+
+	/*
+	 * return la ligne et la colonne sous forme de String tout attaché
+	 */
 	public String toString() {
-		return "[" + colonne + "][" + ligne +"]; ";
+		return this.getLigne() + "" + this.getColonne();
 	}
 	
-	
-	public boolean equals(Case c) {
-		if (this.getColonne() == c.getColonne() && this.getLigne() == c.getLigne()){
-			return true;
-		}
-		else {
-			return false;
-		}
-		
+	//GETTES AND SETTERS
+	public boolean estOccupee() {
+		return estOccupee;
 	}
 	
-	//GETTERS AND SETTERS
+	public void setOccupee() {
+		estOccupee = true;
+	}
 	
+	public boolean estTouchee() {
+		return estTouchee;
+	}
 	
-	public boolean isTouchee() {
-		return touchee;
+	public void setTouchee() {
+		estTouchee= true;
 	}
-
-	public boolean isOccupe() {
-		return occupe;
-	}
-
-	public void setOccupe(boolean occupe) {
-		this.occupe = occupe;
-	}
-
-	public void setTouchee(boolean touchee) {
-		this.touchee = touchee;
+	
+	public int getLigne() {
+		return ligne;
 	}
 
 	public int getColonne() {
 		return colonne;
 	}
 
-	public void setColonne(int colonne) {
-		this.colonne = colonne;
-	}
-
-	public int getLigne() {
-		return ligne;
-	}
-
-	public void setLigne(int ligne) {
-		this.ligne = ligne;
-	}
-
-	
 }

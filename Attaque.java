@@ -1,68 +1,53 @@
 
 public class Attaque {
 
-	String nom;
+	int ligne;
+	int colonne;
 	Case[] surface;
 	int cout;
-	Case centre;
 	
 	/*
-	 * Crée une Attaque 
-	 * @param : nom represente le nom de l'attaque
-	 * @param : surface represente la surface de l'attaque 
-	 * @param : cout represente son cout 
-	 * @param : centre represente le centre de l'attaque
+	 * Construit une attaque composée d'une ligne et d'une colonne ainsi que d'une surface représentant un tableau de case 
+	 * @param : ligne la ligne de la case
+	 * @param : colonne la colonne de la case
 	 */
-	public Attaque(String nom, Case[] surface, int cout, Case centre) {
-		this.nom = nom;
-		this.surface = surface;
-		this.cout = cout;
-		this.centre = centre;
+	public Attaque(int ligne, int colonne) { 
+		this.ligne = ligne;
+		this.colonne = colonne;
+		this.cout = 3;
+	}
+
+	/*
+	 * renvoi la ligne et la colonne de l'attaque entre []
+	 */
+	public String toString() {
+		return "[" + getLigne() + getColonne() + "]" ;
 	}
 	
-	/*
-	 * Crée une Attaque 
-	 * @param : nom represente le nom de l'attaque
-	 * @param : cout represente son cout 
-	 * @param : centre represente le centre de l'attaque
-	 */
-	public Attaque(String nom, int cout, Case centre) {
-		this.nom = nom;
-		this.cout = cout;
-		this.centre = centre;
+	//GETTERS AND SETTERS
+	public int getLigne() {
+		return ligne;
 	}
 
-	public String getNom() {
-		return nom;
+	public void setLigne(int ligne) {
+		this.ligne = ligne;
 	}
 
-	public void setNom(String nom) {
-		this.nom = nom;
+	public int getColonne() {
+		return colonne;
 	}
 
 	public Case[] getSurface() {
+		surface = new Case[1];
+		surface[0] = new Case(this.ligne,this.colonne);
 		return surface;
 	}
-
-	public void setSurface(Case[] surface) {
-		this.surface = surface;
-	}
-
-	public int getCout() {
-		return cout;
-	}
-
-	public void setCout(int cout) {
-		this.cout = cout;
-	}
-
-	public Case getCentre() {
-		return centre;
-	}
-
-	public void setCentre(Case centre) {
-		this.centre = centre;
+	
+	public void setColonne(int colonne) {
+		this.colonne = colonne;
 	}
 	
-	
+	public int getCout(){
+		return this.cout;
+	}
 }
