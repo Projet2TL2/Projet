@@ -9,6 +9,7 @@ public class Joueur extends Observable{
 	ArrayList<Case> caseDeBateauxOrdi = new ArrayList<Case>();
 	boolean aPlacerBateaux = false;
 	int argent = 10;
+	int bateauxAPlacer = 2;
 	
 	/*
 	 * Crée un Joueur qui possède un plateau sur lequelle il placera ses bateaux et un plateauOrdi qui représente le plateau sur lequel il attaque
@@ -44,6 +45,8 @@ public class Joueur extends Observable{
 	 * @retrun false: si le bateau n'a pas été placé car la surface était déja occupée
 	 */
 	public boolean joueurPlacerBateau(Bateau b) {
+		setChanged();
+		notifyObservers();
 		for (int i = 0; i < b.getLongueur(); i++) {
 			for (int j = 0; j < caseDeBateauxJoueur.size(); j++) {
 				if(b.getSurface()[i].equals(caseDeBateauxJoueur.get(j))) {
@@ -63,6 +66,8 @@ public class Joueur extends Observable{
 	 * @retrun false: si le bateau n'a pas été placé car la surface était déja occupée
 	 */
 	public boolean ordiPlacerBateau(Bateau b) {
+		setChanged();
+		notifyObservers();
 		for (int i = 0; i < b.getLongueur(); i++) {
 			for (int j = 0; j < caseDeBateauxOrdi.size(); j++) {
 				if(b.getSurface()[i].equals(caseDeBateauxOrdi.get(j))) {
@@ -100,5 +105,13 @@ public class Joueur extends Observable{
 	
 	public void setArgent(int a) {
 		this.argent = a;
+	}
+	
+	public int getbateauAPlacer() {
+		return bateauxAPlacer;
+	}
+	
+	public void bateauAPlacerMoins1 () {
+		this.bateauxAPlacer = bateauxAPlacer-1;
 	}
 }

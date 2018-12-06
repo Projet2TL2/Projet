@@ -48,4 +48,12 @@ public class JoueurControl {
 	public void addView(JoueurVue vue) {
 		this.vue = vue;
 	}
+	
+	public int getArgent() {
+		return model.getArgent();
+	}
+	
+	public void setArgent( int a) {
+		model.setArgent(a);
+	}
 }

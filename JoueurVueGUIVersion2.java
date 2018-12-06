@@ -25,22 +25,38 @@ import javax.swing.JTextField;
 
 public class JoueurVueGUIVersion2 extends JoueurVue implements ActionListener{
 	
-	private JTextField ligneAttaque = new JTextField(1);
-	private JTextField colonneAttaque = new JTextField(1);
 	private JButton attaqueButton = new JButton("Attaquer");
 	private JButton attaqueHorizontaleButton = new JButton("Attaque Horizontale");
+	private JButton attaqueVerticaleButton = new JButton("Attaque Verticale");
 	private JButton placerBateauButton = new JButton("Placer Bateau");
-	private JLabel message = new JLabel(" ");
 	
 	private JPanel jpanelJoueur;
 	private JPanel jpanelOrdi;
-	private JButton mesBoutonsJoueur[][] = new JButton[11][11];
-	private JButton mesBoutonsOrdi[][] = new JButton[11][11];
 	private JPanel grilleJoueur;
 	private JPanel grilleOrdi;
+	private JPanel commandes;
+	private JPanel commandesInputs;
+	private JPanel commandesLigne;
+	private JPanel commandesColonne;
+	private JPanel commandesOrientation;
+	private JPanel global;
+	
+	private JButton mesBoutonsJoueur[][] = new JButton[11][11];
+	private JButton mesBoutonsOrdi[][] = new JButton[11][11];
+	
+	
 	private JFrame framePlateau = new JFrame();
 	private JFrame framePlateauOrdi = new JFrame();
-	private JPanel commandes;
+	
+	private JLabel message = new JLabel(" ");
+	private JLabel labelArgent = new JLabel("Il vous reste : " + model.getArgent() + " pièces pour ce tour !");
+	private JLabel labelLigne = new JLabel(" Ligne de votre attaque ");
+	private JLabel labelColonne = new JLabel(" Colonne de votre attaque ");
+	private JLabel labelOrientation = new JLabel(" Orientation de votre bateau ");;
+
+	private JTextField ligneAttaque = new JTextField(1);
+	private JTextField colonneAttaque = new JTextField(1);
+	private JTextField orientationBateau = new JTextField(1);
 	
 	
 	boolean bateauxPlacés = false;
@@ -49,12 +65,50 @@ public class JoueurVueGUIVersion2 extends JoueurVue implements ActionListener{
 		
 		super(model, controller);
 		
+		labelArgent.setForeground(Color.blue);
 		jpanelJoueur = new JPanel();
 		jpanelOrdi = new JPanel();
 		commandes = new JPanel();
+		commandesInputs = new JPanel();
+		commandesLigne = new JPanel();
+		commandesColonne = new JPanel();
+		global = new JPanel();
+		commandesOrientation = new JPanel();
+		
+		attaqueButton.addActionListener(this);
+		attaqueHorizontaleButton.addActionListener(this);
+		attaqueVerticaleButton.addActionListener(this);
+		placerBateauButton.addActionListener(this);
+		
+		commandesLigne.setLayout(new BoxLayout(commandesLigne, BoxLayout.X_AXIS));
+		commandesColonne.setLayout(new BoxLayout(commandesColonne, BoxLayout.X_AXIS));
+		commandesOrientation.setLayout(new BoxLayout(commandesOrientation, BoxLayout.X_AXIS));
+		commandesInputs.setLayout(new BoxLayout(commandesInputs, BoxLayout.Y_AXIS));
+		commandes.setLayout(new BoxLayout(commandes, BoxLayout.X_AXIS));
+		global.setLayout(new BoxLayout(global, BoxLayout.Y_AXIS));
+		
+		commandesOrientation.add(labelOrientation);
+		commandesOrientation.add(orientationBateau);
+		commandesOrientation.setVisible(false);
+		
+		commandesLigne.add(labelLigne);
+		commandesLigne.add(ligneAttaque);
+		
+		commandesColonne.add(labelColonne);
+		commandesColonne.add(colonneAttaque);
+		
+		commandesInputs.add(commandesLigne);
+		commandesInputs.add(commandesColonne);
+		commandesInputs.add(commandesOrientation);
+		
 		commandes.add(attaqueButton);
 		commandes.add(attaqueHorizontaleButton);
+		commandes.add(attaqueVerticaleButton);
 		commandes.add(placerBateauButton);
+		
+		global.add(labelArgent);
+		global.add(commandesInputs);
+		global.add(commandes);
 		
 		jpanelJoueur.setLayout(new BorderLayout());
 		jpanelOrdi.setLayout(new BorderLayout());
@@ -89,6 +143,13 @@ public class JoueurVueGUIVersion2 extends JoueurVue implements ActionListener{
 			//REINITIALISATION DES GRILLES
 		 grilleJoueur.removeAll();
 		 grilleOrdi.removeAll();
+		 labelArgent .setText("Il vous reste : " + controller.getArgent() + " pièces pour ce tour !" + model.getbateauAPlacer());
+		 if(controller.aPlacerBateaux()) {
+			placerBateauButton.setVisible(false); 
+			attaqueButton.setVisible(true);
+			 attaqueHorizontaleButton.setVisible(true);
+			 attaqueVerticaleButton.setVisible(true);
+		 }
 		 
 		 int numeroLignes = 0;
 		 int numeroColonnes = 0;
@@ -157,7 +218,7 @@ public class JoueurVueGUIVersion2 extends JoueurVue implements ActionListener{
 	                	
 	                	/////////////// Remplis Plateau de l'ordi \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 	                	if(model.getPlateauOrdi().getPlateau()[ligne-1][colonne-1].estOccupee()) {
-	    					if(model.getPlateau().getPlateau()[ligne-1][colonne-1].estTouchee()){
+	    					if(model.getPlateauOrdi().getPlateau()[ligne-1][colonne-1].estTouchee()){
 	    						mesBoutonsOrdi[ligne][colonne].setBackground(Color.RED);
 	    					}
 	    					else{
@@ -181,7 +242,7 @@ public class JoueurVueGUIVersion2 extends JoueurVue implements ActionListener{
 	        
 	        	//MISE EN PLACE DES GRILLES
 	        jpanelJoueur.add(grilleJoueur);
-	        jpanelJoueur.add(commandes,BorderLayout.SOUTH);
+	        jpanelJoueur.add(global,BorderLayout.SOUTH);
 	        jpanelOrdi.add(grilleOrdi);
 	        	//TITRE DE LA JFRAME
 	        framePlateau.setTitle("joueur");
@@ -230,25 +291,127 @@ public class JoueurVueGUIVersion2 extends JoueurVue implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		 Object  source=e.getSource();
 		 
+		 /////PLACEMENT BATEAUX\\\\\
+		 if(source == placerBateauButton) {
+			 
+				for(int compteur = model.getbateauAPlacer()*2; compteur!=0 ; compteur --) {
+					 commandesOrientation.setVisible(true);
+					 labelLigne.setText(" Ligne de votre Bateau");
+					 labelColonne.setText(" Colonne de votre Bateau");
+					 attaqueButton.setVisible(false);
+					 attaqueHorizontaleButton.setVisible(false);
+					 attaqueVerticaleButton.setVisible(false);
+					 
+					 /////CHANGEMENT DES COULEURS D'AFFICHAGE\\\\\
+					 grilleJoueur.removeAll();
+					 int numeroLignes = 0;
+					 int numeroColonnes = 0;
+				        for(int ligne=0;ligne<11;ligne++) {
+				            for(int colonne=0;colonne<11;colonne++) {
+				                mesBoutonsJoueur[ligne][colonne] = new JButton("");
+				                mesBoutonsOrdi[ligne][colonne] = new JButton("");
+				                
+				                if(ligne==0&&colonne==0) {
+				                	mesBoutonsJoueur[ligne][colonne].setBackground(Color.BLACK);
+				                	mesBoutonsOrdi[ligne][colonne].setBackground(Color.BLACK);
+				                	
+				                	mesBoutonsJoueur[ligne][colonne].setEnabled(false);
+				                	mesBoutonsOrdi[ligne][colonne].setEnabled(false);
+				                }
+				                if(ligne==0&&colonne!=0) {
+				                	mesBoutonsJoueur[ligne][colonne].setText(""+numeroColonnes);
+				                	mesBoutonsJoueur[ligne][colonne].setBackground(Color.ORANGE);
+				                	mesBoutonsJoueur[ligne][colonne].setForeground(Color.red);
+				                	mesBoutonsJoueur[ligne][colonne].setBorder(BorderFactory.createEtchedBorder(Color.blue, Color.red));
+				                	
+				                	mesBoutonsOrdi[ligne][colonne].setText(""+numeroColonnes);
+				                	mesBoutonsOrdi[ligne][colonne].setBackground(Color.ORANGE);
+				                	mesBoutonsOrdi[ligne][colonne].setForeground(Color.red);
+				                	mesBoutonsOrdi[ligne][colonne].setBorder(BorderFactory.createEtchedBorder(Color.blue, Color.red));
+				                	
+				                	mesBoutonsJoueur[ligne][colonne].setEnabled(false);
+				                	mesBoutonsOrdi[ligne][colonne].setEnabled(false);
+				                	
+				                    numeroColonnes++;
+				                }
+				                if(colonne==0&&ligne!=0) {
+				                	mesBoutonsJoueur[ligne][colonne].setText(""+numeroLignes);
+				                	mesBoutonsJoueur[ligne][colonne].setBackground(Color.ORANGE);
+				                	mesBoutonsJoueur[ligne][colonne].setBorder(BorderFactory.createEtchedBorder(Color.blue, Color.red));
+				                	
+				                	mesBoutonsOrdi[ligne][colonne].setText(""+numeroLignes);
+				                	mesBoutonsOrdi[ligne][colonne].setBackground(Color.ORANGE);
+				                	mesBoutonsOrdi[ligne][colonne].setBorder(BorderFactory.createEtchedBorder(Color.blue, Color.red));
+				                	
+				                	mesBoutonsJoueur[ligne][colonne].setEnabled(false);
+				                	mesBoutonsOrdi[ligne][colonne].setEnabled(false);
+				                	
+				                    numeroLignes++;
+				                }
+				                if(ligne>0&&colonne>0) {
+				    				mesBoutonsJoueur[ligne][colonne].setBackground(Color.GRAY);
+				    				
+				                }
+				                grilleJoueur.add(mesBoutonsJoueur[ligne][colonne]); 
+				            }
+				       }
+				        
+				        if( getColonneAttaque() < 0 || getLigneAttaque() < 0 || getColonneAttaque() >= 10 || getLigneAttaque() >= 10){
+							 affiche("Erreur, ceci n'est pas une coordonée valide "); 
+							 return;
+						 }
+				        if(getOrientation().isEmpty()) {
+				        	
+				        }
+				        else {
+					        Bateau bateau = new Bateau(getLigneAttaque(), getColonneAttaque(),3, getOrientation());
+					        controller.joueurPlacerBateau(bateau);
+					        controller.setAPlacerBateaux(true);
+					        model.bateauAPlacerMoins1();
+					        
+				        }
+				}
+				if(model.getbateauAPlacer() == 0) {
+					updateTable();
+				}
+				
+		 }
+		 
+		 
+		 /////ATTAQUE 1 CASE\\\\\
 		 if(source == attaqueButton) {
-			 if(getColonneAttaque() < 0 || getLigneAttaque() < 0 || getColonneAttaque() > 10 || getLigneAttaque() > 10){
+			 if(getColonneAttaque() < 0 || getLigneAttaque() < 0 || getColonneAttaque() >= 10 || getLigneAttaque() >= 10){
 				 affiche("Erreur, ceci n'est pas une attaque valide "); 
 				 return;
 			 }
 			 Attaque attaque = new Attaque(getLigneAttaque(), getColonneAttaque());
-			 this.controller.ordiEstAttaque(attaque);
+			 controller.ordiEstAttaque(attaque);
+			 controller.setArgent(this.controller.getArgent() - 3);
 			 updateTable();
 		 }
 		 
+		/////ATTAQUE 3 CASES HORIZONTALES\\\\\
 		 if(source == attaqueHorizontaleButton) {
-			 if(getColonneAttaque() < 0 || getLigneAttaque() < 0 || getColonneAttaque() > 10 || getLigneAttaque() > 10){
+			 if(getColonneAttaque() <1 || getLigneAttaque() < 0 || getColonneAttaque() >= 9 || getLigneAttaque() >= 10){
 				 affiche("Erreur, ceci n'est pas une attaque valide "); 
 				 return;
 			 }
 			 Attaque attaque = new AttaqueHorizontale(getLigneAttaque(), getColonneAttaque());
-			 this.controller.ordiEstAttaque(attaque);
+			 controller.ordiEstAttaque(attaque);
+			 controller.setArgent(this.controller.getArgent() - 5);
 			 updateTable();
-
+		 }
+		 
+		/////ATTAQUE 3 CASES VERTICALES\\\\\
+		 if(source == attaqueVerticaleButton) {
+			 if(getColonneAttaque() < 0 || getLigneAttaque() < 1 || getColonneAttaque() >= 10 || getLigneAttaque() >= 9){
+				 affiche("Erreur, ceci n'est pas une attaque valide "); 
+				 return;
+			 }
+			 Attaque attaque = new AttaqueVerticale(getLigneAttaque(), getColonneAttaque());
+			 controller.ordiEstAttaque(attaque);
+			 controller.setArgent(this.controller.getArgent() - 5);
+			 updateTable();
 		 }
 		 
 		
@@ -263,7 +426,7 @@ public class JoueurVueGUIVersion2 extends JoueurVue implements ActionListener{
 			result = Integer.valueOf(ligneAttaque.getText()).intValue();
 		}
 		catch (NumberFormatException e){
-			result = -1;
+			affiche(e.getMessage());
 		}
 		return result;
 	}
@@ -277,7 +440,18 @@ public class JoueurVueGUIVersion2 extends JoueurVue implements ActionListener{
 			result = Integer.valueOf(colonneAttaque.getText()).intValue();
 		}
 		catch (NumberFormatException e){
-			result = -1;
+			affiche(e.getMessage());
+		}
+		return result;
+	}
+	
+	public String getOrientation() {
+		String result = "";
+		try {
+			result = (orientationBateau.getText()).toUpperCase();
+		}
+		catch(StringIndexOutOfBoundsException e) {
+			affiche(e.getMessage());
 		}
 		return result;
 	}

@@ -85,7 +85,7 @@ public class JoueurVueConsole extends JoueurVue implements Observer {
 	 * Affiche en console les règles
 	 */
 	private void printHelp(){
-		affiche("Il vous reste " + model.getArgent() + " pièces");
+		affiche("Il vous reste " + this.controller.getArgent() + " pièces");
 		affiche("3 piéces Pour faire une attaque simple (1 case) : A + numéro de la ligne a attaquée + numéro de la colonne a attaquée.");
 		affiche("5 piéces Pour faire une attaque horizontale (3 cases) : AH + numéro de la ligne du centre a attaquée + numéro de la colonne du centre a attaquée.");
 		affiche("5 piéces Pour faire une attaque verticale (3 cases) : AV + numéro de la ligne du centre a attaquée + numéro de la colonne du centre a attaquée.");
@@ -103,7 +103,7 @@ public class JoueurVueConsole extends JoueurVue implements Observer {
 	private class ReadInput implements Runnable{
 		public void run() {
 			
-			int compteur = 2;
+			int compteur = model.getbateauAPlacer();
 			while(controller.aPlacerBateaux() == false  && compteur != 0) {
 				try {
 					affiche("\nEncore " + compteur + " bateaux a placer !" );
@@ -124,14 +124,17 @@ public class JoueurVueConsole extends JoueurVue implements Observer {
 								affiche("Taille incorrect");
 							}
 							String orientation = sc.next();
-							if(orientation.length()!=1 && (!orientation.equals("V") || !orientation.equals("H"))){
+							if(orientation.length()!=1 && (!orientation.equals("V") || !orientation.equals("H") || !orientation.equals("v") || !orientation.equals("h"))){
 								affiche("Format d'input incorrect");
 								printHelp();
 							}
 							controller.joueurPlacerBateau(new Bateau(i,j,taille,orientation));
 							compteur --;
+							model.bateauAPlacerMoins1();
+							update(null,null);
 							if(compteur == 0) {
 							controller.setAPlacerBateaux(true);
+							update(null,null);
 							}
 							break;
 						default : 
@@ -148,6 +151,7 @@ public class JoueurVueConsole extends JoueurVue implements Observer {
 			System.out.println("L'ordi a placé ses bateaux !! :");
 			controller.ordiPlacerBateau(new Bateau(aleatoire(0, 6),aleatoire(0, 6),aleatoire(2, 5),"H"));
 			controller.ordiPlacerBateau(new Bateau(aleatoire(4, 9),aleatoire(4, 6),aleatoire(2, 4),"V"));
+			update(null,null);
 			printHelp();
 			
 			while(true){
@@ -158,7 +162,7 @@ public class JoueurVueConsole extends JoueurVue implements Observer {
 							if(nbrAleatoire == 0) {
 								controller.joueurEstAttaque(new Attaque(aleatoire(0, 10),aleatoire(0, 10)));
 								printPlateau();
-								model.setArgent(10);
+								controller.setArgent(10);
 							}
 							else{
 								if(nbrAleatoire == 1) {
@@ -184,15 +188,18 @@ public class JoueurVueConsole extends JoueurVue implements Observer {
 							switch(c){
 								case "A" :
 									controller.ordiEstAttaque(new Attaque(i,j));
-									model.setArgent(model.getArgent()-3);
+									controller.setArgent(controller.getArgent()-3);
+									update(null,null);
 									break;
 								case "AH" :
 									controller.ordiEstAttaque(new AttaqueHorizontale(i,j));
-									model.setArgent(model.getArgent()-5);
+									controller.setArgent(controller.getArgent()-5);
+									update(null,null);
 									break;
 								case "AV" :
 									controller.ordiEstAttaque(new AttaqueVerticale(i,j));
-									model.setArgent(model.getArgent()-5);
+									controller.setArgent(controller.getArgent()-5);
+									update(null,null);
 									break;
 								default : 
 									affiche("Opération incorrecte");
