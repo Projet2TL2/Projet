@@ -368,11 +368,17 @@ public class JoueurVueGUIVersion2 extends JoueurVue implements ActionListener{
 					        controller.joueurPlacerBateau(bateau);
 					        controller.setAPlacerBateaux(true);
 					        model.bateauAPlacerMoins1();
+					        ligneAttaque.setText("");
+					        colonneAttaque.setText("");
+					        orientationBateau.setText("");
 					        
 				        }
 				}
-				if(model.getbateauAPlacer() == 0) {
+				if(model.getbateauAPlacer() <= 0) {
 					updateTable();
+					 commandesOrientation.setVisible(false);
+					 labelLigne.setText(" Ligne de votre attaque");
+					 labelColonne.setText(" Colonne de votre attaque");
 				}
 				
 		 }
