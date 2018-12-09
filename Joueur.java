@@ -7,7 +7,10 @@ public class Joueur extends Observable{
 	Plateau plateauOrdi;
 	ArrayList<Case> caseDeBateauxJoueur = new ArrayList<Case>();
 	ArrayList<Case> caseDeBateauxOrdi = new ArrayList<Case>();
-	boolean aPlacerBateaux = false;
+	
+	boolean joueurAPlacerBateaux = false;
+	boolean ordiAPlacerBateaux = false;
+	
 	int argent = 10;
 	int bateauxAPlacer = 2;
 	
@@ -86,10 +89,17 @@ public class Joueur extends Observable{
 	 * @return true: le joueur a déja placé ses bateaux 
 	 * @return false: le joueur n'a pas encore placé ses bateaux
 	 */
-	public boolean aPlacerBateaux() {
-		return aPlacerBateaux;
+	public boolean joueurAPlacerBateaux() {
+		return joueurAPlacerBateaux;
 	}
 	
+	/*
+	 * @return true: le joueur a déja placé ses bateaux 
+	 * @return false: le joueur n'a pas encore placé ses bateaux
+	 */
+	public boolean odriAPlacerBateaux() {
+		return ordiAPlacerBateaux;
+	}
 	//GETTERS 
 	public Plateau getPlateau() {
 		return plateau;
@@ -113,5 +123,29 @@ public class Joueur extends Observable{
 	
 	public void bateauAPlacerMoins1 () {
 		this.bateauxAPlacer = bateauxAPlacer-1;
+	}
+	
+	public boolean ordiAGagne() {
+		boolean boo= true;
+		for (int i = 0; i < 10; i++) {
+			for(int j = 0 ; j<10 ; j++) {
+				if (plateau.getPlateau()[i][j].estOccupee() && !plateau.getPlateau()[i][j].estTouchee()) {
+					boo = false;
+				}
+			}
+		}
+		return boo;
+	}
+	
+	public boolean joueurAGagne() {
+		boolean boo= true;
+		for (int i = 0; i < 10; i++) {
+			for(int j = 0 ; j<10 ; j++) {
+				if (plateauOrdi.getPlateau()[i][j].estOccupee() && !plateauOrdi.getPlateau()[i][j].estTouchee()) {
+					boo = false;
+				}
+			}
+		}
+		return boo;
 	}
 }

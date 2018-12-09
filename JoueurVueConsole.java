@@ -18,7 +18,7 @@ public class JoueurVueConsole extends JoueurVue implements Observer {
 
 	@Override
 	public void update(Observable o, Object arg) {
-		//printPlateau();
+		printPlateau();
 	}
 	
 	/*
@@ -64,7 +64,7 @@ public class JoueurVueConsole extends JoueurVue implements Observer {
 						System.out.print("[X]");
 					}
 					else{
-						System.out.print("[0]");
+						System.out.print("[Y]");
 					}
 				}
 				else {
@@ -104,7 +104,7 @@ public class JoueurVueConsole extends JoueurVue implements Observer {
 		public void run() {
 			
 			int compteur = model.getbateauAPlacer();
-			while(controller.aPlacerBateaux() == false  && compteur != 0) {
+			while(controller.joueurAPlacerBateaux() == false  && compteur != 0) {
 				try {
 					affiche("\nEncore " + compteur + " bateaux a placer !" );
 					affiche("Pour placer un bateau : P + numéro de la ligne + numéro de la colonne + taille du bateau + orientation (H - V).");
@@ -131,15 +131,15 @@ public class JoueurVueConsole extends JoueurVue implements Observer {
 							controller.joueurPlacerBateau(new Bateau(i,j,taille,orientation));
 							compteur --;
 							model.bateauAPlacerMoins1();
-							update(null,null);
 							if(compteur == 0) {
-							controller.setAPlacerBateaux(true);
-							update(null,null);
+								controller.setJoueurAPlacerBateaux(true);
 							}
+							update(null,null);
 							break;
 						default : 
 							affiche("Opération incorrecte");
 							printHelp();
+							break;
 					}
 				}
 				catch(InputMismatchException e){
@@ -148,9 +148,13 @@ public class JoueurVueConsole extends JoueurVue implements Observer {
 				}
 			}
 			
-			System.out.println("L'ordi a placé ses bateaux !! :");
-			controller.ordiPlacerBateau(new Bateau(aleatoire(0, 6),aleatoire(0, 6),aleatoire(2, 5),"H"));
-			controller.ordiPlacerBateau(new Bateau(aleatoire(4, 9),aleatoire(4, 6),aleatoire(2, 4),"V"));
+			if(controller.ordiAPlacerBateaux()) {
+				System.out.println("L'ordi a placé ses bateaux !! :");
+			}
+			else {
+				controller.ordiPlacerBateau(new Bateau(aleatoire(0, 6),aleatoire(0, 6),aleatoire(2, 5),"H"));
+				controller.ordiPlacerBateau(new Bateau(aleatoire(4, 9),aleatoire(4, 6),aleatoire(2, 4),"V"));
+			}
 			update(null,null);
 			printHelp();
 			
@@ -172,7 +176,7 @@ public class JoueurVueConsole extends JoueurVue implements Observer {
 									controller.joueurEstAttaque(new AttaqueVerticale(aleatoire(1, 9),aleatoire(0, 10)));
 								}
 							}
-							printPlateau();
+							update(null,null);
 						}
 						while(model.getArgent()>0){
 							int i = sc.nextInt();
@@ -204,7 +208,7 @@ public class JoueurVueConsole extends JoueurVue implements Observer {
 								default : 
 									affiche("Opération incorrecte");
 							} 
-							printPlateau();
+							update(null,null);
 							printHelp();
 						}
 					}
