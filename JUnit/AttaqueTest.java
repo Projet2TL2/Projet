@@ -29,12 +29,6 @@ class AttaqueTest {
 	}
 
 	@Test
-	void testSetLigne() {
-		Attaque attaque = new Attaque(7,9);
-		assertTrue(attaque.getLigne() == 7);
-	}
-
-	@Test
 	void testGetColonne() {
 		Attaque attaque = new Attaque(7,9);
 		assertTrue(attaque.getColonne() == 9);
@@ -45,12 +39,6 @@ class AttaqueTest {
 	void testGetSurface() {
 		Case[] surface = new Case[1];
 		assertTrue(surface.length == 1);
-	}
-
-	@Test
-	void testSetColonne() {
-		Attaque attaque = new Attaque(7,9);
-		assertTrue(attaque.getColonne() == 9);
 	}
 
 	@Test
