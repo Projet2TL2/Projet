@@ -12,6 +12,7 @@ import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -23,39 +24,57 @@ import javax.swing.JTextField;
 
 public class JoueurVueGUIVersion2 extends JoueurVue implements ActionListener{
 	
+	/////DECLARATIONS DES JPANNELS DES 2 JOUEURS\\\\\
+	private JPanel jpanelJoueur;
+	private JPanel jpanelOrdi;
+	private JPanel grilleJoueur;
+	private JPanel grilleOrdi;
+	private JPanel commandes, commandesJ2;
+	private JPanel commandesInputs, commandesInputsJ2;
+	private JPanel commandesLigne, commandesLigneJ2;
+	private JPanel commandesColonne, commandesColonneJ2;
+	private JPanel commandesOrientation, commandesOrientationJ2;
+	private JPanel commandesTaille, commandesTailleJ2;
+	private JPanel global, globalJ2;
+	
+	/////DECLARATION JBUTTONS DES 2 JOUEURS\\\\\
 	private JButton attaqueButton = new JButton("Attaquer");
 	private JButton attaqueHorizontaleButton = new JButton("Attaque Horizontale");
 	private JButton attaqueVerticaleButton = new JButton("Attaque Verticale");
 	private JButton placerBateauButton = new JButton("Placer Bateau");
 	private JButton finTourButton = new JButton("Fin du tour");
 	private JButton aideButton = new JButton("Besoin d'aide ?");
+	private JButton attaqueButtonJ2 = new JButton("Attaquer");
+	private JButton attaqueHorizontaleButtonJ2 = new JButton("Attaque Horizontale");
+	private JButton attaqueVerticaleButtonJ2 = new JButton("Attaque Verticale");
+	private JButton placerBateauButtonJ2 = new JButton("Placer Bateau");
+	private JButton finTourButtonJ2 = new JButton("Fin du tour");
+	private JButton aideButtonJ2 = new JButton("Besoin d'aide ?");
 	
-	private JPanel jpanelJoueur;
-	private JPanel jpanelOrdi;
-	private JPanel grilleJoueur;
-	private JPanel grilleOrdi;
-	private JPanel commandes;
-	private JPanel commandesInputs;
-	private JPanel commandesLigne;
-	private JPanel commandesColonne;
-	private JPanel commandesOrientation;
-	private JPanel commandesTaille;
-	private JPanel global;
-	
+	/////DECLARATIONS GRILLE DES 2 JOUEURS\\\\\
 	private JButton mesBoutonsJoueur[][] = new JButton[11][11];
 	private JButton mesBoutonsOrdi[][] = new JButton[11][11];
 	
-	
+	/////DECLARATIONS DES JFRAMES DES 2 JOUEURS + AIDE\\\\\
 	private JFrame framePlateau = new JFrame();
 	private JFrame framePlateauOrdi = new JFrame();
 	private JFrame frameAide = new JFrame();
 	
+	/////DECLARATIONS DES JLABEL DES 2 JOUEURS\\\\\
 	private JLabel message = new JLabel("");
 	private JLabel labelArgent = new JLabel("Il vous reste : " + model.getArgent() + " pièces pour ce tour !");
 	private JLabel labelLigne = new JLabel(" Ligne de votre attaque ");
 	private JLabel labelColonne = new JLabel(" Colonne de votre attaque ");
 	private JLabel labelOrientation = new JLabel(" Orientation de votre bateau ");
 	private JLabel labelTaille = new JLabel("Choisissez une taille : ");
+	private JLabel messageJ2 = new JLabel("");
+	private JLabel labelArgentJ2 = new JLabel("Il vous reste : " + model.getArgent() + " pièces pour ce tour !");
+	private JLabel labelLigneJ2 = new JLabel(" Ligne de votre attaque ");
+	private JLabel labelColonneJ2 = new JLabel(" Colonne de votre attaque ");
+	private JLabel labelOrientationJ2 = new JLabel(" Orientation de votre bateau ");
+	private JLabel labelTailleJ2 = new JLabel("Choisissez une taille : ");
+	
+	/////DECLARATION DU TEXTE DE LA JFRAME AIDEE\\\\\
 	private JLabel labelAide = new JLabel("<html>Voici comment se déroule une parite de notre BATAILLE NAVALE :<br><br> "
 										+ "1)Cliquez sur Placer bateaux et placer vos différent bateaux;<br>	"
 										+ "    Pour se faire cliquer dans la grille sur une case et les champs colonne et ligne de votre bateau se rempliront tous seuls,<br>"
@@ -67,44 +86,86 @@ public class JoueurVueGUIVersion2 extends JoueurVue implements ActionListener{
 										+ "3)Fin de tour<br>"
 										+ "    Quand vous avez fini votre tour, cliquez sur fin du tour et votre adversaire pourra ainsi jouer à son tour!</html>");
 
+	/////DECLARATIONS DES JTEXTFIELDS DES 2 JOUEURS\\\\\
 	private JTextField ligneAttaque = new JTextField(1);
 	private JTextField colonneAttaque = new JTextField(1);
+	private JTextField ligneAttaqueJ2 = new JTextField(1);
+	private JTextField colonneAttaqueJ2 = new JTextField(1);
 	
+	/////DECLARATIONS DES BUTTONGROUP DES 2 JOUEURS\\\\\
 	private ButtonGroup bgTaille = new ButtonGroup();
 	private ButtonGroup bgOrientaion = new ButtonGroup();
+	private ButtonGroup bgTailleJ2 = new ButtonGroup();
+	private ButtonGroup bgOrientaionJ2 = new ButtonGroup();
 	
+	/////DECLARATIONS DES JRADIOBUTTONS DES 2 JOUEURS\\\\\
 	private JRadioButton tailleDeux = new JRadioButton("2");
 	private JRadioButton tailleTrois = new JRadioButton("3");
 	private JRadioButton tailleQuatre = new JRadioButton("4");
 	private JRadioButton tailleCinq = new JRadioButton("5");
 	private JRadioButton orientationH = new JRadioButton("H");
 	private JRadioButton orientationV = new JRadioButton("V");
+	private JRadioButton tailleDeuxJ2 = new JRadioButton("2");
+	private JRadioButton tailleTroisJ2 = new JRadioButton("3");
+	private JRadioButton tailleQuatreJ2 = new JRadioButton("4");
+	private JRadioButton tailleCinqJ2 = new JRadioButton("5");
+	private JRadioButton orientationHJ2 = new JRadioButton("H");
+	private JRadioButton orientationVJ2 = new JRadioButton("V");
 	
+	/////DECLARATIONS VARIABLES UTILES\\\\\
 	boolean bateauxPlacés = false;
-
-	public JoueurVueGUIVersion2(Joueur model, JoueurControl controller, int posX, int posY) {
+	private int choixModeJeux;
+	
+	public JoueurVueGUIVersion2(Joueur model, JoueurControl controller) {
 		
 		super(model, controller);
 		
-		int choixModeJeux =  JOptionPane.showConfirmDialog(null,"A quelle mode de BATAILLE NAVALE voullez vous jouer ?", "Bonjour", JOptionPane.YES_NO_OPTION);
+		////CHOIX MODE DE JEUX\\\\\
+		String modeJeux = choixModeJeux();
+		if(modeJeux.equals("Jouer contre l'ordinateur")) {
+			choixModeJeux = 0;
+		}
+		if(modeJeux.equals("Jouer contre un autre joueur sur ce PC")) {
+			choixModeJeux = 1;
+		}
+		if(modeJeux.equals("Jouer contre un autre joueur en réseau")) {
+			choixModeJeux = 2;
+		}	
 		
+		
+		/////INITIALISATION DES JBUTTONGROUPS DES 2 JOUEURS\\\\\
+		bgTailleJ2.add(tailleDeuxJ2);
+		bgTailleJ2.add(tailleTroisJ2);
+		bgTailleJ2.add(tailleQuatreJ2);
+		bgTailleJ2.add(tailleCinqJ2);
 		bgTaille.add(tailleDeux);
 		bgTaille.add(tailleTrois);
 		bgTaille.add(tailleQuatre);
 		bgTaille.add(tailleCinq);
-		
+		bgOrientaionJ2.add(orientationHJ2);
+		bgOrientaionJ2.add(orientationVJ2);
 		bgOrientaion.add(orientationH);
 		bgOrientaion.add(orientationV);
 		
+		/////INITIALISATION DES ACTIONCOMMAND DES JRADIOBUTTONS DES 2 JOUEURS\\\\\
 		tailleDeux.setActionCommand("2");
 		tailleTrois.setActionCommand("3");
 		tailleQuatre.setActionCommand("4");
 		tailleCinq.setActionCommand("5");
 		orientationH.setActionCommand("H");
 		orientationV.setActionCommand("V");
+		tailleDeuxJ2.setActionCommand("2");
+		tailleTroisJ2.setActionCommand("3");
+		tailleQuatreJ2.setActionCommand("4");
+		tailleCinqJ2.setActionCommand("5");
+		orientationHJ2.setActionCommand("H");
+		orientationVJ2.setActionCommand("V");
 		
+		/////CHANGEMENT DE COULEUR DU LABEL ARGENT DES 2 JOUEURS\\\\\
 		labelArgent.setForeground(Color.blue);
+		labelArgentJ2.setForeground(Color.blue);
 		
+		/////INITIALISATION DES JPANEL DES 2 JOUEURS\\\\\
 		jpanelJoueur = new JPanel();
 		jpanelOrdi = new JPanel();
 		commandes = new JPanel();
@@ -114,14 +175,30 @@ public class JoueurVueGUIVersion2 extends JoueurVue implements ActionListener{
 		commandesOrientation = new JPanel();
 		commandesTaille = new JPanel();
 		global = new JPanel();
+		jpanelOrdi = new JPanel();
+		commandesJ2 = new JPanel();
+		commandesInputsJ2 = new JPanel();
+		commandesLigneJ2 = new JPanel();
+		commandesColonneJ2 = new JPanel();
+		commandesOrientationJ2 = new JPanel();
+		commandesTailleJ2 = new JPanel();
+		globalJ2 = new JPanel();
 		
+		/////AJOUT DE LISTENER AUX JBUTTONS DES 2 JOUEURS\\\\\
 		attaqueButton.addActionListener(this);
 		attaqueHorizontaleButton.addActionListener(this);
 		attaqueVerticaleButton.addActionListener(this);
 		placerBateauButton.addActionListener(this);
 		finTourButton.addActionListener(this);
 		aideButton.addActionListener(this);
+		attaqueButtonJ2.addActionListener(this);
+		attaqueHorizontaleButtonJ2.addActionListener(this);
+		attaqueVerticaleButtonJ2.addActionListener(this);
+		placerBateauButtonJ2.addActionListener(this);
+		finTourButtonJ2.addActionListener(this);
+		aideButtonJ2.addActionListener(this);
 		
+		/////INITIALISATION DES LAYOUT DES 2 JOUEURS\\\\\
 		commandesLigne.setLayout(new BoxLayout(commandesLigne, BoxLayout.X_AXIS));
 		commandesColonne.setLayout(new BoxLayout(commandesColonne, BoxLayout.X_AXIS));
 		commandesOrientation.setLayout(new BoxLayout(commandesOrientation, BoxLayout.X_AXIS));
@@ -129,7 +206,15 @@ public class JoueurVueGUIVersion2 extends JoueurVue implements ActionListener{
 		commandesInputs.setLayout(new BoxLayout(commandesInputs, BoxLayout.Y_AXIS));
 		commandes.setLayout(new BoxLayout(commandes, BoxLayout.X_AXIS));
 		global.setLayout(new BoxLayout(global, BoxLayout.Y_AXIS));
+		commandesLigneJ2.setLayout(new BoxLayout(commandesLigneJ2, BoxLayout.X_AXIS));
+		commandesColonneJ2.setLayout(new BoxLayout(commandesColonneJ2, BoxLayout.X_AXIS));
+		commandesOrientationJ2.setLayout(new BoxLayout(commandesOrientationJ2, BoxLayout.X_AXIS));
+		commandesTailleJ2.setLayout(new BoxLayout(commandesTailleJ2, BoxLayout.X_AXIS));
+		commandesInputsJ2.setLayout(new BoxLayout(commandesInputsJ2, BoxLayout.Y_AXIS));
+		commandesJ2.setLayout(new BoxLayout(commandesJ2, BoxLayout.X_AXIS));
+		globalJ2.setLayout(new BoxLayout(globalJ2, BoxLayout.Y_AXIS));
 		
+		/////CONSTRUCTION DU JPANEL GLOBAL DU JOUEUR 1\\\\\
 		commandesOrientation.add(labelOrientation);
 		commandesOrientation.add(orientationH);
 		commandesOrientation.add(orientationV);
@@ -164,6 +249,42 @@ public class JoueurVueGUIVersion2 extends JoueurVue implements ActionListener{
 		global.add(commandes);
 		global.add(finTourButton);
 		
+		/////CONSTRUCTION DU JPANEL GLOBAL DU JOUEUR 2\\\\\
+		commandesOrientationJ2.add(labelOrientationJ2);
+		commandesOrientationJ2.add(orientationHJ2);
+		commandesOrientationJ2.add(orientationVJ2);
+		commandesOrientationJ2.setVisible(false);
+		
+		commandesLigneJ2.add(labelLigneJ2);
+		commandesLigneJ2.add(ligneAttaqueJ2);
+		
+		commandesColonneJ2.add(labelColonneJ2);
+		commandesColonneJ2.add(colonneAttaqueJ2);
+		
+		commandesTailleJ2.add(labelTailleJ2);
+		commandesTailleJ2.add(tailleDeuxJ2);
+		commandesTailleJ2.add(tailleTroisJ2);
+		commandesTailleJ2.add(tailleQuatreJ2);
+		commandesTailleJ2.add(tailleCinqJ2);
+		commandesTailleJ2.setVisible(false);
+		
+		commandesInputsJ2.add(commandesLigneJ2);
+		commandesInputsJ2.add(commandesColonneJ2);
+		commandesInputsJ2.add(commandesOrientationJ2);
+		commandesInputsJ2.add(commandesTailleJ2);
+		
+		commandesJ2.add(attaqueButtonJ2);
+		commandesJ2.add(attaqueHorizontaleButtonJ2);
+		commandesJ2.add(attaqueVerticaleButtonJ2);
+		commandesJ2.add(placerBateauButtonJ2);
+		
+		globalJ2.add(messageJ2);
+		globalJ2.add(labelArgentJ2);
+		globalJ2.add(commandesInputsJ2);
+		globalJ2.add(commandesJ2);
+		globalJ2.add(finTourButtonJ2);
+		
+		/////CONSTRUCTION DES JFRAMES DES 2 JOUEURS\\\\\
 		jpanelJoueur.setLayout(new BorderLayout());
 		jpanelOrdi.setLayout(new BorderLayout());
 		
@@ -174,7 +295,28 @@ public class JoueurVueGUIVersion2 extends JoueurVue implements ActionListener{
         grilleOrdi.setLayout(new GridLayout(11, 11));
 		
 		updateTable();
+
+    	//TITRE DE LA JFRAME
+		framePlateau.setTitle("Plateau du Joueur");
 		
+		/////CONSTRUCTION DES JFRAMES EN FONCTION DU MODE DE JEU CHOISI\\\\\
+		
+		switch(choixModeJeux) {
+			
+			case 0 : 
+					framePlateauOrdi.setTitle("Plateau de l'Ordi");
+					break;
+		
+			/////DANS CE CAS_CI PLATEAU ORDI REPRESENTE LE PLATEAU DU JOUEUR 2\\\\\
+			case 1 :
+					framePlateauOrdi.setTitle("Plateau du Joueur 2");
+					break;
+		
+		}
+		
+		
+		framePlateau.setVisible(true);
+		framePlateauOrdi.setVisible(true);
 		framePlateau.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		framePlateauOrdi.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
@@ -194,10 +336,12 @@ public class JoueurVueGUIVersion2 extends JoueurVue implements ActionListener{
 	 */
 	public void updateTable(){
 		
-			//REINITIALISATION DES GRILLES
+		 /////REINITIALISATION DES GRILLES\\\\\
 		 grilleJoueur.removeAll();
 		 grilleOrdi.removeAll();
 		 labelArgent .setText("Il vous reste : " + controller.getArgent() + " pièces pour ce tour !");
+		 labelArgentJ2 .setText("Il vous reste : " + controller.getArgent() + " pièces pour ce tour !");
+		 
 		 if(controller.joueurAPlacerBateaux()) {
 			placerBateauButton.setVisible(false); 
 			commandesTaille.setVisible(false);
@@ -206,6 +350,16 @@ public class JoueurVueGUIVersion2 extends JoueurVue implements ActionListener{
 			attaqueHorizontaleButton.setVisible(true);
 			attaqueVerticaleButton.setVisible(true);
 		 }
+		 
+		 if(controller.ordiAPlacerBateaux()) {
+			placerBateauButtonJ2.setVisible(false); 
+			commandesTailleJ2.setVisible(false);
+			commandesOrientationJ2.setVisible(false);
+			attaqueButtonJ2.setVisible(true);
+			attaqueHorizontaleButtonJ2.setVisible(true);
+			attaqueVerticaleButtonJ2.setVisible(true);
+		}
+		 
 		 
 		 int numeroLignes = 0;
 		 int numeroColonnes = 0;
@@ -299,38 +453,47 @@ public class JoueurVueGUIVersion2 extends JoueurVue implements ActionListener{
 	                grilleOrdi.add(mesBoutonsOrdi[ligne][colonne]);
 	            }
 	        }
+	        
+	        /*
 	        if( model.caseDeBateauxOrdi.size() != 0) {
 	        	if(model.joueurAGagne()) {
-	        		JOptionPane.showInputDialog("C'est GAGNE !!!");
+	        		JOptionPane.showInputDialog("AIE AIE AIE, le joueur 1 a gagné !!!");
 	        	}
 	        	if(model.ordiAGagne()) {
-	        		JOptionPane.showInputDialog("AIE AIE AIE, c'est une DEFAITE !!!");
+	        		JOptionPane.showInputDialog("AIE AIE AIE, le joueur 2 a gagné !!!");
 	        	}
 	        }
+	        */
 	        
 	        	//MISE EN PLACE DES GRILLES
 	        jpanelJoueur.add(aideButton, BorderLayout.NORTH);
 	        jpanelJoueur.add(grilleJoueur);
 	        jpanelJoueur.add(global,BorderLayout.SOUTH);
-	        jpanelOrdi.add(grilleOrdi);
-	        	//TITRE DE LA JFRAME
-	        framePlateau.setTitle("Plateau du Joueur");
-	        framePlateauOrdi.setTitle("Plateau de l'Ordi");
+	        
+	        if(choixModeJeux == 0) {
+	        	jpanelOrdi.add(grilleOrdi); 
+	        	framePlateauOrdi.setContentPane(jpanelOrdi);
+	        	framePlateauOrdi.pack();
+		        framePlateauOrdi.setSize(500,500);
+	        }
+	        else {
+	        	jpanelOrdi.add(aideButtonJ2, BorderLayout.NORTH);
+	        	jpanelOrdi.add(grilleOrdi);
+	        	jpanelOrdi.add(globalJ2,BorderLayout.SOUTH);
+	        	framePlateauOrdi.setContentPane(jpanelOrdi);
+	        	framePlateauOrdi.pack();
+		        framePlateauOrdi.setSize(500,600);
+	        }
 	        	//AJOUT DU CONTENUE DANS LA JFRAME
 	        framePlateau.setContentPane(jpanelJoueur);
-	        framePlateauOrdi.setContentPane(jpanelOrdi);
+	        
 	        	//PACK TOUTE LA JFRAME
 	        framePlateau.pack();
-	        framePlateauOrdi.pack();
 	        	//DEFINITION TAILLE OPTIMALE
 	        framePlateau.setSize(500, 600);
-	        framePlateauOrdi.setSize(500, 500);
 	        	//LOCALISATION D'APPARITION
 	        framePlateau.setLocation(100, 100);
 	        framePlateauOrdi.setLocation(900, 100);
-	        	//SET VISIBLE
-	        framePlateau.setVisible(true);
-	        framePlateauOrdi.setVisible(true);
 	}
 	
 	
@@ -360,7 +523,7 @@ public class JoueurVueGUIVersion2 extends JoueurVue implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		 Object  source=e.getSource();
 		 
-		 /////PLACEMENT BATEAUX\\\\\
+		 /////PLACEMENT BATEAUX JOUEUR 1\\\\\
 		 if(source == placerBateauButton) {
 				for(int compteur = model.getbateauAPlacer(); compteur>0 ; compteur --) {
 					 commandesOrientation.setVisible(true);
@@ -379,28 +542,17 @@ public class JoueurVueGUIVersion2 extends JoueurVue implements ActionListener{
 				        for(int ligne=0;ligne<11;ligne++) {
 				            for(int colonne=0;colonne<11;colonne++) {
 				                mesBoutonsJoueur[ligne][colonne] = new JButton("");
-				                mesBoutonsOrdi[ligne][colonne] = new JButton("");
 				                
 				                if(ligne==0&&colonne==0) {
 				                	mesBoutonsJoueur[ligne][colonne].setBackground(Color.BLACK);
-				                	mesBoutonsOrdi[ligne][colonne].setBackground(Color.BLACK);
-				                	
 				                	mesBoutonsJoueur[ligne][colonne].setEnabled(false);
-				                	mesBoutonsOrdi[ligne][colonne].setEnabled(false);
 				                }
 				                if(ligne==0&&colonne!=0) {
 				                	mesBoutonsJoueur[ligne][colonne].setText(""+numeroColonnes);
 				                	mesBoutonsJoueur[ligne][colonne].setBackground(Color.ORANGE);
 				                	mesBoutonsJoueur[ligne][colonne].setForeground(Color.red);
 				                	mesBoutonsJoueur[ligne][colonne].setBorder(BorderFactory.createEtchedBorder(Color.blue, Color.red));
-				                	
-				                	mesBoutonsOrdi[ligne][colonne].setText(""+numeroColonnes);
-				                	mesBoutonsOrdi[ligne][colonne].setBackground(Color.ORANGE);
-				                	mesBoutonsOrdi[ligne][colonne].setForeground(Color.red);
-				                	mesBoutonsOrdi[ligne][colonne].setBorder(BorderFactory.createEtchedBorder(Color.blue, Color.red));
-				                	
 				                	mesBoutonsJoueur[ligne][colonne].setEnabled(false);
-				                	mesBoutonsOrdi[ligne][colonne].setEnabled(false);
 				                	
 				                    numeroColonnes++;
 				                }
@@ -408,13 +560,7 @@ public class JoueurVueGUIVersion2 extends JoueurVue implements ActionListener{
 				                	mesBoutonsJoueur[ligne][colonne].setText(""+numeroLignes);
 				                	mesBoutonsJoueur[ligne][colonne].setBackground(Color.ORANGE);
 				                	mesBoutonsJoueur[ligne][colonne].setBorder(BorderFactory.createEtchedBorder(Color.blue, Color.red));
-				                	
-				                	mesBoutonsOrdi[ligne][colonne].setText(""+numeroLignes);
-				                	mesBoutonsOrdi[ligne][colonne].setBackground(Color.ORANGE);
-				                	mesBoutonsOrdi[ligne][colonne].setBorder(BorderFactory.createEtchedBorder(Color.blue, Color.red));
-				                	
 				                	mesBoutonsJoueur[ligne][colonne].setEnabled(false);
-				                	mesBoutonsOrdi[ligne][colonne].setEnabled(false);
 				                	
 				                    numeroLignes++;
 				                }
@@ -432,41 +578,44 @@ public class JoueurVueGUIVersion2 extends JoueurVue implements ActionListener{
 				            }
 				       }
 				        
-				        if( getColonneAttaque() < 0 || getLigneAttaque() < 0 || getColonneAttaque() >= 10 || getLigneAttaque() >= 10){
+				        if( getColonneAttaque(colonneAttaque) < 0 || getLigneAttaque(ligneAttaque) < 0 || getColonneAttaque(colonneAttaque) >= 10 || getLigneAttaque(ligneAttaque) >= 10){
 							 affiche("Erreur, ceci n'est pas une coordonée valide "); 
 							 return;
 						 }
 				        
-				        if(getOrientation().equals("H")) {
-				        	if(getTaille() + getColonneAttaque() >= 10) {
+				        if(getOrientation(bgOrientaion).equals("H")) {
+				        	if(getTaille(bgTaille) + getColonneAttaque(colonneAttaque) >= 10) {
 				        		affiche("Impossible de placer ce bateau !");
 				        		return;
 				        	}
 				        }
-				        if(getOrientation().equals("V")) {
-				        	if(getTaille() + getLigneAttaque() >= 10) {
+				        if(getOrientation(bgOrientaion).equals("V")) {
+				        	if(getTaille(bgTaille) + getLigneAttaque(ligneAttaque) >= 10) {
 				        		affiche("Impossible de placer ce bateau !");
 				        		return;
 				        	}
 				        }
-				        
-				        
-				        
-				        if(getOrientation().isEmpty()) {
+				        if(getOrientation(bgOrientaion).isEmpty()) {
 				        	affiche("Pas d'orientation encodée");
 				        	return;
 				        }
-				        if(getTaille() == 0) {
+				        if(getTaille(bgTaille) == 0) {
 				        	affiche("Pas de taille encodée");
 				        	return;
 				        }
-				        if(!getOrientation().equals(" ") ) {
-					        Bateau bateau = new Bateau(getLigneAttaque(), getColonneAttaque(),getTaille(), getOrientation());
-					        bgTaille.getSelection().setEnabled(false);
-					        controller.joueurPlacerBateau(bateau);
-					        model.bateauAPlacerMoins1();
-					        ligneAttaque.setText("");
-					        colonneAttaque.setText("");
+				        if(!getOrientation(bgOrientaion).equals(" ") ) {
+					        Bateau bateau = new Bateau(getLigneAttaque(ligneAttaque), getColonneAttaque(colonneAttaque),getTaille(bgTaille), getOrientation(bgOrientaion));
+					        
+					        if(controller.joueurPlacerBateau(bateau)) {
+					        	model.bateauAPlacerMoins1();
+					        	bgTaille.getSelection().setEnabled(false);
+					        	ligneAttaque.setText("");
+					        	colonneAttaque.setText("");
+					        	//update(null,null);
+					        }
+					        if(! controller.joueurPlacerBateau(bateau)) {
+					        	affiche("Un bateaux ne peut pas chevaucher un autre !");
+					        }
 					        update(null,null);
 				        }
 				}
@@ -478,10 +627,10 @@ public class JoueurVueGUIVersion2 extends JoueurVue implements ActionListener{
 					 if(!controller.ordiAPlacerBateaux()) {
 						//controller.ordiPlacerBateau(new Bateau(aleatoire(0, 6),aleatoire(0, 6),aleatoire(2, 5),"H"));
 						// controller.ordiPlacerBateau(new Bateau(aleatoire(4, 9),aleatoire(4, 6),aleatoire(2, 4),"V"));
-						 controller.ordiPlacerBateau(new Bateau(0,0,5,"H"));
-						 controller.ordiPlacerBateau(new Bateau(1,0,5,"V"));
-						 controller.ordiPlacerBateau(new Bateau(5,5,2,"H"));
-						 controller.ordiPlacerBateau(new Bateau(6,6,2,"V"));
+						 //controller.ordiPlacerBateau(new Bateau(0,0,5,"H"));
+						// controller.ordiPlacerBateau(new Bateau(1,0,5,"V"));
+						// controller.ordiPlacerBateau(new Bateau(5,5,2,"H"));
+						// controller.ordiPlacerBateau(new Bateau(6,6,2,"V"));
 						 update(null,null);
 					 }
 				}
@@ -490,9 +639,135 @@ public class JoueurVueGUIVersion2 extends JoueurVue implements ActionListener{
 		 }
 		 
 		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		/////PLACEMENT BATEAUX JOUEUR 2\\\\\
+				 if(source == placerBateauButtonJ2) {
+						for( int compteur = model.getbateauAPlacerOrdi() ; compteur>0 ; compteur --) {
+							 commandesOrientationJ2.setVisible(true);
+							 commandesTailleJ2.setVisible(true);
+							 labelLigneJ2.setText(" Ligne de votre Bateau");
+							 labelColonneJ2.setText(" Colonne de votre Bateau");
+							 labelArgentJ2.setText("Il vous reste " + model.getbateauAPlacer() + " bateaux a placer");
+							 attaqueButtonJ2.setVisible(false);
+							 attaqueHorizontaleButtonJ2.setVisible(false);
+							 attaqueVerticaleButtonJ2.setVisible(false);
+							 
+							 /////CHANGEMENT DES COULEURS D'AFFICHAGE\\\\\
+							 grilleOrdi.removeAll();
+							 int numeroLignes = 0;
+							 int numeroColonnes = 0;
+						        for(int ligne=0;ligne<11;ligne++) {
+						            for(int colonne=0;colonne<11;colonne++) {
+						                mesBoutonsOrdi[ligne][colonne] = new JButton("");
+						                
+						                if(ligne==0&&colonne==0) {
+						                	mesBoutonsOrdi[ligne][colonne].setBackground(Color.BLACK);
+						                	mesBoutonsOrdi[ligne][colonne].setEnabled(false);
+						                }
+						                if(ligne==0&&colonne!=0) {
+						                	mesBoutonsOrdi[ligne][colonne].setText(""+numeroColonnes);
+						                	mesBoutonsOrdi[ligne][colonne].setBackground(Color.ORANGE);
+						                	mesBoutonsOrdi[ligne][colonne].setForeground(Color.red);
+						                	mesBoutonsOrdi[ligne][colonne].setBorder(BorderFactory.createEtchedBorder(Color.blue, Color.red));
+						                	mesBoutonsOrdi[ligne][colonne].setEnabled(false);
+						                	
+						                    numeroColonnes++;
+						                }
+						                if(colonne==0&&ligne!=0) {
+						                	mesBoutonsOrdi[ligne][colonne].setText(""+numeroLignes);
+						                	mesBoutonsOrdi[ligne][colonne].setBackground(Color.ORANGE);
+						                	mesBoutonsOrdi[ligne][colonne].setBorder(BorderFactory.createEtchedBorder(Color.blue, Color.red));
+						                	mesBoutonsOrdi[ligne][colonne].setEnabled(false);
+						                	
+						                    numeroLignes++;
+						                }
+						                if(ligne>0&&colonne>0) {
+						                	if(model.getPlateauOrdi().getPlateau()[ligne-1][colonne-1].estOccupee()) {
+						                		mesBoutonsOrdi[ligne][colonne].setBackground(Color.GREEN);
+						                	}
+						                	else {
+						                		mesBoutonsOrdi[ligne][colonne].setBackground(Color.GRAY);
+						                	}
+						                }
+						                mesBoutonsOrdi[ligne][colonne].setActionCommand((ligne-1) + " " + (colonne-1));
+						                mesBoutonsOrdi[ligne][colonne].addActionListener(this);
+						                grilleOrdi.add(mesBoutonsOrdi[ligne][colonne]); 
+						            }
+						       }
+						        
+						        if( getColonneAttaque(colonneAttaqueJ2) < 0 || getLigneAttaque(ligneAttaqueJ2) < 0 || getColonneAttaque(colonneAttaqueJ2) >= 10 || getLigneAttaque(ligneAttaqueJ2) >= 10){
+									 affiche("Erreur, ceci n'est pas une coordonée valide "); 
+									 return;
+								 }
+						        
+						        if(getOrientation(bgOrientaionJ2).equals("H")) {
+						        	if(getTaille(bgTailleJ2) + getColonneAttaque(colonneAttaqueJ2) >= 10) {
+						        		affiche("Impossible de placer ce bateau !");
+						        		return;
+						        	}
+						        }
+						        if(getOrientation(bgOrientaionJ2).equals("V")) {
+						        	if(getTaille(bgTailleJ2) + getLigneAttaque(ligneAttaqueJ2) >= 10) {
+						        		affiche("Impossible de placer ce bateau !");
+						        		return;
+						        	}
+						        }
+						        if(getOrientation(bgOrientaionJ2).isEmpty()) {
+						        	affiche("Pas d'orientation encodée");
+						        	return;
+						        }
+						        if(getTaille(bgTailleJ2) == 0) {
+						        	affiche("Pas de taille encodée");
+						        	return;
+						        }
+						        if(!getOrientation(bgOrientaionJ2).equals(" ") ) {
+							        Bateau bateau = new Bateau(getLigneAttaque(ligneAttaqueJ2), getColonneAttaque(colonneAttaqueJ2),getTaille(bgTailleJ2), getOrientation(bgOrientaionJ2));
+							        
+							        if(controller.ordiPlacerBateau(bateau)) {
+							        	model.bateauAPlacerOrdiMoins1();
+							        	bgTailleJ2.getSelection().setEnabled(false);
+							        	ligneAttaqueJ2.setText("");
+							        	colonneAttaqueJ2.setText("");
+							        	//update(null,null);
+							        }
+							        if(! controller.ordiPlacerBateau(bateau)) {
+							        	affiche("Un bateaux ne peut pas chevaucher un autre !");
+							        }
+							        update(null,null);
+						        }
+						}
+						if(model.getbateauAPlacerOrdi() <= 0) {
+							 controller.setOrdiAPlacerBateaux(true);
+							 labelLigneJ2.setText(" Ligne de votre attaque");
+							 labelColonneJ2.setText(" Colonne de votre attaque");
+							 labelArgentJ2.setText("Il vous reste : " + model.getArgent() + " pièces pour ce tour !");
+							 if(!controller.ordiAPlacerBateaux()) {
+								 update(null,null);
+							 }
+						}
+						update(null,null);
+						return;
+				 }
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
 		 /////ATTAQUE 1 CASE\\\\\
 		 if(source == attaqueButton) {
-			 if(getColonneAttaque() < 0 || getLigneAttaque() < 0 || getColonneAttaque() >= 10 || getLigneAttaque() >= 10){
+			 if(getColonneAttaque(colonneAttaque) < 0 || getLigneAttaque(ligneAttaque) < 0 || getColonneAttaque(colonneAttaque) >= 10 || getLigneAttaque(ligneAttaque) >= 10){
 				 affiche("Erreur, ceci n'est pas une attaque valide "); 
 				 return;
 			 }
@@ -500,7 +775,7 @@ public class JoueurVueGUIVersion2 extends JoueurVue implements ActionListener{
 				 affiche("Vous n'avez plus suffisament d'argent !!"); 
 				 return;
 			 }
-			 Attaque attaque = new Attaque(getLigneAttaque(), getColonneAttaque());
+			 Attaque attaque = new Attaque(getLigneAttaque(ligneAttaque), getColonneAttaque(colonneAttaque));
 			 controller.ordiEstAttaque(attaque);
 			 controller.setArgent(this.controller.getArgent() - 3);
 			 update(null,null);
@@ -509,7 +784,7 @@ public class JoueurVueGUIVersion2 extends JoueurVue implements ActionListener{
 		 
 		/////ATTAQUE 3 CASES HORIZONTALES\\\\\
 		 if(source == attaqueHorizontaleButton) {
-			 if(getColonneAttaque() <1 || getLigneAttaque() < 0 || getColonneAttaque() >= 9 || getLigneAttaque() >= 10){
+			 if(getColonneAttaque(colonneAttaque) <1 || getLigneAttaque(ligneAttaque) < 0 || getColonneAttaque(colonneAttaque) >= 9 || getLigneAttaque(ligneAttaque) >= 10){
 				 affiche("Erreur, ceci n'est pas une attaque valide "); 
 				 return;
 			 }
@@ -517,7 +792,7 @@ public class JoueurVueGUIVersion2 extends JoueurVue implements ActionListener{
 				 affiche("Vous n'avez plus suffisament d'argent !!"); 
 				 return;
 			 }
-			 Attaque attaque = new AttaqueHorizontale(getLigneAttaque(), getColonneAttaque());
+			 Attaque attaque = new AttaqueHorizontale(getLigneAttaque(ligneAttaque), getColonneAttaque(colonneAttaque));
 			 controller.ordiEstAttaque(attaque);
 			 controller.setArgent(this.controller.getArgent() - 5);
 			 update(null,null);
@@ -526,7 +801,7 @@ public class JoueurVueGUIVersion2 extends JoueurVue implements ActionListener{
 		 
 		/////ATTAQUE 3 CASES VERTICALES\\\\\
 		 if(source == attaqueVerticaleButton) {
-			 if(getColonneAttaque() < 0 || getLigneAttaque() < 1 || getColonneAttaque() >= 10 || getLigneAttaque() >= 9){
+			 if(getColonneAttaque(colonneAttaque) < 0 || getLigneAttaque(ligneAttaque) < 1 || getColonneAttaque(colonneAttaque) >= 10 || getLigneAttaque(ligneAttaque) >= 9){
 				 affiche("Erreur, ceci n'est pas une attaque valide "); 
 				 return;
 			 }
@@ -534,7 +809,7 @@ public class JoueurVueGUIVersion2 extends JoueurVue implements ActionListener{
 				 affiche("Vous n'avez plus suffisament d'argent !!"); 
 				 return;
 			 }
-			 Attaque attaque = new AttaqueVerticale(getLigneAttaque(), getColonneAttaque());
+			 Attaque attaque = new AttaqueVerticale(getLigneAttaque(ligneAttaque), getColonneAttaque(colonneAttaque));
 			 controller.ordiEstAttaque(attaque);
 			 controller.setArgent(this.controller.getArgent() - 5);
 			 update(null,null);
@@ -574,6 +849,8 @@ public class JoueurVueGUIVersion2 extends JoueurVue implements ActionListener{
 			JButton test = (JButton) source;
 			ligneAttaque.setText(test.getActionCommand().substring(0,1));
 			colonneAttaque.setText(test.getActionCommand().substring(2,3));
+			ligneAttaqueJ2.setText(test.getActionCommand().substring(0,1));
+			colonneAttaqueJ2.setText(test.getActionCommand().substring(2,3));
 			return;
 		}
 		 
@@ -581,13 +858,22 @@ public class JoueurVueGUIVersion2 extends JoueurVue implements ActionListener{
 		
 	}
 	
+	public String choixModeJeux() {
+		JDialog.setDefaultLookAndFeelDecorated(true);
+	    Object[] selectionValues = { "Jouer contre l'ordinateur", "Jouer contre un autre joueur sur ce PC", "Jouer contre un autre joueur en réseau" };
+	    String initialSelection = "Dogs";
+	    Object selection = JOptionPane.showInputDialog(null, "A quelle mode de jeu voullez vous jouer?",
+	        "Mode BATAIILE NAVALE", JOptionPane.QUESTION_MESSAGE, null, selectionValues, initialSelection);
+	    return (String)selection;
+	}
+	
 	/*
 	 * Return le nombre du premier JTextField
 	 */
-	public int getLigneAttaque() {
+	public int getLigneAttaque(JTextField input) {
 		int result = -1;
 		try {
-			result = Integer.valueOf(ligneAttaque.getText()).intValue();
+			result = Integer.valueOf(input.getText()).intValue();
 		}
 		catch (NumberFormatException e){
 			affiche(e.getMessage());
@@ -598,10 +884,10 @@ public class JoueurVueGUIVersion2 extends JoueurVue implements ActionListener{
 	/*
 	 * Return le nombre du second JTextField
 	 */
-	public int getColonneAttaque() {
+	public int getColonneAttaque(JTextField input) {
 		int result = -1;
 		try {
-			result = Integer.valueOf(colonneAttaque.getText()).intValue();
+			result = Integer.valueOf(input.getText()).intValue();
 		}
 		catch (NumberFormatException e){
 			affiche(e.getMessage());
@@ -609,10 +895,10 @@ public class JoueurVueGUIVersion2 extends JoueurVue implements ActionListener{
 		return result;
 	}
 	
-	public String getOrientation() {
+	public String getOrientation(ButtonGroup input) {
 		String result = "";
 		try {
-			result = bgOrientaion.getSelection().getActionCommand();
+			result = input.getSelection().getActionCommand();
 		}
 		catch(Exception e) {
 			result = " ";
@@ -620,10 +906,10 @@ public class JoueurVueGUIVersion2 extends JoueurVue implements ActionListener{
 		return result;
 	}
 	
-	public int getTaille() {
+	public int getTaille(ButtonGroup input) {
 		int result = 0;
 		try {
-			result = Integer.parseInt(bgTaille.getSelection().getActionCommand());
+			result = Integer.parseInt(input.getSelection().getActionCommand());
 		}
 		catch(Exception e) {
 			result = 0;
