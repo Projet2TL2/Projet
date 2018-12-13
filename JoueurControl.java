@@ -1,4 +1,4 @@
-
+import javafx.collections.SetChangeListener;
 
 public class JoueurControl {
 
@@ -23,26 +23,40 @@ public class JoueurControl {
 		else vue.affiche("L'attaque: " + attaque.toString() + "n'a pas touchée un de vos bateau !\n");
 	}
 	
-	public void joueurPlacerBateau(Bateau b) {
+	public boolean joueurPlacerBateau(Bateau b) {
 		if(model.joueurPlacerBateau(b)) {
-			vue.affiche("Le bateau : " + b.toString() + "  a bien été placé !\n");
-	} 
-		else vue.affiche("Le bateau : " + b.toString() + "  n'a pas été placé !\n");
+			//vue.affiche("Le bateau : " + b.toString() + "  a bien été placé !\n");
+			return true;
+		} 
+		else{
+			//vue.affiche("Le bateau : " + b.toString() + "  n'a pas été placé !\n");
+			return false;
+		}
 	}
 
-	public void ordiPlacerBateau(Bateau b) {
+	public boolean ordiPlacerBateau(Bateau b) {
 		if(model.ordiPlacerBateau(b)) {
 			vue.affiche("Le bateau : " + b.toString() + "  a bien été placé !\n");
+			return true;
 	} 
 		else vue.affiche("Le bateau : " + b.toString() + "  n'a pas été placé !\n");
+		return false;
 	}
 	
-	public boolean aPlacerBateaux() {
-		return model.aPlacerBateaux();
+	public boolean joueurAPlacerBateaux() {
+		return model.joueurAPlacerBateaux();
 	}
 	
-	public void setAPlacerBateaux(boolean boo) {
-		model.aPlacerBateaux = boo;
+	public void setJoueurAPlacerBateaux(boolean boo) {
+		model.joueurAPlacerBateaux = boo;
+	}
+	
+	public boolean ordiAPlacerBateaux() {
+		return model.odriAPlacerBateaux();
+	}
+	
+	public void setOrdiAPlacerBateaux(boolean boo) {
+		model.ordiAPlacerBateaux = boo;
 	}
 	
 	public void addView(JoueurVue vue) {
