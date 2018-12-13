@@ -12,7 +12,8 @@ public class Joueur extends Observable{
 	boolean ordiAPlacerBateaux = false;
 	
 	int argent = 10;
-	int bateauxAPlacer = 2;
+	int bateauxAPlacer = 4;
+	int bateauxAPlacerOrdi = 4;
 	
 	/*
 	 * Crée un Joueur qui possède un plateau sur lequelle il placera ses bateaux et un plateauOrdi qui représente le plateau sur lequel il attaque
@@ -52,7 +53,7 @@ public class Joueur extends Observable{
 		notifyObservers();
 		for (int i = 0; i < b.getLongueur(); i++) {
 			for (int j = 0; j < caseDeBateauxJoueur.size(); j++) {
-				if(b.getSurface()[i].equals(caseDeBateauxJoueur.get(j))) {
+				if(caseDeBateauxJoueur.get(j).getLigne() == b.getSurface()[i].getColonne() && caseDeBateauxJoueur.get(j).getLigne() == b.getSurface()[i].getLigne()) {
 					return false;
 				}
 			}
@@ -123,6 +124,14 @@ public class Joueur extends Observable{
 	
 	public void bateauAPlacerMoins1 () {
 		this.bateauxAPlacer = bateauxAPlacer-1;
+	}
+	
+	public int getbateauAPlacerOrdi() {
+		return bateauxAPlacerOrdi;
+	}
+	
+	public void bateauAPlacerOrdiMoins1 () {
+		this.bateauxAPlacerOrdi = bateauxAPlacerOrdi-1;
 	}
 	
 	public boolean ordiAGagne() {
