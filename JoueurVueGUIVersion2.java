@@ -115,6 +115,7 @@ public class JoueurVueGUIVersion2 extends JoueurVue implements ActionListener{
 	/////DECLARATIONS VARIABLES UTILES\\\\\
 	boolean bateauxPlacés = false;
 	private int choixModeJeux;
+	int tour = -1;
 	
 	public JoueurVueGUIVersion2(Joueur model, JoueurControl controller) {
 		
@@ -319,6 +320,7 @@ public class JoueurVueGUIVersion2 extends JoueurVue implements ActionListener{
 		framePlateauOrdi.setVisible(true);
 		framePlateau.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		framePlateauOrdi.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
 	}
 	
 	/*
@@ -349,6 +351,7 @@ public class JoueurVueGUIVersion2 extends JoueurVue implements ActionListener{
 			attaqueButton.setVisible(true);
 			attaqueHorizontaleButton.setVisible(true);
 			attaqueVerticaleButton.setVisible(true);
+			finTourButton.setVisible(true);
 		 }
 		 
 		 if(controller.ordiAPlacerBateaux()) {
@@ -358,8 +361,46 @@ public class JoueurVueGUIVersion2 extends JoueurVue implements ActionListener{
 			attaqueButtonJ2.setVisible(true);
 			attaqueHorizontaleButtonJ2.setVisible(true);
 			attaqueVerticaleButtonJ2.setVisible(true);
+			finTourButtonJ2.setVisible(true);
 		}
 		 
+		 /////TOUR DU JOUEUR 1\\\\\
+		 if(tour == 0) {
+			attaqueButtonJ2.setEnabled(false);
+			attaqueHorizontaleButtonJ2.setEnabled(false);
+			attaqueVerticaleButtonJ2.setEnabled(false);
+			finTourButtonJ2.setEnabled(false);
+			
+			attaqueButton.setEnabled(true);
+			attaqueHorizontaleButton.setEnabled(true);
+			attaqueVerticaleButton.setEnabled(true);
+			finTourButton.setEnabled(true);
+		 }
+		 
+		/////TOUR DU JOUEUR 2\\\\\
+		 if(tour == 1) {
+			attaqueButton.setEnabled(false);
+			attaqueHorizontaleButton.setEnabled(false);
+			attaqueVerticaleButton.setEnabled(false);
+			finTourButton.setEnabled(false);
+			
+			attaqueButtonJ2.setEnabled(true);
+			attaqueHorizontaleButtonJ2.setEnabled(true);
+			attaqueVerticaleButtonJ2.setEnabled(true);
+			finTourButtonJ2.setEnabled(true);
+		 }
+		 
+		 /////DEBUT DE PARTIE\\\\\
+		 if (tour == -1) {
+			attaqueButton.setEnabled(false);
+			attaqueHorizontaleButton.setEnabled(false);
+			attaqueVerticaleButton.setEnabled(false);
+			finTourButton.setEnabled(false);
+			attaqueButtonJ2.setEnabled(false);
+			attaqueHorizontaleButtonJ2.setEnabled(false);
+			attaqueVerticaleButtonJ2.setEnabled(false);
+			finTourButtonJ2.setEnabled(false);
+		 }
 		 
 		 int numeroLignes = 0;
 		 int numeroColonnes = 0;
@@ -454,16 +495,18 @@ public class JoueurVueGUIVersion2 extends JoueurVue implements ActionListener{
 	            }
 	        }
 	        
-	        /*
-	        if( model.caseDeBateauxOrdi.size() != 0) {
+	        if( model.caseDeBateauxOrdi.size() != 0 && model.caseDeBateauxJoueur.size() != 0) {
 	        	if(model.joueurAGagne()) {
 	        		JOptionPane.showInputDialog("AIE AIE AIE, le joueur 1 a gagné !!!");
+	        		framePlateau.setEnabled(false);
+	        		framePlateauOrdi.setEnabled(false);
 	        	}
 	        	if(model.ordiAGagne()) {
 	        		JOptionPane.showInputDialog("AIE AIE AIE, le joueur 2 a gagné !!!");
+	        		framePlateau.setEnabled(false);
+	        		framePlateauOrdi.setEnabled(false);
 	        	}
 	        }
-	        */
 	        
 	        	//MISE EN PLACE DES GRILLES
 	        jpanelJoueur.add(aideButton, BorderLayout.NORTH);
@@ -525,6 +568,7 @@ public class JoueurVueGUIVersion2 extends JoueurVue implements ActionListener{
 		 
 		 /////PLACEMENT BATEAUX JOUEUR 1\\\\\
 		 if(source == placerBateauButton) {
+			 framePlateauOrdi.setEnabled(false);
 				for(int compteur = model.getbateauAPlacer(); compteur>0 ; compteur --) {
 					 commandesOrientation.setVisible(true);
 					 commandesTaille.setVisible(true);
@@ -534,6 +578,7 @@ public class JoueurVueGUIVersion2 extends JoueurVue implements ActionListener{
 					 attaqueButton.setVisible(false);
 					 attaqueHorizontaleButton.setVisible(false);
 					 attaqueVerticaleButton.setVisible(false);
+					 finTourButton.setVisible(false);
 					 
 					 /////CHANGEMENT DES COULEURS D'AFFICHAGE\\\\\
 					 grilleJoueur.removeAll();
@@ -619,20 +664,27 @@ public class JoueurVueGUIVersion2 extends JoueurVue implements ActionListener{
 					        update(null,null);
 				        }
 				}
+				framePlateauOrdi.setEnabled(true);
 				if(model.getbateauAPlacer() <= 0) {
 					 controller.setJoueurAPlacerBateaux(true);
 					 labelLigne.setText(" Ligne de votre attaque");
 					 labelColonne.setText(" Colonne de votre attaque");
 					 labelArgent.setText("Il vous reste : " + model.getArgent() + " pièces pour ce tour !");
-					 if(!controller.ordiAPlacerBateaux()) {
-						//controller.ordiPlacerBateau(new Bateau(aleatoire(0, 6),aleatoire(0, 6),aleatoire(2, 5),"H"));
-						// controller.ordiPlacerBateau(new Bateau(aleatoire(4, 9),aleatoire(4, 6),aleatoire(2, 4),"V"));
-						 //controller.ordiPlacerBateau(new Bateau(0,0,5,"H"));
-						// controller.ordiPlacerBateau(new Bateau(1,0,5,"V"));
-						// controller.ordiPlacerBateau(new Bateau(5,5,2,"H"));
-						// controller.ordiPlacerBateau(new Bateau(6,6,2,"V"));
+					 if(!controller.ordiAPlacerBateaux() && choixModeJeux == 0) {
+						controller.ordiPlacerBateau(new Bateau(aleatoire(0, 6),aleatoire(0, 6),aleatoire(2, 5),"H"));
+						controller.ordiPlacerBateau(new Bateau(aleatoire(4, 9),aleatoire(4, 6),aleatoire(2, 4),"V"));
+						//controller.ordiPlacerBateau(new Bateau(0,0,5,"H"));
+						//controller.ordiPlacerBateau(new Bateau(1,0,5,"V"));
+						//controller.ordiPlacerBateau(new Bateau(5,5,2,"H"));
+						//controller.ordiPlacerBateau(new Bateau(6,6,2,"V"));
 						 update(null,null);
 					 }
+				}
+				if(choixModeJeux == 0) {
+					tour = 0;
+				}
+				else {
+					tour = 1;
 				}
 				update(null,null);
 				return;
@@ -648,15 +700,17 @@ public class JoueurVueGUIVersion2 extends JoueurVue implements ActionListener{
 		 
 		/////PLACEMENT BATEAUX JOUEUR 2\\\\\
 				 if(source == placerBateauButtonJ2) {
+					 framePlateau.setEnabled(false);
 						for( int compteur = model.getbateauAPlacerOrdi() ; compteur>0 ; compteur --) {
 							 commandesOrientationJ2.setVisible(true);
 							 commandesTailleJ2.setVisible(true);
 							 labelLigneJ2.setText(" Ligne de votre Bateau");
 							 labelColonneJ2.setText(" Colonne de votre Bateau");
-							 labelArgentJ2.setText("Il vous reste " + model.getbateauAPlacer() + " bateaux a placer");
+							 labelArgentJ2.setText("Il vous reste " + model.getbateauAPlacerOrdi() + " bateaux a placer");
 							 attaqueButtonJ2.setVisible(false);
 							 attaqueHorizontaleButtonJ2.setVisible(false);
 							 attaqueVerticaleButtonJ2.setVisible(false);
+							 finTourButtonJ2.setVisible(false);
 							 
 							 /////CHANGEMENT DES COULEURS D'AFFICHAGE\\\\\
 							 grilleOrdi.removeAll();
@@ -742,6 +796,7 @@ public class JoueurVueGUIVersion2 extends JoueurVue implements ActionListener{
 							        update(null,null);
 						        }
 						}
+						framePlateau.setEnabled(true);
 						if(model.getbateauAPlacerOrdi() <= 0) {
 							 controller.setOrdiAPlacerBateaux(true);
 							 labelLigneJ2.setText(" Ligne de votre attaque");
@@ -751,6 +806,7 @@ public class JoueurVueGUIVersion2 extends JoueurVue implements ActionListener{
 								 update(null,null);
 							 }
 						}
+						tour = 0;
 						update(null,null);
 						return;
 				 }
@@ -765,7 +821,7 @@ public class JoueurVueGUIVersion2 extends JoueurVue implements ActionListener{
 		 
 		 
 		 
-		 /////ATTAQUE 1 CASE\\\\\
+		 /////ATTAQUE 1 CASE DU JOUEUR 1 VERS JOUEUR 2 (OU ORDI)\\\\\
 		 if(source == attaqueButton) {
 			 if(getColonneAttaque(colonneAttaque) < 0 || getLigneAttaque(ligneAttaque) < 0 || getColonneAttaque(colonneAttaque) >= 10 || getLigneAttaque(ligneAttaque) >= 10){
 				 affiche("Erreur, ceci n'est pas une attaque valide "); 
@@ -782,7 +838,24 @@ public class JoueurVueGUIVersion2 extends JoueurVue implements ActionListener{
 			 return;
 		 }
 		 
-		/////ATTAQUE 3 CASES HORIZONTALES\\\\\
+		 /////ATTAQUE 1 CASE DU JOUEUR 2 VERS JOUEUR 1\\\\\
+		 if(source == attaqueButtonJ2) {
+			 if(getColonneAttaque(colonneAttaqueJ2) < 0 || getLigneAttaque(ligneAttaqueJ2) < 0 || getColonneAttaque(colonneAttaqueJ2) >= 10 || getLigneAttaque(ligneAttaqueJ2) >= 10){
+				 affiche("Erreur, ceci n'est pas une attaque valide "); 
+				 return;
+			 }
+			 if(controller.getArgent() < 3) {
+				 affiche("Vous n'avez plus suffisament d'argent !!"); 
+				 return;
+			 }
+			 Attaque attaque = new Attaque(getLigneAttaque(ligneAttaqueJ2), getColonneAttaque(colonneAttaqueJ2));
+			 controller.joueurEstAttaque(attaque);
+			 controller.setArgent(this.controller.getArgent() - 3);
+			 update(null,null);
+			 return;
+		 }
+		 
+		 /////ATTAQUE 3 CASES HORIZONTALES DU JOUEUR 1 VERS JOUEUR 2 (OU ORDI)\\\\\
 		 if(source == attaqueHorizontaleButton) {
 			 if(getColonneAttaque(colonneAttaque) <1 || getLigneAttaque(ligneAttaque) < 0 || getColonneAttaque(colonneAttaque) >= 9 || getLigneAttaque(ligneAttaque) >= 10){
 				 affiche("Erreur, ceci n'est pas une attaque valide "); 
@@ -799,7 +872,24 @@ public class JoueurVueGUIVersion2 extends JoueurVue implements ActionListener{
 			 return;
 		 }
 		 
-		/////ATTAQUE 3 CASES VERTICALES\\\\\
+		 /////ATTAQUE 3 CASES HORIZONTALES DU JOUEUR 2 VERS JOUEUR 1\\\\\
+		 if(source == attaqueHorizontaleButtonJ2) {
+			 if(getColonneAttaque(colonneAttaqueJ2) <1 || getLigneAttaque(ligneAttaqueJ2) < 0 || getColonneAttaque(colonneAttaqueJ2) >= 9 || getLigneAttaque(ligneAttaqueJ2) >= 10){
+				 affiche("Erreur, ceci n'est pas une attaque valide "); 
+				 return;
+			 }
+			 if(controller.getArgent() < 5) {
+				 affiche("Vous n'avez plus suffisament d'argent !!"); 
+				 return;
+			 }
+			 Attaque attaque = new AttaqueHorizontale(getLigneAttaque(ligneAttaqueJ2), getColonneAttaque(colonneAttaqueJ2));
+			 controller.joueurEstAttaque(attaque);
+			 controller.setArgent(this.controller.getArgent() - 5);
+			 update(null,null);
+			 return;
+		 }
+		 
+		 /////ATTAQUE 3 CASES VERTICALES DU JOUEUR 1 VERS JOUEUR 2 (OU ORDI)\\\\\
 		 if(source == attaqueVerticaleButton) {
 			 if(getColonneAttaque(colonneAttaque) < 0 || getLigneAttaque(ligneAttaque) < 1 || getColonneAttaque(colonneAttaque) >= 10 || getLigneAttaque(ligneAttaque) >= 9){
 				 affiche("Erreur, ceci n'est pas une attaque valide "); 
@@ -816,8 +906,25 @@ public class JoueurVueGUIVersion2 extends JoueurVue implements ActionListener{
 			 return;
 		 }
 		 
-		/////FIN DE TOUR\\\\\
-		 if(source == finTourButton) {
+		/////ATTAQUE 3 CASES VERTICALES DU JOUEUR 2 VERS JOUEUR 1\\\\\
+				 if(source == attaqueVerticaleButtonJ2) {
+					 if(getColonneAttaque(colonneAttaqueJ2) < 0 || getLigneAttaque(ligneAttaqueJ2) < 1 || getColonneAttaque(colonneAttaqueJ2) >= 10 || getLigneAttaque(ligneAttaqueJ2) >= 9){
+						 affiche("Erreur, ceci n'est pas une attaque valide "); 
+						 return;
+					 }
+					 if(controller.getArgent() < 5) {
+						 affiche("Vous n'avez plus suffisament d'argent !!"); 
+						 return;
+					 }
+					 Attaque attaque = new AttaqueVerticale(getLigneAttaque(ligneAttaqueJ2), getColonneAttaque(colonneAttaqueJ2));
+					 controller.joueurEstAttaque(attaque);
+					 controller.setArgent(this.controller.getArgent() - 5);
+					 update(null,null);
+					 return;
+				 }
+		 
+		/////FIN DE TOUR EN MODE DE JEUX CONTRE L'ORDI\\\\\
+		 if(source == finTourButton && choixModeJeux == 0) {
 			 int nbrAleatoire = aleatoire(0, 3);
 				if(nbrAleatoire == 0) {
 					controller.joueurEstAttaque(new Attaque(aleatoire(0, 10),aleatoire(0, 10)));
@@ -834,6 +941,19 @@ public class JoueurVueGUIVersion2 extends JoueurVue implements ActionListener{
 				update(null,null);
 				return;
 		 }
+		 
+		/////FIN DE TOUR EN MODE DE JEUX CONTRE UN AUTRE JOUEUR SUR LE MEME PC\\\\\
+				 if((source == finTourButton || source == finTourButtonJ2) && choixModeJeux == 1) {
+					 if(source == finTourButton) {
+						 tour = 1;
+					 }
+					 else {
+						 tour = 0;
+					 }
+					controller.setArgent(10);
+					update(null,null);
+					return;
+				 }
 		 
 		/////AIDE\\\\\
 		 if(source == aideButton) {
@@ -863,7 +983,7 @@ public class JoueurVueGUIVersion2 extends JoueurVue implements ActionListener{
 	    Object[] selectionValues = { "Jouer contre l'ordinateur", "Jouer contre un autre joueur sur ce PC", "Jouer contre un autre joueur en réseau" };
 	    String initialSelection = "Dogs";
 	    Object selection = JOptionPane.showInputDialog(null, "A quelle mode de jeu voullez vous jouer?",
-	        "Mode BATAIILE NAVALE", JOptionPane.QUESTION_MESSAGE, null, selectionValues, initialSelection);
+	        "Mode BATAILLE NAVALE", JOptionPane.QUESTION_MESSAGE, null, selectionValues, initialSelection);
 	    return (String)selection;
 	}
 	
