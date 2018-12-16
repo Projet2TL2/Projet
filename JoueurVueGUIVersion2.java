@@ -20,9 +20,12 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
+import socketTest.Client;
+import socketTest.Serveur;
 
 
-public class JoueurVueGUIVersion2 extends JoueurVue implements ActionListener{
+
+public class JoueurVueGUIVersion2 extends JoueurVue implements ActionListener, Runnable{
 	
 	/////DECLARATIONS DES JPANNELS DES 2 JOUEURS\\\\\
 	private JPanel jpanelJoueur;
@@ -116,6 +119,9 @@ public class JoueurVueGUIVersion2 extends JoueurVue implements ActionListener{
 	boolean bateauxPlacés = false;
 	private int choixModeJeux;
 	int tour = -1;
+	
+	Serveur serveur = new Serveur();
+	//Client client = new Client();
 	
 	public JoueurVueGUIVersion2(Joueur model, JoueurControl controller) {
 		
@@ -310,6 +316,10 @@ public class JoueurVueGUIVersion2 extends JoueurVue implements ActionListener{
 		
 			/////DANS CE CAS_CI PLATEAU ORDI REPRESENTE LE PLATEAU DU JOUEUR 2\\\\\
 			case 1 :
+					framePlateauOrdi.setTitle("Plateau du Joueur 2");
+					break;
+			/////DANS CE CAS_CI ON JOUE EN RESEAU\\\\\		
+			case 2 :
 					framePlateauOrdi.setTitle("Plateau du Joueur 2");
 					break;
 		
@@ -513,7 +523,7 @@ public class JoueurVueGUIVersion2 extends JoueurVue implements ActionListener{
 	        jpanelJoueur.add(grilleJoueur);
 	        jpanelJoueur.add(global,BorderLayout.SOUTH);
 	        
-	        if(choixModeJeux == 0) {
+	        if(choixModeJeux == 0 || choixModeJeux == 2) {
 	        	jpanelOrdi.add(grilleOrdi); 
 	        	framePlateauOrdi.setContentPane(jpanelOrdi);
 	        	framePlateauOrdi.pack();
@@ -565,7 +575,7 @@ public class JoueurVueGUIVersion2 extends JoueurVue implements ActionListener{
 	 */
 	public void actionPerformed(ActionEvent e) {
 		 Object  source=e.getSource();
-		 
+	if(choixModeJeux == 0 || choixModeJeux == 1) {
 		 /////PLACEMENT BATEAUX JOUEUR 1\\\\\
 		 if(source == placerBateauButton) {
 			 framePlateauOrdi.setEnabled(false);
@@ -975,8 +985,134 @@ public class JoueurVueGUIVersion2 extends JoueurVue implements ActionListener{
 		}
 		 
 		 update(null,null);
-		
 	}
+	
+	
+	
+	
+	
+	if(choixModeJeux == 2) {
+		 /////PLACEMENT BATEAUX JOUEUR 1\\\\\
+		 if(source == placerBateauButton) {
+			 framePlateauOrdi.setEnabled(false);
+				for(int compteur = model.getbateauAPlacer(); compteur>0 ; compteur --) {
+					 commandesOrientation.setVisible(true);
+					 commandesTaille.setVisible(true);
+					 labelLigne.setText(" Ligne de votre Bateau");
+					 labelColonne.setText(" Colonne de votre Bateau");
+					 labelArgent.setText("Il vous reste " + model.getbateauAPlacer() + " bateaux a placer");
+					 attaqueButton.setVisible(false);
+					 attaqueHorizontaleButton.setVisible(false);
+					 attaqueVerticaleButton.setVisible(false);
+					 finTourButton.setVisible(false);
+					 
+					 /////CHANGEMENT DES COULEURS D'AFFICHAGE\\\\\
+					 grilleJoueur.removeAll();
+					 int numeroLignes = 0;
+					 int numeroColonnes = 0;
+				        for(int ligne=0;ligne<11;ligne++) {
+				            for(int colonne=0;colonne<11;colonne++) {
+				                mesBoutonsJoueur[ligne][colonne] = new JButton("");
+				                
+				                if(ligne==0&&colonne==0) {
+				                	mesBoutonsJoueur[ligne][colonne].setBackground(Color.BLACK);
+				                	mesBoutonsJoueur[ligne][colonne].setEnabled(false);
+				                }
+				                if(ligne==0&&colonne!=0) {
+				                	mesBoutonsJoueur[ligne][colonne].setText(""+numeroColonnes);
+				                	mesBoutonsJoueur[ligne][colonne].setBackground(Color.ORANGE);
+				                	mesBoutonsJoueur[ligne][colonne].setForeground(Color.red);
+				                	mesBoutonsJoueur[ligne][colonne].setBorder(BorderFactory.createEtchedBorder(Color.blue, Color.red));
+				                	mesBoutonsJoueur[ligne][colonne].setEnabled(false);
+				                	
+				                    numeroColonnes++;
+				                }
+				                if(colonne==0&&ligne!=0) {
+				                	mesBoutonsJoueur[ligne][colonne].setText(""+numeroLignes);
+				                	mesBoutonsJoueur[ligne][colonne].setBackground(Color.ORANGE);
+				                	mesBoutonsJoueur[ligne][colonne].setBorder(BorderFactory.createEtchedBorder(Color.blue, Color.red));
+				                	mesBoutonsJoueur[ligne][colonne].setEnabled(false);
+				                	
+				                    numeroLignes++;
+				                }
+				                if(ligne>0&&colonne>0) {
+				                	if(model.getPlateau().getPlateau()[ligne-1][colonne-1].estOccupee()) {
+				                		mesBoutonsJoueur[ligne][colonne].setBackground(Color.GREEN);
+				                	}
+				                	else {
+				                		mesBoutonsJoueur[ligne][colonne].setBackground(Color.GRAY);
+				                	}
+				                }
+				                mesBoutonsJoueur[ligne][colonne].setActionCommand((ligne-1) + " " + (colonne-1));
+				                mesBoutonsJoueur[ligne][colonne].addActionListener(this);
+				                grilleJoueur.add(mesBoutonsJoueur[ligne][colonne]); 
+				            }
+				       }
+				        
+				        if( getColonneAttaque(colonneAttaque) < 0 || getLigneAttaque(ligneAttaque) < 0 || getColonneAttaque(colonneAttaque) >= 10 || getLigneAttaque(ligneAttaque) >= 10){
+							 affiche("Erreur, ceci n'est pas une coordonée valide "); 
+							 return;
+						 }
+				        
+				        if(getOrientation(bgOrientaion).equals("H")) {
+				        	if(getTaille(bgTaille) + getColonneAttaque(colonneAttaque) >= 10) {
+				        		affiche("Impossible de placer ce bateau !");
+				        		return;
+				        	}
+				        }
+				        if(getOrientation(bgOrientaion).equals("V")) {
+				        	if(getTaille(bgTaille) + getLigneAttaque(ligneAttaque) >= 10) {
+				        		affiche("Impossible de placer ce bateau !");
+				        		return;
+				        	}
+				        }
+				        if(getOrientation(bgOrientaion).isEmpty()) {
+				        	affiche("Pas d'orientation encodée");
+				        	return;
+				        }
+				        if(getTaille(bgTaille) == 0) {
+				        	affiche("Pas de taille encodée");
+				        	return;
+				        }
+				        if(!getOrientation(bgOrientaion).equals(" ") ) {
+					        Bateau bateau = new Bateau(getLigneAttaque(ligneAttaque), getColonneAttaque(colonneAttaque),getTaille(bgTaille), getOrientation(bgOrientaion));
+					        
+					        if(controller.joueurPlacerBateau(bateau)) {
+					        	model.bateauAPlacerMoins1();
+					        	bgTaille.getSelection().setEnabled(false);
+					        	ligneAttaque.setText("");
+					        	colonneAttaque.setText("");
+					        	//update(null,null);
+					        }
+					        if(! controller.joueurPlacerBateau(bateau)) {
+					        	affiche("Un bateaux ne peut pas chevaucher un autre !");
+					        }
+					        update(null,null);
+				        }
+				}
+				framePlateauOrdi.setEnabled(true);
+				if(model.getbateauAPlacer() <= 0) {
+					 controller.setJoueurAPlacerBateaux(true);
+					 labelLigne.setText(" Ligne de votre attaque");
+					 labelColonne.setText(" Colonne de votre attaque");
+					 labelArgent.setText("Il vous reste : " + model.getArgent() + " pièces pour ce tour !");
+				}
+				if(choixModeJeux == 0) {
+					tour = 0;
+				}
+				else {
+					tour = 1;
+				}
+				update(null,null);
+				return;
+		 }
+	}
+	
+	
+	
+	
+	
+}
 	
 	public String choixModeJeux() {
 		JDialog.setDefaultLookAndFeelDecorated(true);
@@ -1041,5 +1177,11 @@ public class JoueurVueGUIVersion2 extends JoueurVue implements ActionListener{
 		Random r = new Random();
 		int valeur = min + r.nextInt(max - min);
 		return valeur;
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		
 	}
 }
