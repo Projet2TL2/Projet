@@ -1,15 +1,13 @@
-package JUnit;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
-import Attaque;
-import Case;
-
-class AttaqueTest {
+public class AttaqueTest {
 
 	@Test
-	void testAttaque() {
+	public void testAttaque() {
 		Attaque attaque = new Attaque(7,8);
 		assertTrue(attaque.ligne == 7);
 		assertTrue(attaque.colonne == 8);
@@ -17,32 +15,33 @@ class AttaqueTest {
 	}
 
 	@Test
-	void testToString() {
+	public void testToString() {
 		Attaque attaque = new Attaque(5,5);
 		assertEquals("[55]", attaque.toString());
 	}
 
 	@Test
-	void testGetLigne() {
+	public void testGetLigne() {
 		Attaque attaque = new Attaque(7,9);
 		assertTrue(attaque.getLigne() == 7);
 	}
 
 	@Test
-	void testGetColonne() {
+	public void testGetColonne() {
 		Attaque attaque = new Attaque(7,9);
 		assertTrue(attaque.getColonne() == 9);
 		assertFalse(attaque.getColonne() == 5);
 	}
 
 	@Test
-	void testGetSurface() {
-		Case[] surface = new Case[1];
-		assertTrue(surface.length == 1);
-	}
+	public void testGetSurface() {
+		Attaque attaque = new Attaque(5,6);
+		assertTrue(attaque.getSurface().length == 1);
+		
+	} 
 
 	@Test
-	void testGetCout() {
+	public void testGetCout() {
 		Attaque attaque = new Attaque(7,8);
 		assertTrue(attaque.getCout() == 3);
 		

@@ -1,22 +1,17 @@
-package JUnit;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.assertTrue;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
-import AttaqueHorizontale;
-import Case;
-
-class AttaqueHorizontaleTest {
+public class AttaqueHorizontaleTest {
 
 	@Test
-	void testGetSurface() {
-		AttaqueHorizontale attaque = new AttaqueHorizontale(7,8);
-		Case[] surface = new Case[3];
-		assertTrue(surface.length == 3);
+	public void testGetSurface() {
+		AttaqueHorizontale attaqueHorizontale = new AttaqueHorizontale(7,7);
+		assertTrue(attaqueHorizontale.getSurface().length == 3);
 	}
 
 	@Test
-	void testAttaqueHorizontale() {
+	public void testAttaqueHorizontale() {
 		AttaqueHorizontale attaque = new AttaqueHorizontale(7,8);
 		assertTrue(attaque.ligne == 7);
 		assertTrue(attaque.colonne == 8);
