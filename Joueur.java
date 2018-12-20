@@ -1,3 +1,4 @@
+package model;
 import java.util.ArrayList;
 import java.util.Observable;
 
@@ -28,9 +29,16 @@ public class Joueur extends Observable{
 	 * @return false : si l'attaque ne touche pas de bateau 
 	 */
 	public boolean ordiEstAttaque(Attaque attaque) {
-		setChanged();
-		notifyObservers();
-		return plateauOrdi.estAttaque(attaque);
+		if(plateauOrdi.estAttaque(attaque) == true) {
+			setChanged();
+			notifyObservers();
+			return true;
+		}
+		else {
+			setChanged();
+			notifyObservers();
+			return false;
+		}
 	}
 	
 	/*
@@ -38,9 +46,16 @@ public class Joueur extends Observable{
 	 * @return false : si l'attaque ne touche pas de bateau 
 	 */
 	public boolean joueurEstAttaque(Attaque attaque) {
-		setChanged();
-		notifyObservers();
-		return plateau.estAttaque(attaque);
+		if(plateau.estAttaque(attaque) == true) {
+			setChanged();
+			notifyObservers();
+			return true;
+		}
+		else {
+			setChanged();
+			notifyObservers();
+			return false;
+		}
 	}
 	
 	
@@ -49,11 +64,9 @@ public class Joueur extends Observable{
 	 * @retrun false: si le bateau n'a pas été placé car la surface était déja occupée
 	 */
 	public boolean joueurPlacerBateau(Bateau b) {
-		setChanged();
-		notifyObservers();
 		for (int i = 0; i < b.getLongueur(); i++) {
 			for (int j = 0; j < caseDeBateauxJoueur.size(); j++) {
-				if(caseDeBateauxJoueur.get(j).getLigne() == b.getSurface()[i].getColonne() && caseDeBateauxJoueur.get(j).getLigne() == b.getSurface()[i].getLigne()) {
+				if(caseDeBateauxJoueur.get(j).getLigne() == b.getSurface()[i].getLigne() && caseDeBateauxJoueur.get(j).getColonne() == b.getSurface()[i].getColonne()) {
 					return false;
 				}
 			}
@@ -62,6 +75,8 @@ public class Joueur extends Observable{
 			plateau.getPlateau()[b.getSurface()[i].getLigne()][b.getSurface()[i].getColonne()].setOccupee();
 			caseDeBateauxJoueur.add(b.getSurface()[i]);
 		}
+		setChanged();
+		notifyObservers();
 		return true;
 	}
 
@@ -70,8 +85,6 @@ public class Joueur extends Observable{
 	 * @retrun false: si le bateau n'a pas été placé car la surface était déja occupée
 	 */
 	public boolean ordiPlacerBateau(Bateau b) {
-		setChanged();
-		notifyObservers();
 		for (int i = 0; i < b.getLongueur(); i++) {
 			for (int j = 0; j < caseDeBateauxOrdi.size(); j++) {
 				if(b.getSurface()[i].equals(caseDeBateauxOrdi.get(j))) {
@@ -83,6 +96,8 @@ public class Joueur extends Observable{
 			plateauOrdi.getPlateau()[b.getSurface()[i].getLigne()][b.getSurface()[i].getColonne()].setOccupee();
 			caseDeBateauxOrdi.add(b.getSurface()[i]);
 		}
+		setChanged();
+		notifyObservers();
 		return true;
 	}
 	
@@ -157,4 +172,38 @@ public class Joueur extends Observable{
 		}
 		return boo;
 	}
+
+	public boolean isJoueurAPlacerBateaux() {
+		return joueurAPlacerBateaux;
+	}
+
+	public void setJoueurAPlacerBateaux(boolean joueurAPlacerBateaux) {
+		this.joueurAPlacerBateaux = joueurAPlacerBateaux;
+	}
+
+	public boolean isOrdiAPlacerBateaux() {
+		return ordiAPlacerBateaux;
+	}
+
+	public void setOrdiAPlacerBateaux(boolean ordiAPlacerBateaux) {
+		this.ordiAPlacerBateaux = ordiAPlacerBateaux;
+	}
+
+	public ArrayList<Case> getCaseDeBateauxJoueur() {
+		return caseDeBateauxJoueur;
+	}
+
+	public void setCaseDeBateauxJoueur(ArrayList<Case> caseDeBateauxJoueur) {
+		this.caseDeBateauxJoueur = caseDeBateauxJoueur;
+	}
+
+	public ArrayList<Case> getCaseDeBateauxOrdi() {
+		return caseDeBateauxOrdi;
+	}
+
+	public void setCaseDeBateauxOrdi(ArrayList<Case> caseDeBateauxOrdi) {
+		this.caseDeBateauxOrdi = caseDeBateauxOrdi;
+	}
+	
+	
 }
