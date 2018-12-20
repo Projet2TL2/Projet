@@ -1,3 +1,5 @@
+package Controller;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -9,6 +11,8 @@ import java.net.Socket;
 import java.util.Scanner;
 
 import model.Attaque;
+import model.AttaqueHorizontale;
+import model.AttaqueVerticale;
 import model.Bateau;
 import model.Joueur;
 
@@ -44,7 +48,7 @@ public class Network {
 		else {
 			try {
 				System.out.println("je suis client");
-				socketClient= new Socket("127.0.0.1", 5000);
+				socketClient= new Socket("192.168.1.59", 5000);
 				in = new BufferedReader(new InputStreamReader(socketClient.getInputStream()));
 				out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socketClient.getOutputStream())), true);
 			}
@@ -67,14 +71,26 @@ public class Network {
 						e.printStackTrace();
 					}
 					if(! input.equals(" ")) {
-						if(input.length() == 3) {
+						if(input.split(" ")[0].equals("attaqueSimple")) {
 							tab[0] = Integer.parseInt(input.split(" ")[1]);	
 							tab[1] = Integer.parseInt(input.split(" ")[2]);	
 							model.joueurEstAttaque(new Attaque(tab[0], tab[1]));
 							input = " ";
 						}
-						if(input.length() > 5) {
+						else if(input.split(" ")[0].equals("B")) {
 							model.ordiPlacerBateau(new Bateau(Integer.parseInt(input.split(" ")[1]), Integer.parseInt(input.split(" ")[2]), Integer.parseInt(input.split(" ")[3]), input.split(" ")[4]));
+							input = " ";
+						}
+						else if(input.split(" ")[0].equals("attaqueHorizontale")) {
+							tab[0] = Integer.parseInt(input.split(" ")[1]);	
+							tab[1] = Integer.parseInt(input.split(" ")[2]);	
+							model.joueurEstAttaque(new AttaqueHorizontale(tab[0], tab[1]));
+							input = " ";
+						}
+						else if(input.split(" ")[0].equals("attaqueVerticale")) {
+							tab[0] = Integer.parseInt(input.split(" ")[1]);	
+							tab[1] = Integer.parseInt(input.split(" ")[2]);	
+							model.joueurEstAttaque(new AttaqueVerticale(tab[0], tab[1]));
 							input = " ";
 						}
 					}
@@ -83,7 +99,15 @@ public class Network {
 		}
 		
 		public void sendAttaque(Attaque attaque) {
-			out.println(attaque.getLigne() + " " + attaque.getColonne());
+			out.println("attaqueSimple" + " " + attaque.getLigne() + " " + attaque.getColonne());
+			out.flush();
+		}
+		public void sendAttaqueHorizontale(AttaqueHorizontale attaque) {
+			out.println("attaqueHorizontale" + " " + attaque.getLigne() + " " + attaque.getColonne());
+			out.flush();
+		}
+		public void sendAttaqueVerticale(AttaqueVerticale attaque) {
+			out.println("attaqueVerticale" + " " + attaque.getLigne() + " " + attaque.getColonne());
 			out.flush();
 		}
 		
