@@ -1,27 +1,16 @@
-
+package Vue;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.Observable;
 import java.util.Random;
-import java.util.Scanner;
-import java.util.concurrent.TimeUnit;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -31,9 +20,13 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
-import socketTest.Client;
-import socketTest.Serveur;
-
+import Controller.JoueurControl;
+import Controller.Network;
+import model.Attaque;
+import model.AttaqueHorizontale;
+import model.AttaqueVerticale;
+import model.Bateau;
+import model.Joueur;
 
 
 public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListener, Runnable{
@@ -52,9 +45,9 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 	private JPanel global, globalJ2;
 	
 	/////DECLARATION JBUTTONS DES 2 JOUEURS\\\\\
-	private JButton attaqueButton = new JButton("Attaquer");
-	private JButton attaqueHorizontaleButton = new JButton("Attaque Horizontale");
-	private JButton attaqueVerticaleButton = new JButton("Attaque Verticale");
+	private JButton attaqueButton = new JButton("Attaque Simple (3)");
+	private JButton attaqueHorizontaleButton = new JButton("Attaque Horizontale (5)");
+	private JButton attaqueVerticaleButton = new JButton("Attaque Verticale (5)");
 	private JButton placerBateauButton = new JButton("Placer Bateau");
 	private JButton finTourButton = new JButton("Fin du tour");
 	private JButton aideButton = new JButton("Besoin d'aide ?");
@@ -130,21 +123,14 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 	boolean bateauxPlacés = false;
 	private int choixModeJeux;
 	int tour = -1;
-	
-	ServerSocket socketserver  ;
-	Socket socketClient ;
-	BufferedReader in;
-	PrintWriter out;
-	Scanner sc = null;
-	String input = "";
 	boolean isServer;
+	Network test;
 	
-	
-	public JoueurVueGUIVersionReseau(Joueur model, JoueurControl controller, String arg) {
+	public JoueurVueGUIVersionReseau(Joueur model, JoueurControl controller, boolean boo) {
 		
 		super(model, controller);
 		
-		isServer = (arg.equals("true")? true : false);
+		//this.test = test;
 		
 		////CHOIX MODE DE JEUX\\\\\
 		String modeJeux = choixModeJeux();
@@ -156,31 +142,11 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 		}
 		if(modeJeux.equals("Jouer contre un autre joueur en réseau")) {
 			choixModeJeux = 2;
-			/////SI EST LE SERVEUR\\\\\
-			if(isServer) {
-				try {
-					socketserver = new ServerSocket(2009);
-					socketClient = socketserver.accept();
-					in = new BufferedReader(new InputStreamReader(socketClient.getInputStream()));
-					out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socketClient.getOutputStream())), true);
-				}
-				catch (Exception e) {
-					
-				}
-			}
-			/////SI EST LE CLIENT\\\\\
-			else {
-				try {
-					socketClient= new Socket("192.168.1.61", 2009);
-					in = new BufferedReader(new InputStreamReader(socketClient.getInputStream()));
-					out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socketClient.getOutputStream())), true);
-				}
-				catch (Exception e) {
-					
-				}
-			}
+			test = new Network(model, boo);
 		}	
 		
+		isServer = boo;
+		tour = boo==true? 0 : 1;
 		
 		/////INITIALISATION DES JBUTTONGROUPS DES 2 JOUEURS\\\\\
 		bgTailleJ2.add(tailleDeuxJ2);
@@ -363,8 +329,13 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 			/////DANS CE CAS_CI ON JOUE EN RESEAU\\\\\		
 			case 2 :
 					framePlateauOrdi.setTitle("Plateau du Joueur 2");
+					if(boo == false) {
+						framePlateau.setTitle("Plateau du client");
+					}
 					break;
 		
+		
+					
 		}
 		
 		
@@ -373,6 +344,7 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 		framePlateau.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		framePlateauOrdi.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
+		aideButton.setBackground(Color.GREEN);
 	}
 	
 	/*
@@ -441,7 +413,7 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 			attaqueVerticaleButtonJ2.setEnabled(true);
 			finTourButtonJ2.setEnabled(true);
 		 }
-		 
+		
 		 /////DEBUT DE PARTIE\\\\\
 		 if (tour == -1) {
 			attaqueButton.setEnabled(false);
@@ -452,6 +424,48 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 			attaqueHorizontaleButtonJ2.setEnabled(false);
 			attaqueVerticaleButtonJ2.setEnabled(false);
 			finTourButtonJ2.setEnabled(false);
+			//tour = 0;
+		 }
+		 
+		 if(choixModeJeux == 2) {
+			 if(controller.joueurAPlacerBateaux()) {
+				 if(tour == 0) {
+					 placerBateauButton.setVisible(false);
+					 attaqueButton.setEnabled(true);
+					 attaqueHorizontaleButton.setEnabled(true);
+					 attaqueVerticaleButton.setEnabled(true);
+					 finTourButton.setEnabled(true);
+				 }
+				 else {
+					 placerBateauButton.setVisible(false);
+					 attaqueButton.setEnabled(false);
+					 attaqueHorizontaleButton.setEnabled(false);
+					 attaqueVerticaleButton.setEnabled(false);
+					 finTourButton.setEnabled(false);
+				 }
+			 }
+			 else {
+				 if(tour == 0) {
+					 placerBateauButton.setEnabled(true);
+					 placerBateauButton.setVisible(true);
+				 }
+				 else {
+					 placerBateauButton.setEnabled(false);
+					 placerBateauButton.setVisible(true);
+				 }
+				attaqueButton.setEnabled(false);
+				attaqueHorizontaleButton.setEnabled(false);
+				attaqueVerticaleButton.setEnabled(false);
+				finTourButton.setEnabled(false);
+			 }
+		 }
+		 
+		 if(test.getTour() == 0) {
+			 placerBateauButton.setVisible(true);
+			 attaqueButton.setEnabled(true);
+			 attaqueHorizontaleButton.setEnabled(true);
+			 attaqueVerticaleButton.setEnabled(true);
+			 finTourButton.setEnabled(true);
 		 }
 		 
 		 int numeroLignes = 0;
@@ -547,16 +561,21 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 	            }
 	        }
 	        
-	        if( model.caseDeBateauxOrdi.size() != 0 && model.caseDeBateauxJoueur.size() != 0) {
+	        if( model.getCaseDeBateauxOrdi().size() != 0 && model.getCaseDeBateauxJoueur().size() != 0) {
 	        	if(model.joueurAGagne()) {
 	        		JOptionPane.showInputDialog("AIE AIE AIE, le joueur 1 a gagné !!!");
 	        		framePlateau.setEnabled(false);
 	        		framePlateauOrdi.setEnabled(false);
 	        	}
 	        	if(model.ordiAGagne()) {
-	        		JOptionPane.showInputDialog("AIE AIE AIE, le joueur 2 a gagné !!!");
-	        		framePlateau.setEnabled(false);
-	        		framePlateauOrdi.setEnabled(false);
+	        		if(choixModeJeux == 0) {
+	        			JOptionPane.showInputDialog("AIE AIE AIE, l'ordinateur a gagné !!!");
+	        		}
+	        		else {
+	        			JOptionPane.showInputDialog("AIE AIE AIE, le joueur 2 a gagné !!!");
+	        		}
+	        		//framePlateau.setEnabled(false);
+	        		//framePlateauOrdi.setEnabled(false);
 	        	}
 	        }
 	        
@@ -569,7 +588,7 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 	        	jpanelOrdi.add(grilleOrdi); 
 	        	framePlateauOrdi.setContentPane(jpanelOrdi);
 	        	framePlateauOrdi.pack();
-		        framePlateauOrdi.setSize(500,500);
+		        framePlateauOrdi.setSize(600,500);
 	        }
 	        else {
 	        	jpanelOrdi.add(aideButtonJ2, BorderLayout.NORTH);
@@ -577,7 +596,7 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 	        	jpanelOrdi.add(globalJ2,BorderLayout.SOUTH);
 	        	framePlateauOrdi.setContentPane(jpanelOrdi);
 	        	framePlateauOrdi.pack();
-		        framePlateauOrdi.setSize(500,600);
+		        framePlateauOrdi.setSize(600,600);
 	        }
 	        	//AJOUT DU CONTENUE DANS LA JFRAME
 	        framePlateau.setContentPane(jpanelJoueur);
@@ -585,10 +604,10 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 	        	//PACK TOUTE LA JFRAME
 	        framePlateau.pack();
 	        	//DEFINITION TAILLE OPTIMALE
-	        framePlateau.setSize(500, 600);
+	        framePlateau.setSize(600, 600);
 	        	//LOCALISATION D'APPARITION
-	        framePlateau.setLocation(100, 100);
-	        framePlateauOrdi.setLocation(900, 100);
+	        //framePlateau.setLocation(100, 100);
+	        //framePlateauOrdi.setLocation(900, 100);
 	}
 	
 	
@@ -597,6 +616,12 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 	 * si le joueur n'a pas encore placé ses bateaux, les bouttons d'attaque ne sont pas visibles
 	 */
 	public void update(Observable o, Object arg) {
+		if(!controller.joueurAPlacerBateaux() && isServer==false) {
+			if(test.serveurAPlacerTousSesBateaux()) {
+				tour = 0;
+			}
+		}
+		
 		updateTable();
 	}
 	
@@ -701,6 +726,10 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 				        }
 				        if(!getOrientation(bgOrientaion).equals(" ") ) {
 					        Bateau bateau = new Bateau(getLigneAttaque(ligneAttaque), getColonneAttaque(colonneAttaque),getTaille(bgTaille), getOrientation(bgOrientaion));
+					        if(choixModeJeux == 2) {
+								test.sendBateau(bateau);
+					        }
+					        
 					        
 					        if(controller.joueurPlacerBateau(bateau)) {
 					        	model.bateauAPlacerMoins1();
@@ -722,7 +751,7 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 					 labelColonne.setText(" Colonne de votre attaque");
 					 labelArgent.setText("Il vous reste : " + model.getArgent() + " pièces pour ce tour !");
 					 if(!controller.ordiAPlacerBateaux() && choixModeJeux == 0) {
-						controller.ordiPlacerBateau(new Bateau(aleatoire(0, 6),aleatoire(0, 6),aleatoire(2, 5),"H"));
+						controller.ordiPlacerBateau(new Bateau(aleatoire(0, 6),aleatoire(0, 5),aleatoire(2, 5),"H"));
 						controller.ordiPlacerBateau(new Bateau(aleatoire(4, 9),aleatoire(4, 6),aleatoire(2, 4),"V"));
 						//controller.ordiPlacerBateau(new Bateau(0,0,5,"H"));
 						//controller.ordiPlacerBateau(new Bateau(1,0,5,"V"));
@@ -736,42 +765,12 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 				}
 				else {
 					tour = 1;
+					test.finDeTour();
 				}
-				
-				if(choixModeJeux == 2) {
-					if(isServer) {
-						sendMessage("<J'ai placé mes bateaux ! A votre tour !");
-						System.out.println(">J'ai placé mes bateaux ! A votre tour !");
-						try {
-							System.out.println(waitForMessage());
-						} catch (IOException e1) {
-							e1.printStackTrace();
-						}
-					}
-					else {
-						try {
-							System.out.println(waitForMessage());
-						} catch (IOException e1) {
-							e1.printStackTrace();
-						}
-						sendMessage("<J'ai placé les miens! Commencons a jouer !");
-						System.out.println(">J'ai placé les miens! Commencons a jouer !");
-					}
-					
-				}
-				
 				
 				update(null,null);
 				return;
 		 }
-		 
-		 
-		 
-		 
-		 
-		 
-		 
-		 
 		 
 		/////PLACEMENT BATEAUX JOUEUR 2\\\\\
 				 if(source == placerBateauButtonJ2) {
@@ -886,16 +885,6 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 						return;
 				 }
 		 
-		 
-		 
-		 
-		 
-		 
-		 
-		 
-		 
-		 
-		 
 		 /////ATTAQUE 1 CASE DU JOUEUR 1 VERS JOUEUR 2 (OU ORDI)\\\\\
 		 if(source == attaqueButton) {
 			 if(getColonneAttaque(colonneAttaque) < 0 || getLigneAttaque(ligneAttaque) < 0 || getColonneAttaque(colonneAttaque) >= 10 || getLigneAttaque(ligneAttaque) >= 10){
@@ -909,9 +898,11 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 			 Attaque attaque = new Attaque(getLigneAttaque(ligneAttaque), getColonneAttaque(colonneAttaque));
 			 controller.ordiEstAttaque(attaque);
 			 controller.setArgent(this.controller.getArgent() - 3);
-			 if(choixModeJeux == 2) { 
-				 sendMessage(getLigneAttaque(ligneAttaque)+" "+getColonneAttaque(colonneAttaque));
-			 }
+			 
+			 if(choixModeJeux == 2) {
+				test.sendAttaque(attaque);
+			}
+			 
 			 update(null,null);
 			 return;
 		 }
@@ -943,9 +934,12 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 				 affiche("Vous n'avez plus suffisament d'argent !!"); 
 				 return;
 			 }
-			 Attaque attaque = new AttaqueHorizontale(getLigneAttaque(ligneAttaque), getColonneAttaque(colonneAttaque));
+			 AttaqueHorizontale attaque = new AttaqueHorizontale(getLigneAttaque(ligneAttaque), getColonneAttaque(colonneAttaque));
 			 controller.ordiEstAttaque(attaque);
 			 controller.setArgent(this.controller.getArgent() - 5);
+			 if(choixModeJeux == 2) {
+					test.sendAttaqueHorizontale(attaque);
+			}
 			 update(null,null);
 			 return;
 		 }
@@ -960,7 +954,7 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 				 affiche("Vous n'avez plus suffisament d'argent !!"); 
 				 return;
 			 }
-			 Attaque attaque = new AttaqueHorizontale(getLigneAttaque(ligneAttaqueJ2), getColonneAttaque(colonneAttaqueJ2));
+			 AttaqueHorizontale attaque = new AttaqueHorizontale(getLigneAttaque(ligneAttaqueJ2), getColonneAttaque(colonneAttaqueJ2));
 			 controller.joueurEstAttaque(attaque);
 			 controller.setArgent(this.controller.getArgent() - 5);
 			 update(null,null);
@@ -977,44 +971,49 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 				 affiche("Vous n'avez plus suffisament d'argent !!"); 
 				 return;
 			 }
-			 Attaque attaque = new AttaqueVerticale(getLigneAttaque(ligneAttaque), getColonneAttaque(colonneAttaque));
+			 AttaqueVerticale attaque = new AttaqueVerticale(getLigneAttaque(ligneAttaque), getColonneAttaque(colonneAttaque));
 			 controller.ordiEstAttaque(attaque);
 			 controller.setArgent(this.controller.getArgent() - 5);
+			 if(choixModeJeux == 2) {
+					test.sendAttaqueVerticale(attaque);
+			}
 			 update(null,null);
 			 return;
 		 }
 		 
 		/////ATTAQUE 3 CASES VERTICALES DU JOUEUR 2 VERS JOUEUR 1\\\\\
-				 if(source == attaqueVerticaleButtonJ2) {
-					 if(getColonneAttaque(colonneAttaqueJ2) < 0 || getLigneAttaque(ligneAttaqueJ2) < 1 || getColonneAttaque(colonneAttaqueJ2) >= 10 || getLigneAttaque(ligneAttaqueJ2) >= 9){
-						 affiche("Erreur, ceci n'est pas une attaque valide "); 
-						 return;
-					 }
-					 if(controller.getArgent() < 5) {
-						 affiche("Vous n'avez plus suffisament d'argent !!"); 
-						 return;
-					 }
-					 Attaque attaque = new AttaqueVerticale(getLigneAttaque(ligneAttaqueJ2), getColonneAttaque(colonneAttaqueJ2));
-					 controller.joueurEstAttaque(attaque);
-					 controller.setArgent(this.controller.getArgent() - 5);
-					 update(null,null);
-					 return;
-				 }
+		if(source == attaqueVerticaleButtonJ2) {
+			if(getColonneAttaque(colonneAttaqueJ2) < 0 || getLigneAttaque(ligneAttaqueJ2) < 1 || getColonneAttaque(colonneAttaqueJ2) >= 10 || getLigneAttaque(ligneAttaqueJ2) >= 9){
+				 affiche("Erreur, ceci n'est pas une attaque valide "); 
+				 return;
+			 }
+			 if(controller.getArgent() < 5) {
+				 affiche("Vous n'avez plus suffisament d'argent !!"); 
+				 return;
+			 }
+			 AttaqueVerticale attaque = new AttaqueVerticale(getLigneAttaque(ligneAttaqueJ2), getColonneAttaque(colonneAttaqueJ2));
+			 controller.joueurEstAttaque(attaque);
+			 controller.setArgent(this.controller.getArgent() - 5);
+			 update(null,null);
+			 return;
+		 }
 		 
 		/////FIN DE TOUR EN MODE DE JEUX CONTRE L'ORDI\\\\\
 		 if(source == finTourButton && choixModeJeux == 0) {
-			 int nbrAleatoire = aleatoire(0, 3);
-				if(nbrAleatoire == 0) {
-					controller.joueurEstAttaque(new Attaque(aleatoire(0, 10),aleatoire(0, 10)));
-				}
-				else{
-					if(nbrAleatoire == 1) {
-						controller.joueurEstAttaque(new AttaqueHorizontale(aleatoire(0, 10),aleatoire(1, 9)));
+			 for(int i = 0 ; i < 2 ; i++) { 
+				 int nbrAleatoire = aleatoire(0, 3);
+					if(nbrAleatoire == 0) {
+						controller.joueurEstAttaque(new Attaque(aleatoire(0, 10),aleatoire(0, 10)));
 					}
 					else{
-						controller.joueurEstAttaque(new AttaqueVerticale(aleatoire(1, 9),aleatoire(0, 10)));
+						if(nbrAleatoire == 1) {
+							controller.joueurEstAttaque(new AttaqueHorizontale(aleatoire(0, 10),aleatoire(1, 9)));
+						}
+						else{
+							controller.joueurEstAttaque(new AttaqueVerticale(aleatoire(1, 9),aleatoire(0, 10)));
+						}
 					}
-				}
+			 }
 				controller.setArgent(10);
 				update(null,null);
 				return;
@@ -1032,7 +1031,19 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 					update(null,null);
 					return;
 				 }
+				 
+		/////FIN DE TOUR EN MODE DE JEUX CONTRE UN AUTRE JOUEUR EN RESEAU\\\\\
+				 if(source == finTourButton  && choixModeJeux == 2) {
+					//tour = 1;
+					test.finDeTour();
+					controller.setArgent(10);
+					update(null,null);
+					return;
+				 }				 
 		 
+				 
+				 
+				 
 		/////AIDE\\\\\
 		 if(source == aideButton) {
 				frameAide.setTitle("Aide");
@@ -1120,21 +1131,6 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 		return valeur;
 	}
 
-	
-	/*
-	 * Envoie le messages msg Ã  l'interlocuteur
-	 * @param msg un message
-	 */
-	public void sendMessage(String msg) {
-		out.println(msg);
-	}
-	
-	public String waitForMessage() throws IOException {
-        String str = in.readLine();
-        if(str.equals("STOP"))str = "votre interlocuteur s'est deconnecté";
-        return str;
-	}
-	
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
