@@ -57,6 +57,7 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 	private JButton placerBateauButtonJ2 = new JButton("Placer Bateau");
 	private JButton finTourButtonJ2 = new JButton("Fin du tour");
 	private JButton aideButtonJ2 = new JButton("Besoin d'aide ?");
+	private JButton rafraichirButton = new JButton("Raffraichir");
 	
 	/////DECLARATIONS GRILLE DES 2 JOUEURS\\\\\
 	private JButton mesBoutonsJoueur[][] = new JButton[11][11];
@@ -212,6 +213,7 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 		placerBateauButtonJ2.addActionListener(this);
 		finTourButtonJ2.addActionListener(this);
 		aideButtonJ2.addActionListener(this);
+		rafraichirButton.addActionListener(this);
 		
 		/////INITIALISATION DES LAYOUT DES 2 JOUEURS\\\\\
 		commandesLigne.setLayout(new BoxLayout(commandesLigne, BoxLayout.X_AXIS));
@@ -257,6 +259,7 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 		commandes.add(attaqueHorizontaleButton);
 		commandes.add(attaqueVerticaleButton);
 		commandes.add(placerBateauButton);
+		commandes.add(rafraichirButton);
 		
 		global.add(message);
 		global.add(labelArgent);
@@ -362,6 +365,9 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 	 */
 	public void updateTable(){
 		
+		tour = test.getTour();
+		
+		
 		 /////REINITIALISATION DES GRILLES\\\\\
 		 grilleJoueur.removeAll();
 		 grilleOrdi.removeAll();
@@ -460,6 +466,7 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 			 }
 		 }
 		 
+		 /*
 		 if(test.getTour() == 0) {
 			 placerBateauButton.setVisible(true);
 			 attaqueButton.setEnabled(true);
@@ -467,6 +474,7 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 			 attaqueVerticaleButton.setEnabled(true);
 			 finTourButton.setEnabled(true);
 		 }
+		 */
 		 
 		 int numeroLignes = 0;
 		 int numeroColonnes = 0;
@@ -541,7 +549,7 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 	    						mesBoutonsOrdi[ligne][colonne].setBackground(Color.RED);
 	    					}
 	    					else{
-	    						mesBoutonsOrdi[ligne][colonne].setBackground(Color.GREEN);
+	    						mesBoutonsOrdi[ligne][colonne].setBackground(Color.CYAN);
 	    					}
 	    				}
 	    				else {
@@ -561,11 +569,11 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 	            }
 	        }
 	        
-	        if( model.getCaseDeBateauxOrdi().size() != 0 && model.getCaseDeBateauxJoueur().size() != 0) {
+	        if( model.getCaseDeBateauxOrdi().size() != 0 && model.getCaseDeBateauxJoueur().size() != 0 && choixModeJeux!=2) {
 	        	if(model.joueurAGagne()) {
 	        		JOptionPane.showInputDialog("AIE AIE AIE, le joueur 1 a gagné !!!");
-	        		framePlateau.setEnabled(false);
-	        		framePlateauOrdi.setEnabled(false);
+	        		//framePlateau.setEnabled(false);
+	        		//framePlateauOrdi.setEnabled(false);
 	        	}
 	        	if(model.ordiAGagne()) {
 	        		if(choixModeJeux == 0) {
@@ -577,6 +585,16 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 	        		//framePlateau.setEnabled(false);
 	        		//framePlateauOrdi.setEnabled(false);
 	        	}
+	        }
+	        
+	        if( model.getCaseDeBateauxOrdi().size() != 0 && model.getCaseDeBateauxJoueur().size() != 0 && choixModeJeux==2) {
+	        	if(model.joueurAGagne() && isServer == true) {
+	        		JOptionPane.showInputDialog("AIE AIE AIE, le joueur serveur a gagné !!!");
+	        	}
+	        	if(model.joueurAGagne() && isServer == false) {
+	        		JOptionPane.showInputDialog("AIE AIE AIE, le joueur client a gagné !!!");
+	        	}
+	        	
 	        }
 	        
 	        	//MISE EN PLACE DES GRILLES
@@ -608,6 +626,8 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 	        	//LOCALISATION D'APPARITION
 	        //framePlateau.setLocation(100, 100);
 	        //framePlateauOrdi.setLocation(900, 100);
+	        
+	        message.setText(test.getMessage());
 	}
 	
 	
@@ -1052,6 +1072,10 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 				frameAide.setLocation(300, 300);
 				frameAide.setAlwaysOnTop(true);
 				frameAide.setVisible(true);
+		 }
+		 
+		 if(source == rafraichirButton) {
+			 update(null,null);
 		 }
 		 
 		else {

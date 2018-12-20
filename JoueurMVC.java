@@ -1,5 +1,7 @@
 package model;
 
+import javax.swing.JOptionPane;
+
 import Controller.JoueurControl;
 import Vue.JoueurVue;
 import Vue.JoueurVueConsole;
@@ -24,7 +26,13 @@ public class JoueurMVC {
 	}
 	
 	public static void main(String args[]) {
-		isServeur = (args[0].equals("true")? true : false);
+		int nbr = JOptionPane.showConfirmDialog(null, "Attendez-vous qqun?", "Etes vous serveur?", JOptionPane.YES_NO_OPTION);
+		if(nbr == 0) {
+			isServeur = true;
+		}
+		else {
+			isServeur = false;
+		}
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				new JoueurMVC(isServeur);
