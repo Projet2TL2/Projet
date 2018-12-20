@@ -28,6 +28,10 @@ public class Network {
 	String input = "";
 	private Thread networking = new Thread(new Continue());
 	Joueur model;
+	int nbrBateauPlaceDeAdversaire = 0;
+	int tour;
+	String message;
+	boolean hasChanged = false;
 	
 	public Network(Joueur model, boolean isServer) {
 		this.model = model;
@@ -39,6 +43,7 @@ public class Network {
 				System.out.println("Connexion effectuée !");
 				in = new BufferedReader(new InputStreamReader(socketduServeur.getInputStream()));
 				out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socketduServeur.getOutputStream())), true);
+				tour = 0;
 			}
 			catch (Exception e) {
 				
@@ -51,6 +56,7 @@ public class Network {
 				socketClient= new Socket("192.168.1.59", 5000);
 				in = new BufferedReader(new InputStreamReader(socketClient.getInputStream()));
 				out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socketClient.getOutputStream())), true);
+				tour = 1;
 			}
 			catch (Exception e) {
 				
@@ -71,15 +77,18 @@ public class Network {
 						e.printStackTrace();
 					}
 					if(! input.equals(" ")) {
+						hasChanged = true;
 						if(input.split(" ")[0].equals("attaqueSimple")) {
 							tab[0] = Integer.parseInt(input.split(" ")[1]);	
 							tab[1] = Integer.parseInt(input.split(" ")[2]);	
 							model.joueurEstAttaque(new Attaque(tab[0], tab[1]));
 							input = " ";
+							message = "Attaque simple";
 						}
 						else if(input.split(" ")[0].equals("B")) {
 							model.ordiPlacerBateau(new Bateau(Integer.parseInt(input.split(" ")[1]), Integer.parseInt(input.split(" ")[2]), Integer.parseInt(input.split(" ")[3]), input.split(" ")[4]));
 							input = " ";
+							nbrBateauPlaceDeAdversaire++;
 						}
 						else if(input.split(" ")[0].equals("attaqueHorizontale")) {
 							tab[0] = Integer.parseInt(input.split(" ")[1]);	
@@ -92,6 +101,14 @@ public class Network {
 							tab[1] = Integer.parseInt(input.split(" ")[2]);	
 							model.joueurEstAttaque(new AttaqueVerticale(tab[0], tab[1]));
 							input = " ";
+						}
+						else if(input.equals("finDeTour")) {
+							if(tour == 0) {
+								tour = 1;
+							}
+							else {
+								tour = 0;
+							}
 						}
 					}
 				}
@@ -113,6 +130,52 @@ public class Network {
 		
 		public void sendBateau(Bateau bateau) {
 			out.println("B" + " " + bateau.getLigneDebut() + " " + bateau.getColonneDebut() + " " + bateau.getLongueur() + " " + bateau.getOrientation());
+			//nbrBateauPlaceDeAdversaire++;
 		}
+		
+		public void finDeTour () {
+			out.println("finDeTour");
+			if(tour == 0) {
+				tour = 1;
+			}
+			else {
+				tour = 0;
+			}
+		}
+		
+		public boolean serveurAPlacerTousSesBateaux () {
+			if(nbrBateauPlaceDeAdversaire >=3 ) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		
+		public boolean hasChanged() {
+			if(hasChanged == true) {
+				hasChanged = false;
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		
+		public int getTour() {
+			return tour;
+		}
+		public void setTour(int tour) {
+			this.tour = tour;
+		}
+		public String getMessage() {
+			return message;
+		}
+		public void setMessage(String message) {
+			this.message = message;
+		}
+		
+		
+		
 	}
 
