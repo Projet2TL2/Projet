@@ -1,4 +1,4 @@
-package Controller;
+package Controleur;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -10,11 +10,11 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
 
-import model.Attaque;
-import model.AttaqueHorizontale;
-import model.AttaqueVerticale;
-import model.Bateau;
-import model.Joueur;
+import Model.Attaque;
+import Model.AttaqueHorizontale;
+import Model.AttaqueVerticale;
+import Model.Bateau;
+import Model.Joueur;
 
 public class Network {
 
@@ -30,6 +30,8 @@ public class Network {
 	Joueur model;
 	int nbrBateauPlaceDeAdversaire = 0;
 	int tour;
+	String message;
+	boolean hasChanged = false;
 	
 	public Network(Joueur model, boolean isServer) {
 		this.model = model;
@@ -38,7 +40,7 @@ public class Network {
 				System.out.println("je suis serveur");
 				socketserver = new ServerSocket(5000);
 				socketduServeur = socketserver.accept();
-				System.out.println("Connexion effectuÃ©e !");
+				System.out.println("Connexion effectuée !");
 				in = new BufferedReader(new InputStreamReader(socketduServeur.getInputStream()));
 				out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socketduServeur.getOutputStream())), true);
 				tour = 0;
@@ -51,7 +53,7 @@ public class Network {
 		else {
 			try {
 				System.out.println("je suis client");
-				socketClient= new Socket("192.168.1.59", 5000);
+				socketClient= new Socket("192.168.6.1", 5000);
 				in = new BufferedReader(new InputStreamReader(socketClient.getInputStream()));
 				out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socketClient.getOutputStream())), true);
 				tour = 1;
@@ -75,11 +77,13 @@ public class Network {
 						e.printStackTrace();
 					}
 					if(! input.equals(" ")) {
+						hasChanged = true;
 						if(input.split(" ")[0].equals("attaqueSimple")) {
 							tab[0] = Integer.parseInt(input.split(" ")[1]);	
 							tab[1] = Integer.parseInt(input.split(" ")[2]);	
 							model.joueurEstAttaque(new Attaque(tab[0], tab[1]));
 							input = " ";
+							message = "Attaque simple";
 						}
 						else if(input.split(" ")[0].equals("B")) {
 							model.ordiPlacerBateau(new Bateau(Integer.parseInt(input.split(" ")[1]), Integer.parseInt(input.split(" ")[2]), Integer.parseInt(input.split(" ")[3]), input.split(" ")[4]));
@@ -131,6 +135,12 @@ public class Network {
 		
 		public void finDeTour () {
 			out.println("finDeTour");
+			if(tour == 0) {
+				tour = 1;
+			}
+			else {
+				tour = 0;
+			}
 		}
 		
 		public boolean serveurAPlacerTousSesBateaux () {
@@ -141,12 +151,30 @@ public class Network {
 				return false;
 			}
 		}
+		
+		public boolean hasChanged() {
+			if(hasChanged == true) {
+				hasChanged = false;
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		
 		public int getTour() {
 			return tour;
 		}
 		public void setTour(int tour) {
 			this.tour = tour;
 		}
+		public String getMessage() {
+			return message;
+		}
+		public void setMessage(String message) {
+			this.message = message;
+		}
+		
 		
 		
 	}

@@ -1,4 +1,9 @@
-import javafx.collections.SetChangeListener;
+package Controleur;
+
+import Model.Attaque;
+import Model.Bateau;
+import Model.Joueur;
+import Vue.JoueurVue;
 
 public class JoueurControl {
 
@@ -48,7 +53,7 @@ public class JoueurControl {
 	}
 	
 	public void setJoueurAPlacerBateaux(boolean boo) {
-		model.joueurAPlacerBateaux = boo;
+		model.setJoueurAPlacerBateaux(boo);
 	}
 	
 	public boolean ordiAPlacerBateaux() {
@@ -56,7 +61,7 @@ public class JoueurControl {
 	}
 	
 	public void setOrdiAPlacerBateaux(boolean boo) {
-		model.ordiAPlacerBateaux = boo;
+		model.setOrdiAPlacerBateaux(boo);
 	}
 	
 	public void addView(JoueurVue vue) {
@@ -69,5 +74,9 @@ public class JoueurControl {
 	
 	public void setArgent( int a) {
 		model.setArgent(a);
+	}
+	
+	public int getBateauxAPlacer(){
+		return model.getbateauAPlacer();
 	}
 }
