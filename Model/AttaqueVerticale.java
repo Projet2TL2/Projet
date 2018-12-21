@@ -1,7 +1,7 @@
 
 public class AttaqueVerticale extends Attaque {
 	/*
-	 * Crée une Attaque verticale
+	 * CrÃ©e une Attaque verticale
 	 * @param : nom represente "attaque horizontale"
 	 * @param : surface represente la surface de l'attaque (3 cases)
 	 * @param : cout represente son cout (3)
