@@ -7,7 +7,7 @@ public class Attaque {
 	int cout;
 	
 	/*
-	 * Construit une attaque composée d'une ligne et d'une colonne ainsi que d'une surface représentant un tableau de case 
+	 * Construit une attaque composÃ©e d'une ligne et d'une colonne ainsi que d'une surface reprÃ©sentant un tableau de case 
 	 * @param : ligne la ligne de la case
 	 * @param : colonne la colonne de la case
 	 */
