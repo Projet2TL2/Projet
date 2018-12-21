@@ -11,6 +11,7 @@ import Vue.JoueurVueGUIVersionReseau;
 public class JoueurMVC {
 
 	static boolean isServeur;
+	String addressIP;
 	public JoueurMVC(boolean arg) {
 		
 		Joueur model = new Joueur();
@@ -18,7 +19,7 @@ public class JoueurMVC {
 		JoueurControl ctrlGUI = new JoueurControl(model);
 		JoueurControl ctrlConsole = new JoueurControl(model);
 		
-		JoueurVue gui = new JoueurVueGUIVersionReseau(model, ctrlGUI, isServeur);
+		JoueurVue gui = new JoueurVueGUIVersionReseau(model, ctrlGUI, isServeur,addressIP);
 		JoueurVue console = new JoueurVueConsole(model, ctrlConsole);
 		
 		ctrlGUI.addView(gui);
