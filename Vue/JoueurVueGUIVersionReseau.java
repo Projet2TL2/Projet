@@ -125,9 +125,9 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 	private int choixModeJeux;
 	int tour = -1;
 	boolean isServer;
-	Network test;
+	Network monNetwork;
 	
-	public JoueurVueGUIVersionReseau(Joueur model, JoueurControl controller, boolean boo) {
+	public JoueurVueGUIVersionReseau(Joueur model, JoueurControl controller, boolean boo, String addressIP) {
 		
 		super(model, controller);
 		
@@ -150,7 +150,8 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 			else {
 				boo = false;
 			}
-			test = new Network(model, boo);
+			addressIP = JOptionPane.showInputDialog("entrez addresse IP du serveur svp");
+			monNetwork = new Network(model, boo, addressIP);
 		}	
 		
 		isServer = boo;
@@ -373,7 +374,7 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 	public void updateTable(){
 		
 		if(choixModeJeux == 2){
-			tour = test.getTour();
+			tour = monNetwork.getTour();
 		}
 		
 		
@@ -625,7 +626,7 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 	        //framePlateau.setLocation(100, 100);
 	        //framePlateauOrdi.setLocation(900, 100);
 	        if(choixModeJeux == 2){
-	        	message.setText(test.getMessage());
+	        	message.setText(monNetwork.getMessage());
 	        }
 	        
 	        if( model.getCaseDeBateauxOrdi().size() != 0 && model.getCaseDeBateauxJoueur().size() != 0 && choixModeJeux==2) {
@@ -646,7 +647,7 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 	 */
 	public void update(Observable o, Object arg) {
 		if(!controller.joueurAPlacerBateaux() && isServer==false && choixModeJeux == 2) {
-			if(test.serveurAPlacerTousSesBateaux()) {
+			if(monNetwork.serveurAPlacerTousSesBateaux()) {
 				tour = 0;
 			}
 		}
@@ -756,7 +757,7 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 				        if(!getOrientation(bgOrientaion).equals(" ") ) {
 					        Bateau bateau = new Bateau(getLigneAttaque(ligneAttaque), getColonneAttaque(colonneAttaque),getTaille(bgTaille), getOrientation(bgOrientaion));
 					        if(choixModeJeux == 2) {
-								test.sendBateau(bateau);
+								monNetwork.sendBateau(bateau);
 					        }
 					        
 					        
@@ -794,7 +795,7 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 				}
 				else {
 					tour = 1;
-					test.finDeTour();
+					monNetwork.finDeTour();
 				}
 				
 				update(null,null);
@@ -929,7 +930,7 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 			 controller.setArgent(this.controller.getArgent() - 3);
 			 
 			 if(choixModeJeux == 2) {
-				test.sendAttaque(attaque);
+				monNetwork.sendAttaque(attaque);
 			}
 			 
 			 update(null,null);
@@ -967,7 +968,7 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 			 controller.ordiEstAttaque(attaque);
 			 controller.setArgent(this.controller.getArgent() - 5);
 			 if(choixModeJeux == 2) {
-					test.sendAttaqueHorizontale(attaque);
+					monNetwork.sendAttaqueHorizontale(attaque);
 			}
 			 update(null,null);
 			 return;
@@ -1004,7 +1005,7 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 			 controller.ordiEstAttaque(attaque);
 			 controller.setArgent(this.controller.getArgent() - 5);
 			 if(choixModeJeux == 2) {
-					test.sendAttaqueVerticale(attaque);
+					monNetwork.sendAttaqueVerticale(attaque);
 			}
 			 update(null,null);
 			 return;
@@ -1064,7 +1065,7 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 		/////FIN DE TOUR EN MODE DE JEUX CONTRE UN AUTRE JOUEUR EN RESEAU\\\\\
 				 if(source == finTourButton  && choixModeJeux == 2) {
 					//tour = 1;
-					test.finDeTour();
+					monNetwork.finDeTour();
 					controller.setArgent(10);
 					update(null,null);
 					return;
