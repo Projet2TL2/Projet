@@ -23,12 +23,12 @@ public class JoueurVueConsole extends JoueurVue implements Observer {
 	
 	/*
 	 * Affiche en console le plateau du joueur( en premier) et le plateau de l'ordi ( en second)
-	 * Affiche [0] si cette case n'est pas attaquée
-	 * Affiche [X] si cette case est attaquée et contient un bateau
-	 * Affiche [ ] si cette case est attaquée mais ne contient pas de bateau 
+	 * Affiche [0] si cette case n'est pas attaquÃ©e
+	 * Affiche [X] si cette case est attaquÃ©e et contient un bateau
+	 * Affiche [ ] si cette case est attaquÃ©e mais ne contient pas de bateau 
 	 */
 	public void printPlateau() {
-		System.out.print("[0] = Case non découverte\n[Y] = Bateau non découvert\n[X] = Bateau touché\n[ ] = Case touchée mais vide\n");
+		System.out.print("[0] = Case non dÃ©couverte\n[Y] = Bateau non dÃ©couvert\n[X] = Bateau touchÃ©\n[ ] = Case touchÃ©e mais vide\n");
 		System.out.println("Votre plateau: ");
 		System.out.println("   0  1  2  3  4  5  6  7  8  9");
 		for(int ligne = 0; ligne<10; ligne++){
@@ -82,18 +82,18 @@ public class JoueurVueConsole extends JoueurVue implements Observer {
 	}
 
 	/*
-	 * Affiche en console les règles
+	 * Affiche en console les rÃ¨gles
 	 */
 	private void printHelp(){
-		affiche("Il vous reste " + this.controller.getArgent() + " pièces");
-		affiche("3 piéces Pour faire une attaque simple (1 case) : A + numéro de la ligne a attaquée + numéro de la colonne a attaquée.");
-		affiche("5 piéces Pour faire une attaque horizontale (3 cases) : AH + numéro de la ligne du centre a attaquée + numéro de la colonne du centre a attaquée.");
-		affiche("5 piéces Pour faire une attaque verticale (3 cases) : AV + numéro de la ligne du centre a attaquée + numéro de la colonne du centre a attaquée.");
-		affiche("0 piécesPour finir le tour et faire le tour de l'ordi : fin");
+		affiche("Il vous reste " + this.controller.getArgent() + " piÃ¨ces");
+		affiche("3 piÃ©ces Pour faire une attaque simple (1 case) : A + numÃ©ro de la ligne a attaquÃ©e + numÃ©ro de la colonne a attaquÃ©e.");
+		affiche("5 piÃ©ces Pour faire une attaque horizontale (3 cases) : AH + numÃ©ro de la ligne du centre a attaquÃ©e + numÃ©ro de la colonne du centre a attaquÃ©e.");
+		affiche("5 piÃ©ces Pour faire une attaque verticale (3 cases) : AV + numÃ©ro de la ligne du centre a attaquÃ©e + numÃ©ro de la colonne du centre a attaquÃ©e.");
+		affiche("0 piÃ©cesPour finir le tour et faire le tour de l'ordi : fin");
 	}
 	
 	/*
-	 * Gere tous ce qui est entré comme input en console:
+	 * Gere tous ce qui est entrÃ© comme input en console:
 	 * 		-A = attaque
 	 * 		-AH = attaque horizontale
 	 * 		-AV = attaque verticale
@@ -107,17 +107,17 @@ public class JoueurVueConsole extends JoueurVue implements Observer {
 			while(controller.joueurAPlacerBateaux() == false  && compteur != 0) {
 				try {
 					affiche("\nEncore " + compteur + " bateaux a placer !" );
-					affiche("Pour placer un bateau : P + numéro de la ligne + numéro de la colonne + taille du bateau + orientation (H - V).");
+					affiche("Pour placer un bateau : P + numÃ©ro de la ligne + numÃ©ro de la colonne + taille du bateau + orientation (H - V).");
 					String a = sc.next();
 					switch(a) {
 						case "P":
 							int i = sc.nextInt();
 							if(i<0 || i> 9){
-								affiche("Numéro de ligne incorrect");
+								affiche("NumÃ©ro de ligne incorrect");
 							}
 							int j = sc.nextInt();
 							if(j<0 || j> 9){
-								affiche("Numéro de colonne incorrect");
+								affiche("NumÃ©ro de colonne incorrect");
 							}
 							int taille = sc.nextInt();
 							if(taille<2 || taille> 5){
@@ -137,7 +137,7 @@ public class JoueurVueConsole extends JoueurVue implements Observer {
 							update(null,null);
 							break;
 						default : 
-							affiche("Opération incorrecte");
+							affiche("OpÃ©ration incorrecte");
 							printHelp();
 							break;
 					}
@@ -149,7 +149,7 @@ public class JoueurVueConsole extends JoueurVue implements Observer {
 			}
 			
 			if(controller.ordiAPlacerBateaux()) {
-				System.out.println("L'ordi a placé ses bateaux !! :");
+				System.out.println("L'ordi a placÃ© ses bateaux !! :");
 			}
 			else {
 				controller.ordiPlacerBateau(new Bateau(aleatoire(0, 6),aleatoire(0, 6),aleatoire(2, 5),"H"));
@@ -181,12 +181,12 @@ public class JoueurVueConsole extends JoueurVue implements Observer {
 						while(model.getArgent()>0){
 							int i = sc.nextInt();
 							if(i<0 || i> 9){
-								affiche("Numéro de ligne incorrect");
+								affiche("NumÃ©ro de ligne incorrect");
 							}
 							
 							int j = sc.nextInt();
 							if(j<0 || j> 9){
-								affiche("Numéro de colonne incorrect");
+								affiche("NumÃ©ro de colonne incorrect");
 							}
 							
 							switch(c){
@@ -206,7 +206,7 @@ public class JoueurVueConsole extends JoueurVue implements Observer {
 									update(null,null);
 									break;
 								default : 
-									affiche("Opération incorrecte");
+									affiche("OpÃ©ration incorrecte");
 							} 
 							update(null,null);
 							printHelp();
