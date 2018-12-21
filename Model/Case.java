@@ -7,7 +7,7 @@ public class Case {
 	boolean estTouchee = false;
 	
 	/*
-	 * Construit une case de ligne ligne, colonne colonne. EstOccupe et EstTouche sont initialisé a false
+	 * Construit une case de ligne ligne, colonne colonne. EstOccupe et EstTouche sont initialisÃ© a false
 	 * @param : ligne la ligne de la case
 	 * @param : colonne la colonne de la case
 	 */
@@ -17,7 +17,7 @@ public class Case {
 	}
 
 	/*
-	 * return la ligne et la colonne sous forme de String tout attaché
+	 * return la ligne et la colonne sous forme de String tout attachÃ©
 	 */
 	public String toString() {
 		return this.getLigne() + "" + this.getColonne();
