@@ -11,35 +11,35 @@ public class JoueurControl {
 	
 	public void ordiEstAttaque(Attaque attaque) { 
 		if(model.ordiEstAttaque(attaque)) {
-			vue.affiche("L'attaque: " + attaque.toString() + "a touchée un bateau !\n");
+			vue.affiche("L'attaque: " + attaque.toString() + "a touchÃ©e un bateau !\n");
 	} 
-		else vue.affiche("L'attaque: " + attaque.toString() + "n'a pas touchée de bateau !\n");
+		else vue.affiche("L'attaque: " + attaque.toString() + "n'a pas touchÃ©e de bateau !\n");
 	}
 	
 	public void joueurEstAttaque(Attaque attaque) { 
 		if(model.joueurEstAttaque(attaque)) {
-			vue.affiche("L'attaque: " + attaque.toString() + "de l'ordi a touchée un de vos bateau !\n");
+			vue.affiche("L'attaque: " + attaque.toString() + "de l'ordi a touchÃ©e un de vos bateau !\n");
 	} 
-		else vue.affiche("L'attaque: " + attaque.toString() + "n'a pas touchée un de vos bateau !\n");
+		else vue.affiche("L'attaque: " + attaque.toString() + "n'a pas touchÃ©e un de vos bateau !\n");
 	}
 	
 	public boolean joueurPlacerBateau(Bateau b) {
 		if(model.joueurPlacerBateau(b)) {
-			//vue.affiche("Le bateau : " + b.toString() + "  a bien été placé !\n");
+			//vue.affiche("Le bateau : " + b.toString() + "  a bien Ã©tÃ© placÃ© !\n");
 			return true;
 		} 
 		else{
-			//vue.affiche("Le bateau : " + b.toString() + "  n'a pas été placé !\n");
+			//vue.affiche("Le bateau : " + b.toString() + "  n'a pas Ã©tÃ© placÃ© !\n");
 			return false;
 		}
 	}
 
 	public boolean ordiPlacerBateau(Bateau b) {
 		if(model.ordiPlacerBateau(b)) {
-			vue.affiche("Le bateau : " + b.toString() + "  a bien été placé !\n");
+			vue.affiche("Le bateau : " + b.toString() + "  a bien Ã©tÃ© placÃ© !\n");
 			return true;
 	} 
-		else vue.affiche("Le bateau : " + b.toString() + "  n'a pas été placé !\n");
+		else vue.affiche("Le bateau : " + b.toString() + "  n'a pas Ã©tÃ© placÃ© !\n");
 		return false;
 	}
 	
