@@ -70,29 +70,29 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 	
 	/////DECLARATIONS DES JLABEL DES 2 JOUEURS\\\\\
 	private JLabel message = new JLabel("");
-	private JLabel labelArgent = new JLabel("Il vous reste : " + model.getArgent() + " pièces pour ce tour !");
+	private JLabel labelArgent = new JLabel("Il vous reste : " + model.getArgent() + " piÃ¨ces pour ce tour !");
 	private JLabel labelLigne = new JLabel(" Ligne de votre attaque ");
 	private JLabel labelColonne = new JLabel(" Colonne de votre attaque ");
 	private JLabel labelOrientation = new JLabel(" Orientation de votre bateau ");
 	private JLabel labelTaille = new JLabel("Choisissez une taille : ");
 	private JLabel messageJ2 = new JLabel("");
-	private JLabel labelArgentJ2 = new JLabel("Il vous reste : " + model.getArgent() + " pièces pour ce tour !");
+	private JLabel labelArgentJ2 = new JLabel("Il vous reste : " + model.getArgent() + " piÃ¨ces pour ce tour !");
 	private JLabel labelLigneJ2 = new JLabel(" Ligne de votre attaque ");
 	private JLabel labelColonneJ2 = new JLabel(" Colonne de votre attaque ");
 	private JLabel labelOrientationJ2 = new JLabel(" Orientation de votre bateau ");
 	private JLabel labelTailleJ2 = new JLabel("Choisissez une taille : ");
 	
 	/////DECLARATION DU TEXTE DE LA JFRAME AIDEE\\\\\
-	private JLabel labelAide = new JLabel("<html>Voici comment se déroule une parite de notre BATAILLE NAVALE :<br><br> "
-										+ "1)Cliquez sur Placer bateaux et placer vos différent bateaux;<br>	"
+	private JLabel labelAide = new JLabel("<html>Voici comment se dÃ©roule une parite de notre BATAILLE NAVALE :<br><br> "
+										+ "1)Cliquez sur Placer bateaux et placer vos diffÃ©rent bateaux;<br>	"
 										+ "    Pour se faire cliquer dans la grille sur une case et les champs colonne et ligne de votre bateau se rempliront tous seuls,<br>"
-										+ "    Il ne vous reste plus qu'à choisir l'orientation et la taille du bateau;<br><br>"
+										+ "    Il ne vous reste plus qu'Ã  choisir l'orientation et la taille du bateau;<br><br>"
 										+ "2)Attaquez votre adversaire<br>"
 										+ "    Pour se faire cliquer dans la grille sur une case et les champs colonne et ligne de votre attaque se rempliront tous seuls,<br>"
-										+ "    Ensuite sélectionnez quelle type d'attaque vous voulez infiliger à votre adversaire<br>"
-										+ "    /!/, vous n'avez que 10 pièces par tour !<br><br>"
+										+ "    Ensuite sÃ©lectionnez quelle type d'attaque vous voulez infiliger Ã  votre adversaire<br>"
+										+ "    /!/, vous n'avez que 10 piÃ¨ces par tour !<br><br>"
 										+ "3)Fin de tour<br>"
-										+ "    Quand vous avez fini votre tour, cliquez sur fin du tour et votre adversaire pourra ainsi jouer à son tour!</html>");
+										+ "    Quand vous avez fini votre tour, cliquez sur fin du tour et votre adversaire pourra ainsi jouer Ã  son tour!</html>");
 
 	/////DECLARATIONS DES JTEXTFIELDS DES 2 JOUEURS\\\\\
 	private JTextField ligneAttaque = new JTextField(1);
@@ -121,7 +121,7 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 	private JRadioButton orientationVJ2 = new JRadioButton("V");
 	
 	/////DECLARATIONS VARIABLES UTILES\\\\\
-	boolean bateauxPlacés = false;
+	boolean bateauxPlacÃ©s = false;
 	private int choixModeJeux;
 	int tour = -1;
 	boolean isServer;
@@ -141,7 +141,7 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 		if(modeJeux.equals("Jouer contre un autre joueur sur ce PC")) {
 			choixModeJeux = 1;
 		}
-		if(modeJeux.equals("Jouer contre un autre joueur en réseau")) {
+		if(modeJeux.equals("Jouer contre un autre joueur en rÃ©seau")) {
 			choixModeJeux = 2;
 			test = new Network(model, boo);
 		}	
@@ -359,9 +359,9 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 	
 	/*
 	 * Affiche dans le JTable le plateau du model
-	 * Affiche [0] si cette case n'est pas attaquée
-	 * Affiche [X] si cette case est attaquée et contient un bateau
-	 * Affiche [ ] si cette case est attaquée mais ne contient pas de bateau
+	 * Affiche [0] si cette case n'est pas attaquÃ©e
+	 * Affiche [X] si cette case est attaquÃ©e et contient un bateau
+	 * Affiche [ ] si cette case est attaquÃ©e mais ne contient pas de bateau
 	 */
 	public void updateTable(){
 		
@@ -371,8 +371,8 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 		 /////REINITIALISATION DES GRILLES\\\\\
 		 grilleJoueur.removeAll();
 		 grilleOrdi.removeAll();
-		 labelArgent .setText("Il vous reste : " + controller.getArgent() + " pièces pour ce tour !");
-		 labelArgentJ2 .setText("Il vous reste : " + controller.getArgent() + " pièces pour ce tour !");
+		 labelArgent .setText("Il vous reste : " + controller.getArgent() + " piÃ¨ces pour ce tour !");
+		 labelArgentJ2 .setText("Il vous reste : " + controller.getArgent() + " piÃ¨ces pour ce tour !");
 		 
 		 if(controller.joueurAPlacerBateaux()) {
 			placerBateauButton.setVisible(false); 
@@ -571,16 +571,16 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 	        
 	        if( model.getCaseDeBateauxOrdi().size() != 0 && model.getCaseDeBateauxJoueur().size() != 0 && choixModeJeux!=2) {
 	        	if(model.joueurAGagne()) {
-	        		JOptionPane.showInputDialog("AIE AIE AIE, le joueur 1 a gagné !!!");
+	        		JOptionPane.showInputDialog("AIE AIE AIE, le joueur 1 a gagnÃ© !!!");
 	        		//framePlateau.setEnabled(false);
 	        		//framePlateauOrdi.setEnabled(false);
 	        	}
 	        	if(model.ordiAGagne()) {
 	        		if(choixModeJeux == 0) {
-	        			JOptionPane.showInputDialog("AIE AIE AIE, l'ordinateur a gagné !!!");
+	        			JOptionPane.showInputDialog("AIE AIE AIE, l'ordinateur a gagnÃ© !!!");
 	        		}
 	        		else {
-	        			JOptionPane.showInputDialog("AIE AIE AIE, le joueur 2 a gagné !!!");
+	        			JOptionPane.showInputDialog("AIE AIE AIE, le joueur 2 a gagnÃ© !!!");
 	        		}
 	        		//framePlateau.setEnabled(false);
 	        		//framePlateauOrdi.setEnabled(false);
@@ -589,10 +589,10 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 	        
 	        if( model.getCaseDeBateauxOrdi().size() != 0 && model.getCaseDeBateauxJoueur().size() != 0 && choixModeJeux==2) {
 	        	if(model.joueurAGagne() && isServer == true) {
-	        		JOptionPane.showInputDialog("AIE AIE AIE, le joueur serveur a gagné !!!");
+	        		JOptionPane.showInputDialog("AIE AIE AIE, le joueur serveur a gagnÃ© !!!");
 	        	}
 	        	if(model.joueurAGagne() && isServer == false) {
-	        		JOptionPane.showInputDialog("AIE AIE AIE, le joueur client a gagné !!!");
+	        		JOptionPane.showInputDialog("AIE AIE AIE, le joueur client a gagnÃ© !!!");
 	        	}
 	        	
 	        }
@@ -633,7 +633,7 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 	
 	/*
 	 * Lors d'un changement dans le controller, actualise l'affichage
-	 * si le joueur n'a pas encore placé ses bateaux, les bouttons d'attaque ne sont pas visibles
+	 * si le joueur n'a pas encore placÃ© ses bateaux, les bouttons d'attaque ne sont pas visibles
 	 */
 	public void update(Observable o, Object arg) {
 		if(!controller.joueurAPlacerBateaux() && isServer==false) {
@@ -651,14 +651,14 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 	 * 			Ouvre une autre Jframe pour placer les bateaux
 	 * 			TODO
 	 * 		-le bouton "Placer!":
-	 * 			Ferme la Jframe du placement des bateaux et a effectué le placement
+	 * 			Ferme la Jframe du placement des bateaux et a effectuÃ© le placement
 	 * 			TODO
 	 * 		-le bouton "Attaque":
-	 * 			Prends la valeur des 2 JTextField et crée une attaque appliqué sur le plateau de l'ordi du controller/joueur
-	 * 			réactualise le plateau
+	 * 			Prends la valeur des 2 JTextField et crÃ©e une attaque appliquÃ© sur le plateau de l'ordi du controller/joueur
+	 * 			rÃ©actualise le plateau
 	 * 		-le bouton "Attaque Horizontale":
-	 * 			Prends la valeur des 2 JTextField et crée une attaque Horizontale appliqué sur le plateau de l'ordi du controller/joueur
-	 * 			réactualise le plateau
+	 * 			Prends la valeur des 2 JTextField et crÃ©e une attaque Horizontale appliquÃ© sur le plateau de l'ordi du controller/joueur
+	 * 			rÃ©actualise le plateau
 	 */
 	public void actionPerformed(ActionEvent e) {
 		 Object  source=e.getSource();
@@ -720,7 +720,7 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 				       }
 				        
 				        if( getColonneAttaque(colonneAttaque) < 0 || getLigneAttaque(ligneAttaque) < 0 || getColonneAttaque(colonneAttaque) >= 10 || getLigneAttaque(ligneAttaque) >= 10){
-							 affiche("Erreur, ceci n'est pas une coordonée valide "); 
+							 affiche("Erreur, ceci n'est pas une coordonÃ©e valide "); 
 							 return;
 						 }
 				        
@@ -737,11 +737,11 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 				        	}
 				        }
 				        if(getOrientation(bgOrientaion).isEmpty()) {
-				        	affiche("Pas d'orientation encodée");
+				        	affiche("Pas d'orientation encodÃ©e");
 				        	return;
 				        }
 				        if(getTaille(bgTaille) == 0) {
-				        	affiche("Pas de taille encodée");
+				        	affiche("Pas de taille encodÃ©e");
 				        	return;
 				        }
 				        if(!getOrientation(bgOrientaion).equals(" ") ) {
@@ -769,7 +769,7 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 					 controller.setJoueurAPlacerBateaux(true);
 					 labelLigne.setText(" Ligne de votre attaque");
 					 labelColonne.setText(" Colonne de votre attaque");
-					 labelArgent.setText("Il vous reste : " + model.getArgent() + " pièces pour ce tour !");
+					 labelArgent.setText("Il vous reste : " + model.getArgent() + " piÃ¨ces pour ce tour !");
 					 if(!controller.ordiAPlacerBateaux() && choixModeJeux == 0) {
 						controller.ordiPlacerBateau(new Bateau(aleatoire(0, 6),aleatoire(0, 5),aleatoire(2, 5),"H"));
 						controller.ordiPlacerBateau(new Bateau(aleatoire(4, 9),aleatoire(4, 6),aleatoire(2, 4),"V"));
@@ -850,7 +850,7 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 						       }
 						        
 						        if( getColonneAttaque(colonneAttaqueJ2) < 0 || getLigneAttaque(ligneAttaqueJ2) < 0 || getColonneAttaque(colonneAttaqueJ2) >= 10 || getLigneAttaque(ligneAttaqueJ2) >= 10){
-									 affiche("Erreur, ceci n'est pas une coordonée valide "); 
+									 affiche("Erreur, ceci n'est pas une coordonÃ©e valide "); 
 									 return;
 								 }
 						        
@@ -867,11 +867,11 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 						        	}
 						        }
 						        if(getOrientation(bgOrientaionJ2).isEmpty()) {
-						        	affiche("Pas d'orientation encodée");
+						        	affiche("Pas d'orientation encodÃ©e");
 						        	return;
 						        }
 						        if(getTaille(bgTailleJ2) == 0) {
-						        	affiche("Pas de taille encodée");
+						        	affiche("Pas de taille encodÃ©e");
 						        	return;
 						        }
 						        if(!getOrientation(bgOrientaionJ2).equals(" ") ) {
@@ -895,7 +895,7 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 							 controller.setOrdiAPlacerBateaux(true);
 							 labelLigneJ2.setText(" Ligne de votre attaque");
 							 labelColonneJ2.setText(" Colonne de votre attaque");
-							 labelArgentJ2.setText("Il vous reste : " + model.getArgent() + " pièces pour ce tour !");
+							 labelArgentJ2.setText("Il vous reste : " + model.getArgent() + " piÃ¨ces pour ce tour !");
 							 if(!controller.ordiAPlacerBateaux()) {
 								 update(null,null);
 							 }
@@ -1092,7 +1092,7 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 	
 	public String choixModeJeux() {
 		JDialog.setDefaultLookAndFeelDecorated(true);
-	    Object[] selectionValues = { "Jouer contre l'ordinateur", "Jouer contre un autre joueur sur ce PC", "Jouer contre un autre joueur en réseau" };
+	    Object[] selectionValues = { "Jouer contre l'ordinateur", "Jouer contre un autre joueur sur ce PC", "Jouer contre un autre joueur en rÃ©seau" };
 	    String initialSelection = "Dogs";
 	    Object selection = JOptionPane.showInputDialog(null, "A quelle mode de jeu voullez vous jouer?",
 	        "Mode BATAILLE NAVALE", JOptionPane.QUESTION_MESSAGE, null, selectionValues, initialSelection);
