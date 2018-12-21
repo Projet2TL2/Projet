@@ -1,3 +1,4 @@
+package Model;
 
 public class Bateau {
 
@@ -48,6 +49,22 @@ public class Bateau {
 
 	public void setOrientation(String orientation) {
 		this.orientation = orientation;
+	}
+
+	public int getLigneDebut() {
+		return ligneDebut;
+	}
+
+	public void setLigneDebut(int ligneDebut) {
+		this.ligneDebut = ligneDebut;
+	}
+
+	public int getColonneDebut() {
+		return colonneDebut;
+	}
+
+	public void setColonneDebut(int colonneDebut) {
+		this.colonneDebut = colonneDebut;
 	}
 	
 	
