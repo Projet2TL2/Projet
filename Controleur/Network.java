@@ -38,7 +38,7 @@ public class Network {
 				System.out.println("je suis serveur");
 				socketserver = new ServerSocket(5000);
 				socketduServeur = socketserver.accept();
-				System.out.println("Connexion effectuée !");
+				System.out.println("Connexion effectuÃ©e !");
 				in = new BufferedReader(new InputStreamReader(socketduServeur.getInputStream()));
 				out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socketduServeur.getOutputStream())), true);
 				tour = 0;
