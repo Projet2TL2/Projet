@@ -1,17 +1,21 @@
+package JUnit;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import Model.Attaque;
+
 public class AttaqueTest {
 
 	@Test
 	public void testAttaque() {
 		Attaque attaque = new Attaque(7,8);
-		assertTrue(attaque.ligne == 7);
-		assertTrue(attaque.colonne == 8);
-		assertTrue(attaque.cout == 3);
+		assertTrue(attaque.getLigne() == 7);
+		assertTrue(attaque.getColonne() == 8);
+		assertTrue(attaque.getCout() == 3);
 	}
 
 	@Test

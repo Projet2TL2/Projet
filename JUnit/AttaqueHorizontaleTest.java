@@ -1,6 +1,10 @@
+package JUnit;
+
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
+
+import Model.AttaqueHorizontale;
 
 public class AttaqueHorizontaleTest {
 
@@ -13,8 +17,8 @@ public class AttaqueHorizontaleTest {
 	@Test
 	public void testAttaqueHorizontale() {
 		AttaqueHorizontale attaque = new AttaqueHorizontale(7,8);
-		assertTrue(attaque.ligne == 7);
-		assertTrue(attaque.colonne == 8);
+		assertTrue(attaque.getLigne() == 7);
+		assertTrue(attaque.getColonne() == 8);
 	}
 
 
