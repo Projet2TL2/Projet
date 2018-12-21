@@ -4,8 +4,8 @@ public class Plateau {
 	Case[][] plateau;
 	
 	/*
-	 * Construit un plateau composé d'un tableau de tableau de Case  de taille 10 sur 10
-	 * Initialise le plateau a 100 nouvelles cases non occupées et non touchées
+	 * Construit un plateau composÃ© d'un tableau de tableau de Case  de taille 10 sur 10
+	 * Initialise le plateau a 100 nouvelles cases non occupÃ©es et non touchÃ©es
 	 */
 	public Plateau() {
 		plateau = new Case[10][10];
