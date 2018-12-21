@@ -33,7 +33,7 @@ public class Network {
 	String message;
 	boolean hasChanged = false;
 	
-	public Network(Joueur model, boolean isServer) {
+	public Network(Joueur model, boolean isServer, String addressIP) {
 		this.model = model;
 		if(isServer) {
 			try {
@@ -53,7 +53,7 @@ public class Network {
 		else {
 			try {
 				System.out.println("je suis client");
-				socketClient= new Socket("192.168.6.1", 5000);
+				socketClient= new Socket(addressIP, 5000);
 				in = new BufferedReader(new InputStreamReader(socketClient.getInputStream()));
 				out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socketClient.getOutputStream())), true);
 				tour = 1;
