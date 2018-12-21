@@ -118,14 +118,17 @@ public class Network {
 		public void sendAttaque(Attaque attaque) {
 			out.println("attaqueSimple" + " " + attaque.getLigne() + " " + attaque.getColonne());
 			out.flush();
+			setMessage("attaqueSimple" + " " + attaque.getLigne() + " " + attaque.getColonne());
 		}
 		public void sendAttaqueHorizontale(AttaqueHorizontale attaque) {
 			out.println("attaqueHorizontale" + " " + attaque.getLigne() + " " + attaque.getColonne());
 			out.flush();
+			setMessage("attaqueHorizontale" + " " + attaque.getLigne() + " " + attaque.getColonne());
 		}
 		public void sendAttaqueVerticale(AttaqueVerticale attaque) {
 			out.println("attaqueVerticale" + " " + attaque.getLigne() + " " + attaque.getColonne());
 			out.flush();
+			setMessage("attaqueVerticale" + " " + attaque.getLigne() + " " + attaque.getColonne());
 		}
 		
 		public void sendBateau(Bateau bateau) {
@@ -174,8 +177,6 @@ public class Network {
 		public void setMessage(String message) {
 			this.message = message;
 		}
-		
-		
 		
 	}
 
