@@ -1,8 +1,19 @@
+package Vue;
+
 import java.util.InputMismatchException;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Random;
 import java.util.Scanner;
+
+import javax.swing.JOptionPane;
+
+import Controleur.JoueurControl;
+import Model.Attaque;
+import Model.AttaqueHorizontale;
+import Model.AttaqueVerticale;
+import Model.Bateau;
+import Model.Joueur;
 
 
 public class JoueurVueConsole extends JoueurVue implements Observer {
@@ -64,7 +75,7 @@ public class JoueurVueConsole extends JoueurVue implements Observer {
 						System.out.print("[X]");
 					}
 					else{
-						System.out.print("[Y]");
+						System.out.print("[0]");
 					}
 				}
 				else {
@@ -106,7 +117,7 @@ public class JoueurVueConsole extends JoueurVue implements Observer {
 			int compteur = model.getbateauAPlacer();
 			while(controller.joueurAPlacerBateaux() == false  && compteur != 0) {
 				try {
-					affiche("\nEncore " + compteur + " bateaux a placer !" );
+					affiche("\nEncore " + controller.getBateauxAPlacer() + " bateaux a placer !" );
 					affiche("Pour placer un bateau : P + numéro de la ligne + numéro de la colonne + taille du bateau + orientation (H - V).");
 					String a = sc.next();
 					switch(a) {

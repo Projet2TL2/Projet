@@ -20,13 +20,13 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
-import Controller.JoueurControl;
-import Controller.Network;
-import model.Attaque;
-import model.AttaqueHorizontale;
-import model.AttaqueVerticale;
-import model.Bateau;
-import model.Joueur;
+import Controleur.JoueurControl;
+import Controleur.Network;
+import Model.Attaque;
+import Model.AttaqueHorizontale;
+import Model.AttaqueVerticale;
+import Model.Bateau;
+import Model.Joueur;
 
 
 public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListener, Runnable{
@@ -121,7 +121,7 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 	private JRadioButton orientationVJ2 = new JRadioButton("V");
 	
 	/////DECLARATIONS VARIABLES UTILES\\\\\
-	boolean bateauxPlacés = false;
+	boolean bateauxPlace = false;
 	private int choixModeJeux;
 	int tour = -1;
 	boolean isServer;
@@ -143,6 +143,13 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 		}
 		if(modeJeux.equals("Jouer contre un autre joueur en réseau")) {
 			choixModeJeux = 2;
+			int nbr = JOptionPane.showConfirmDialog(null, "Attendez-vous qqun? (serveur) Ou, Rejoignez-vous qqun? (client)", "Etes vous serveur?", JOptionPane.YES_NO_OPTION);
+			if(nbr == 0) {
+				boo = true;
+			}
+			else {
+				boo = false;
+			}
 			test = new Network(model, boo);
 		}	
 		
@@ -365,7 +372,9 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 	 */
 	public void updateTable(){
 		
-		tour = test.getTour();
+		if(choixModeJeux == 2){
+			tour = test.getTour();
+		}
 		
 		
 		 /////REINITIALISATION DES GRILLES\\\\\
@@ -586,17 +595,6 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 	        		//framePlateauOrdi.setEnabled(false);
 	        	}
 	        }
-	        
-	        if( model.getCaseDeBateauxOrdi().size() != 0 && model.getCaseDeBateauxJoueur().size() != 0 && choixModeJeux==2) {
-	        	if(model.joueurAGagne() && isServer == true) {
-	        		JOptionPane.showInputDialog("AIE AIE AIE, le joueur serveur a gagné !!!");
-	        	}
-	        	if(model.joueurAGagne() && isServer == false) {
-	        		JOptionPane.showInputDialog("AIE AIE AIE, le joueur client a gagné !!!");
-	        	}
-	        	
-	        }
-	        
 	        	//MISE EN PLACE DES GRILLES
 	        jpanelJoueur.add(aideButton, BorderLayout.NORTH);
 	        jpanelJoueur.add(grilleJoueur);
@@ -626,8 +624,19 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 	        	//LOCALISATION D'APPARITION
 	        //framePlateau.setLocation(100, 100);
 	        //framePlateauOrdi.setLocation(900, 100);
+	        if(choixModeJeux == 2){
+	        	message.setText(test.getMessage());
+	        }
 	        
-	        message.setText(test.getMessage());
+	        if( model.getCaseDeBateauxOrdi().size() != 0 && model.getCaseDeBateauxJoueur().size() != 0 && choixModeJeux==2) {
+	        	if(model.joueurAGagne() && isServer == true) {
+	        		JOptionPane.showInputDialog("AIE AIE AIE, le joueur serveur a gagné !!!");
+	        	}
+	        	if(model.joueurAGagne() && isServer == false) {
+	        		JOptionPane.showInputDialog("AIE AIE AIE, le joueur client a gagné !!!");
+	        	}
+	        	
+	        }
 	}
 	
 	
@@ -636,7 +645,7 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 	 * si le joueur n'a pas encore placé ses bateaux, les bouttons d'attaque ne sont pas visibles
 	 */
 	public void update(Observable o, Object arg) {
-		if(!controller.joueurAPlacerBateaux() && isServer==false) {
+		if(!controller.joueurAPlacerBateaux() && isServer==false && choixModeJeux == 2) {
 			if(test.serveurAPlacerTousSesBateaux()) {
 				tour = 0;
 			}
@@ -725,13 +734,13 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 						 }
 				        
 				        if(getOrientation(bgOrientaion).equals("H")) {
-				        	if(getTaille(bgTaille) + getColonneAttaque(colonneAttaque) >= 10) {
+				        	if(getTaille(bgTaille) + getColonneAttaque(colonneAttaque) > 10) {
 				        		affiche("Impossible de placer ce bateau !");
 				        		return;
 				        	}
 				        }
 				        if(getOrientation(bgOrientaion).equals("V")) {
-				        	if(getTaille(bgTaille) + getLigneAttaque(ligneAttaque) >= 10) {
+				        	if(getTaille(bgTaille) + getLigneAttaque(ligneAttaque) > 10) {
 				        		affiche("Impossible de placer ce bateau !");
 				        		return;
 				        	}

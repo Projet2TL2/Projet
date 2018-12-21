@@ -1,6 +1,11 @@
+package Vue;
+
 import java.util.Observer;
 
 import javax.swing.JFrame;
+
+import Controleur.JoueurControl;
+import Model.Joueur;
 
 
 
