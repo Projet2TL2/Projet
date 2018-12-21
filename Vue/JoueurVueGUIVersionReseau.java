@@ -83,16 +83,16 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 	private JLabel labelTailleJ2 = new JLabel("Choisissez une taille : ");
 	
 	/////DECLARATION DU TEXTE DE LA JFRAME AIDEE\\\\\
-	private JLabel labelAide = new JLabel("<html>Voici comment se déroule une parite de notre BATAILLE NAVALE :<br><br> "
-										+ "1)Cliquez sur Placer bateaux et placer vos différent bateaux;<br>	"
+	private JLabel labelAide = new JLabel("<html>Voici comment se deroule une parite de notre BATAILLE NAVALE :<br><br> "
+										+ "1)Cliquez sur Placer bateaux et placer vos different bateaux;<br>	"
 										+ "    Pour se faire cliquer dans la grille sur une case et les champs colonne et ligne de votre bateau se rempliront tous seuls,<br>"
-										+ "    Il ne vous reste plus qu'à choisir l'orientation et la taille du bateau;<br><br>"
+										+ "    Il ne vous reste plus qu'a choisir l'orientation et la taille du bateau;<br><br>"
 										+ "2)Attaquez votre adversaire<br>"
 										+ "    Pour se faire cliquer dans la grille sur une case et les champs colonne et ligne de votre attaque se rempliront tous seuls,<br>"
-										+ "    Ensuite sélectionnez quelle type d'attaque vous voulez infiliger à votre adversaire<br>"
-										+ "    /!/, vous n'avez que 10 pièces par tour !<br><br>"
+										+ "    Ensuite selectionnez quelle type d'attaque vous voulez infiliger a votre adversaire<br>"
+										+ "    /!/, vous n'avez que 10 pieces par tour !<br><br>"
 										+ "3)Fin de tour<br>"
-										+ "    Quand vous avez fini votre tour, cliquez sur fin du tour et votre adversaire pourra ainsi jouer à son tour!</html>");
+										+ "    Quand vous avez fini votre tour, cliquez sur fin du tour et votre adversaire pourra ainsi jouer a son tour!</html>");
 
 	/////DECLARATIONS DES JTEXTFIELDS DES 2 JOUEURS\\\\\
 	private JTextField ligneAttaque = new JTextField(1);
@@ -267,7 +267,9 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 		commandes.add(attaqueHorizontaleButton);
 		commandes.add(attaqueVerticaleButton);
 		commandes.add(placerBateauButton);
+		if(choixModeJeux == 2 || choixModeJeux == 1) {
 		commandes.add(rafraichirButton);
+		}
 		
 		global.add(message);
 		global.add(labelArgent);
@@ -381,8 +383,8 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 		 /////REINITIALISATION DES GRILLES\\\\\
 		 grilleJoueur.removeAll();
 		 grilleOrdi.removeAll();
-		 labelArgent .setText("Il vous reste : " + controller.getArgent() + " pièces pour ce tour !");
-		 labelArgentJ2 .setText("Il vous reste : " + controller.getArgent() + " pièces pour ce tour !");
+		 labelArgent .setText("Il vous reste : " + controller.getArgent() + " pieces pour ce tour !");
+		 labelArgentJ2 .setText("Il vous reste : " + controller.getArgent() + " pieces pour ce tour !");
 		 
 		 if(controller.joueurAPlacerBateaux()) {
 			placerBateauButton.setVisible(false); 
@@ -538,7 +540,12 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 	    						mesBoutonsJoueur[ligne][colonne].setBackground(Color.RED);
 	    					}
 	    					else{
+	    						if(choixModeJeux == 1) {
+	    							mesBoutonsJoueur[ligne][colonne].setBackground(Color.CYAN);
+	    						}
+	    						else {
 	    						mesBoutonsJoueur[ligne][colonne].setBackground(Color.GREEN);
+	    						}
 	    					}
 	    				}
 	    				else {
@@ -587,10 +594,10 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 	        	}
 	        	if(model.ordiAGagne()) {
 	        		if(choixModeJeux == 0) {
-	        			JOptionPane.showInputDialog("AIE AIE AIE, l'ordinateur a gagné !!!");
+	        			JOptionPane.showInputDialog("AIE AIE AIE, l'ordinateur a gagne !!!");
 	        		}
 	        		else {
-	        			JOptionPane.showInputDialog("AIE AIE AIE, le joueur 2 a gagné !!!");
+	        			JOptionPane.showInputDialog("AIE AIE AIE, le joueur 2 a gagne !!!");
 	        		}
 	        		//framePlateau.setEnabled(false);
 	        		//framePlateauOrdi.setEnabled(false);
@@ -623,18 +630,18 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 	        	//DEFINITION TAILLE OPTIMALE
 	        framePlateau.setSize(600, 600);
 	        	//LOCALISATION D'APPARITION
-	        //framePlateau.setLocation(100, 100);
-	        //framePlateauOrdi.setLocation(900, 100);
+	        framePlateau.setLocation(100, 100);
+	        framePlateauOrdi.setLocation(900, 100);
 	        if(choixModeJeux == 2){
 	        	message.setText(monNetwork.getMessage());
 	        }
 	        
 	        if( model.getCaseDeBateauxOrdi().size() != 0 && model.getCaseDeBateauxJoueur().size() != 0 && choixModeJeux==2) {
 	        	if(model.joueurAGagne() && isServer == true) {
-	        		JOptionPane.showInputDialog("AIE AIE AIE, le joueur serveur a gagné !!!");
+	        		JOptionPane.showInputDialog("AIE AIE AIE, le joueur serveur a gagne !!!");
 	        	}
 	        	if(model.joueurAGagne() && isServer == false) {
-	        		JOptionPane.showInputDialog("AIE AIE AIE, le joueur client a gagné !!!");
+	        		JOptionPane.showInputDialog("AIE AIE AIE, le joueur client a gagne !!!");
 	        	}
 	        	
 	        }
@@ -680,7 +687,7 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 					 commandesTaille.setVisible(true);
 					 labelLigne.setText(" Ligne de votre Bateau");
 					 labelColonne.setText(" Colonne de votre Bateau");
-					 labelArgent.setText("Il vous reste " + model.getbateauAPlacer() + " bateaux a placer");
+					 labelArgent.setText("Il vous reste " + controller.getBateauxAPlacer() + " bateaux a placer");
 					 attaqueButton.setVisible(false);
 					 attaqueHorizontaleButton.setVisible(false);
 					 attaqueVerticaleButton.setVisible(false);
@@ -730,7 +737,7 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 				       }
 				        
 				        if( getColonneAttaque(colonneAttaque) < 0 || getLigneAttaque(ligneAttaque) < 0 || getColonneAttaque(colonneAttaque) >= 10 || getLigneAttaque(ligneAttaque) >= 10){
-							 affiche("Erreur, ceci n'est pas une coordonée valide "); 
+							 affiche("Erreur, ceci n'est pas une coordonee valide "); 
 							 return;
 						 }
 				        
@@ -747,11 +754,11 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 				        	}
 				        }
 				        if(getOrientation(bgOrientaion).isEmpty()) {
-				        	affiche("Pas d'orientation encodée");
+				        	affiche("Pas d'orientation encodee");
 				        	return;
 				        }
 				        if(getTaille(bgTaille) == 0) {
-				        	affiche("Pas de taille encodée");
+				        	affiche("Pas de taille encodee");
 				        	return;
 				        }
 				        if(!getOrientation(bgOrientaion).equals(" ") ) {
@@ -779,14 +786,13 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 					 controller.setJoueurAPlacerBateaux(true);
 					 labelLigne.setText(" Ligne de votre attaque");
 					 labelColonne.setText(" Colonne de votre attaque");
-					 labelArgent.setText("Il vous reste : " + model.getArgent() + " pièces pour ce tour !");
+					 labelArgent.setText("Il vous reste : " + model.getArgent() + " pieces pour ce tour !");
 					 if(!controller.ordiAPlacerBateaux() && choixModeJeux == 0) {
-						controller.ordiPlacerBateau(new Bateau(aleatoire(0, 6),aleatoire(0, 5),aleatoire(2, 5),"H"));
-						controller.ordiPlacerBateau(new Bateau(aleatoire(4, 9),aleatoire(4, 6),aleatoire(2, 4),"V"));
-						//controller.ordiPlacerBateau(new Bateau(0,0,5,"H"));
-						//controller.ordiPlacerBateau(new Bateau(1,0,5,"V"));
-						//controller.ordiPlacerBateau(new Bateau(5,5,2,"H"));
-						//controller.ordiPlacerBateau(new Bateau(6,6,2,"V"));
+						controller.ordiPlacerBateau(new Bateau(aleatoire(0, 5),aleatoire(0, 2),aleatoire(2, 5),"H"));
+						controller.ordiPlacerBateau(new Bateau(aleatoire(0, 2),aleatoire(5, 10),aleatoire(2, 4),"V"));
+						controller.ordiPlacerBateau(new Bateau(aleatoire(5, 7),aleatoire(0, 5),aleatoire(2, 4),"V"));
+						controller.ordiPlacerBateau(new Bateau(aleatoire(5, 10),aleatoire(5, 6),aleatoire(2, 4),"H"));
+						controller.setOrdiAPlacerBateaux(true);
 						 update(null,null);
 					 }
 				}
@@ -795,7 +801,9 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 				}
 				else {
 					tour = 1;
-					monNetwork.finDeTour();
+					if(choixModeJeux == 2) {
+						monNetwork.finDeTour();
+					}
 				}
 				
 				update(null,null);
@@ -860,7 +868,7 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 						       }
 						        
 						        if( getColonneAttaque(colonneAttaqueJ2) < 0 || getLigneAttaque(ligneAttaqueJ2) < 0 || getColonneAttaque(colonneAttaqueJ2) >= 10 || getLigneAttaque(ligneAttaqueJ2) >= 10){
-									 affiche("Erreur, ceci n'est pas une coordonée valide "); 
+									 affiche("Erreur, ceci n'est pas une coordonee valide "); 
 									 return;
 								 }
 						        
@@ -877,11 +885,11 @@ public class JoueurVueGUIVersionReseau extends JoueurVue implements ActionListen
 						        	}
 						        }
 						        if(getOrientation(bgOrientaionJ2).isEmpty()) {
-						        	affiche("Pas d'orientation encodée");
+						        	affiche("Pas d'orientation encodee");
 						        	return;
 						        }
 						        if(getTaille(bgTailleJ2) == 0) {
-						        	affiche("Pas de taille encodée");
+						        	affiche("Pas de taille encodee");
 						        	return;
 						        }
 						        if(!getOrientation(bgOrientaionJ2).equals(" ") ) {
