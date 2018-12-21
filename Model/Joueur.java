@@ -17,7 +17,7 @@ public class Joueur extends Observable{
 	int bateauxAPlacerOrdi = 4;
 	
 	/*
-	 * Crée un Joueur qui possède un plateau sur lequelle il placera ses bateaux et un plateauOrdi qui représente le plateau sur lequel il attaque
+	 * CrÃ©e un Joueur qui possÃ¨de un plateau sur lequelle il placera ses bateaux et un plateauOrdi qui reprÃ©sente le plateau sur lequel il attaque
 	 */
 	public Joueur() {
 		 plateau = new Plateau();
@@ -60,8 +60,8 @@ public class Joueur extends Observable{
 	
 	
 	/*
-	 * @return true : le bateau b a été placé sur le plateau du joueur
-	 * @retrun false: si le bateau n'a pas été placé car la surface était déja occupée
+	 * @return true : le bateau b a Ã©tÃ© placÃ© sur le plateau du joueur
+	 * @retrun false: si le bateau n'a pas Ã©tÃ© placÃ© car la surface Ã©tait dÃ©ja occupÃ©e
 	 */
 	public boolean joueurPlacerBateau(Bateau b) {
 		for (int i = 0; i < b.getLongueur(); i++) {
@@ -81,8 +81,8 @@ public class Joueur extends Observable{
 	}
 
 	/*
-	 * @return true : le bateau b a été placé sur le plateau de l'ordi
-	 * @retrun false: si le bateau n'a pas été placé car la surface était déja occupée
+	 * @return true : le bateau b a Ã©tÃ© placÃ© sur le plateau de l'ordi
+	 * @retrun false: si le bateau n'a pas Ã©tÃ© placÃ© car la surface Ã©tait dÃ©ja occupÃ©e
 	 */
 	public boolean ordiPlacerBateau(Bateau b) {
 		for (int i = 0; i < b.getLongueur(); i++) {
@@ -102,16 +102,16 @@ public class Joueur extends Observable{
 	}
 	
 	/*
-	 * @return true: le joueur a déja placé ses bateaux 
-	 * @return false: le joueur n'a pas encore placé ses bateaux
+	 * @return true: le joueur a dÃ©ja placÃ© ses bateaux 
+	 * @return false: le joueur n'a pas encore placÃ© ses bateaux
 	 */
 	public boolean joueurAPlacerBateaux() {
 		return joueurAPlacerBateaux;
 	}
 	
 	/*
-	 * @return true: le joueur a déja placé ses bateaux 
-	 * @return false: le joueur n'a pas encore placé ses bateaux
+	 * @return true: le joueur a dÃ©ja placÃ© ses bateaux 
+	 * @return false: le joueur n'a pas encore placÃ© ses bateaux
 	 */
 	public boolean odriAPlacerBateaux() {
 		return ordiAPlacerBateaux;
